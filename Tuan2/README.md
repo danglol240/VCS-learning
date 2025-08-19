@@ -67,9 +67,11 @@
 * Vấn đề thay đổi quyền của file :
     * Chỉ chủ sở hữu hoặc root mới được quyển thay đổi quyền của file
     * Có 2 cách để thay đổi quyền: **symbolic** dùng chuỗi ký tự còn **numeric** dùng số để biểu diễn quyền
+    * Thay đổi quyền của file thông qua câu lệnh **chmod** với cách biểu diễn bên trên
 * Vấn đề thay đổi chủ sở hữu của file  
     * Bắt buộc phải là những người dùng có quyền *sudo* hoặc *root* mới có thể thay đổi quyền của file
     * có thể thay đổi owner/group owner file bằng câu lệnh **chown** **chgrp**
+    * Lưu ý khi sử dụng câu lệnh chmod/chown với option **-R**(Recursive) đối với thư mục thì sẽ thay đổi toàn bộ content ở bên trong
 ### Special Permission
 * SUID:
     * Thực thi file với quyền hạn của owner
@@ -80,3 +82,14 @@
     * chmod o+t / chmod 1xxx -> nếu other không có quyền thực thi thì t->T
     * Files/Directories chỉ có thể bị xóa bởi owner hoặc root
     * E.g <img width="1105" height="344" alt="StickyBit" src="https://github.com/user-attachments/assets/0bb7d084-916a-443f-b389-264557e93012" />
+### sudo và su
+* su : switch user và sudo : super user do
+* config cấu hình sudo nằm ở bên trong file $${\color{red}/etc/sudoers}$$ tuy nhiên việc chỉnh sửa trực tiếp file đấy tiềm ẩn rất nhiều nguy cơ và rủi ro chính vì vậy sẽ sử dụng công cụ để xử lý 1 cách an toàn là : **visudo** => tạo một file sudoers.tmp để tránh sửa đổi trực tiếp file sudoers
+<img width="1185" height="549" alt="visudo" src="https://github.com/user-attachments/assets/23b4fa75-0ed1-44a8-ac38-2208c18c5144" />
+
+* Một entry sẽ có dạng "$${\color{red}user_or_group}$$  $${\color{yellow}host}$$ = $${\color{blue}(runas_user)}$$ $${\color{green}[options:] }$$ command_list"
+    * $${\color{red}user_or_group}$$ : người hoặc nhóm người có thể dùng rule này (WHO)
+    * $${\color{yellow}host}$$ : host nào sẽ bị người/nhóm người áp dụng lệnh (WHERE)
+    * $${\color{blue}(runas_user)}$$ : có thể dưới dạng *user:group* quyền hạn của người dùng rule phụ thuộc vào quyền hạn của runas_user (AS WHO)
+    * $${\color{green}[options:] }$$ : các tùy chọn có thể được áp dụng lên
+    * command_list : các câu lệnh mà người dùng rule này có thể sử dụng
