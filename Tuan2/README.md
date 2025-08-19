@@ -87,9 +87,9 @@
 * config cấu hình sudo nằm ở bên trong file $${\color{red}/etc/sudoers}$$ tuy nhiên việc chỉnh sửa trực tiếp file đấy tiềm ẩn rất nhiều nguy cơ và rủi ro chính vì vậy sẽ sử dụng công cụ để xử lý 1 cách an toàn là : **visudo** => tạo một file sudoers.tmp để tránh sửa đổi trực tiếp file sudoers
 <img width="1185" height="549" alt="visudo" src="https://github.com/user-attachments/assets/23b4fa75-0ed1-44a8-ac38-2208c18c5144" />
 
-* Một entry sẽ có dạng "$${\color{red}user_or_group}$$  $${\color{yellow}host}$$ = $${\color{blue}(runas_user)}$$ $${\color{green}[options:] }$$ command_list"
-    * $${\color{red}user_or_group}$$ : người hoặc nhóm người có thể dùng rule này (WHO)
+* Một entry sẽ có dạng " $${\color{red}userorgroup}$$  $${\color{yellow}host}$$ = $${\color{blue}(runasuser)}$$ $${\color{green}[options:] }$$ command_list"
+    * $${\color{red}userorgroup}$$ : người hoặc nhóm người có thể dùng rule này (WHO)
     * $${\color{yellow}host}$$ : host nào sẽ bị người/nhóm người áp dụng lệnh (WHERE)
-    * $${\color{blue}(runas_user)}$$ : có thể dưới dạng *user:group* quyền hạn của người dùng rule phụ thuộc vào quyền hạn của runas_user (AS WHO)
+    * $${\color{blue}(runasuser)}$$ : có thể dưới dạng *user:group* quyền hạn của người dùng rule phụ thuộc vào quyền hạn của runas_user (AS WHO)
     * $${\color{green}[options:] }$$ : các tùy chọn có thể được áp dụng lên
     * command_list : các câu lệnh mà người dùng rule này có thể sử dụng
