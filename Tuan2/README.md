@@ -62,10 +62,21 @@
 
 ## Permission
 ### Normal Permission
-* 3 loại người dùng file **_user_** - **_group_** - **_other_** => muốn xem thông tin đầy đủ -> ls -l
+* 3 loại người dùng file **_user_** - **_group_** - **_other_** và mỗi người sẽ có 3 quyền chính *r*-*w*-*x*=> muốn xem thông tin đầy đủ -> ls -l
+* Quyền rwx của file có những điểm khác so với quyền rwx của directories cụ thể là ở quyền thực thi (E.g: Một thư mục có quyền --x (chỉ execute) -> không thấy tên file (không ls được) nhưng nếu biết chính xác tên file và có quyền trên file đó thì vẫn mở được)
 * Vấn đề thay đổi quyền của file :
     * Chỉ chủ sở hữu hoặc root mới được quyển thay đổi quyền của file
     * Có 2 cách để thay đổi quyền: **symbolic** dùng chuỗi ký tự còn **numeric** dùng số để biểu diễn quyền
 * Vấn đề thay đổi chủ sở hữu của file  
-    * Bắt buộc phải là những người dùng có quyền *sudo* mới có thể thay đổi quyền của file
-    * có thể thay đổi chủ sở hữu / nhóm sở hữu file bằng câu lệnh **chown** **chgrp**
+    * Bắt buộc phải là những người dùng có quyền *sudo* hoặc *root* mới có thể thay đổi quyền của file
+    * có thể thay đổi owner/group owner file bằng câu lệnh **chown** **chgrp**
+### Special Permission
+* SUID:
+    * Thực thi file với quyền hạn của owner
+    * chmod u+s / chmod 4xxx -> nếu user không có quyền thực thi thì s->S
+    * E.g <img width="550" height="182" alt="SUID" src="https://github.com/user-attachments/assets/fb26dace-2893-423a-aa8b-e5e491c8e4e6" />
+* SGID: Tương tự như với SUID nhưng mà được dùng cho group owner
+* Sticky bit:
+    * chmod o+t / chmod 1xxx -> nếu other không có quyền thực thi thì t->T
+    * Files/Directories chỉ có thể bị xóa bởi owner hoặc root
+    * E.g <img width="1105" height="344" alt="StickyBit" src="https://github.com/user-attachments/assets/0bb7d084-916a-443f-b389-264557e93012" />
