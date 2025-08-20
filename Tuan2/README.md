@@ -93,3 +93,19 @@
     * $${\color{blue}(runasuser)}$$ : có thể dưới dạng *user:group* quyền hạn của người dùng rule phụ thuộc vào quyền hạn của runas_user (AS WHO)
     * $${\color{green}[options:] }$$ : các tùy chọn có thể được áp dụng lên
     * command_list : các câu lệnh mà người dùng rule này có thể sử dụng
+
+## Bash Shell env
+### Env Variables
+- Là các biến **toàn cục** (global variables) trong hệ thống. Được Bash shell và các chương trình con sử dụng để xác định cách hoạt động.
+- Thường chứa thông tin như:
+<img width="1919" height="879" alt="printenv" src="https://github.com/user-attachments/assets/29e7d2ff-9c83-44ad-9110-3d7364b3eba6" />
+
+  - `PATH`: Danh sách thư mục tìm kiếm lệnh
+  - `USER`: Tên người dùng
+  - `HOME`: Thư mục chính của user
+  - `LANG`: Ngôn ngữ hệ thống
+  - `EDITOR`: Trình soạn thảo mặc định
+  - `SHELL`: Loại shell đang dùng
+- Các process con sẽ **kế thừa** biến môi trường từ shell cha.
+
+<img width="1047" height="180" alt="envtest" src="https://github.com/user-attachments/assets/92d1af07-af1c-4396-9eb3-44bd7b4d954f" />
