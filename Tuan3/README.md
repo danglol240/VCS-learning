@@ -1,6 +1,5 @@
 # Package Management
-## Khái niệm cơ bản
-### Mirror và Repo
+## Mirror và Repo
 * Mirror có thể hiểu là một máy chủ nhân bản có chứa bản sao của dữ liệu hay kho lưu trữ của server khác và được chạy ở trên một thiết bị khác với bản gốc mục đích là để : *Tăng tốc độ tải, Chia tải hoặc dùng làm Dự phòng*
 * Repo hay Repository là kho lưu trữ các phần mềm, ứng dụng, tool tiện ích mà được duy trì và phát hành bởi một tổ chức cơ quan => Các công ty thường sẽ tự host một Mirror riêng, nội bộ(internal) nhằm mục đích bảo mật hoặc yêu cầu nhân viên sử dụng những package, yêu cầu về version cụ thể.
 
