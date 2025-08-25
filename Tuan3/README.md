@@ -3,25 +3,59 @@
 ### Mirror và Repo
 * Mirror có thể hiểu là một máy chủ nhân bản có chứa bản sao của dữ liệu hay kho lưu trữ của server khác và được chạy ở trên một thiết bị khác với bản gốc mục đích là để : *Tăng tốc độ tải, Chia tải hoặc dùng làm Dự phòng*
 * Repo hay Repository là kho lưu trữ các phần mềm, ứng dụng, tool tiện ích mà được duy trì và phát hành bởi một tổ chức cơ quan => Các công ty thường sẽ tự host một Mirror riêng, nội bộ(internal) nhằm mục đích bảo mật hoặc yêu cầu nhân viên sử dụng những package, yêu cầu về version cụ thể.
-## 📦 APT và YUM
-* APT và YUM đều là các công cụ dùng cho việc xử lý và quản lý các package của hệ thống , cả 2 đều cung cấp chứ năng tải, cập nhật, xóa các package 1 cách tự động điểm khác biệt chính nằm ở **distro** và **định dạng package**
 
-| Feature              | **APT** (Debian/Ubuntu)                        | **YUM** (RHEL/CentOS)                          |
-|----------------------|------------------------------------------------|------------------------------------------------|
-| **Full Name**        | Advanced Package Tool                          | Yellowdog Updater, Modified                    |
-| **Linux Family**     | Debian-based (Ubuntu, Mint, Kali, Debian)      | Red Hat-based (CentOS, Fedora, RHEL)          |
-| **Package Format**   | `.deb`                                         | `.rpm`                                         |
-| **Default Repos**    | `/etc/apt/sources.list`<br>`/etc/apt/sources.list.d/` | `/etc/yum.repos.d/*.repo`                |     |
-| **Metadata Handling**| Uses local cache (after `apt update`)          | Downloads metadata each time, can be cached    |
-| **Dependency Resolution** | Very strong, tightly integrated with dpkg | Also strong, resolves dependencies automatically |
-| **Commands**         | `apt install`<br>`apt remove`<br>`apt update`<br>`apt upgrade` | `yum install`<br>`yum remove`<br>`yum update`<br>`yum upgrade` |
-| **Underlying Tool**  | `dpkg` (for installing `.deb` directly)        | `rpm` (for installing `.rpm` directly)         |
-
-<img width="800" height="450" alt="pmanager" src="https://github.com/user-attachments/assets/cd8e3332-ee22-4294-add7-3b3ef98752f6" />
-
-## Cách APT/YUM cấu hình mirror và repo
-### APT config
+## Cách APT cấu hình mirror và repo
 * APT lấy cấu hình của repository từ File chính: `/etc/apt/sources.list` Thư mục phụ: `/etc/apt/sources.list.d/*.list` (Trước khi chỉnh sửa cần lưu ý sao lưu trước khi thay đổi)
 <img width="605" height="291" alt="aptsources" src="https://github.com/user-attachments/assets/aae27a77-4d98-402f-88cf-09a6930ba753" />
 
-*
+- **Thêm repo**: Sử dụng `sudo add-apt-repository "deb http://example.com/repo focal main"` (đối với PPA: `sudo add-apt-repository ppa:user/ppa-name`). Hoặc thêm thủ công vào `/etc/apt/sources.list` và chạy `sudo apt update`.
+- **Sửa repo**: Chỉnh sửa dòng trong `/etc/apt/sources.list` (ví dụ: thay đổi URL mirror) và chạy `sudo apt update`.
+- **Xóa repo**: Sử dụng `sudo add-apt-repository --remove "deb http://example.com/repo focal main"`, hoặc xóa tệp trong `/etc/apt/sources.list.d/`, sau đó chạy `sudo apt update`.
+
+## Package
+* Một gói là một tệp lưu trữ nén (định dạng `.deb` trong Ubuntu/Debian) chứa phần mềm, bao gồm các tệp thực thi, thư viện, tệp cấu hình và siêu dữ liệu. Nó đơn giản hóa việc cài đặt, quản lý và phân phối phần mềm.
+* Các gói được sử dụng để cài đặt, cập nhật và xóa phần mềm một cách hiệu quả trong khi xử lý phụ thuộc, đảm bảo tính nhất quán hệ thống và cho phép kiểm soát phiên bản.
+
+## Thông thường, một gói bao gồm:
+- Binary files (tệp thực thi và thư viện).
+- Configuration files
+- Tài liệu (trang man, README).
+- metadata (tên, phiên bản, phụ thuộc, thông tin người duy trì, checksum).
+- Các script trước/sau cài đặt (cho các tác vụ thiết lập/dọn dẹp).
+- Danh sách tệp và quyền truy cập
+
+* Package Dependency là các gói khác cần thiết để một gói hoạt động. APT tự động giải quyết và cài đặt chúng để tránh xung đột hoặc phần mềm bị hỏng
+
+
+## APT và dpkg
+-   **dpkg**: Công cụ cấp thấp (low-level) để cài đặt, gỡ bỏ và quản lý
+    các gói `.deb`.
+-   **apt**: Công cụ cấp cao (high-level) dùng để quản lý gói, phụ
+    thuộc, và kho lưu trữ, dựa trên `dpkg`.
+
+### So sánh dpkg và APT
+
+| Tiêu chí               | dpkg                                | APT (Advanced Package Tool)                   |
+|-------------------------|-------------------------------------|-----------------------------------------------|
+| **Mục đích**            | Low-level package manager           | High-level package management tool            |
+| **Chức năng**           | Cài đặt, Gỡ bỏ, Chỉnh sửa các package `deb` một cách trực tiếp | Quản lý gói, tự động xử lý phụ thuộc |
+| **Xử lý dependency**| Phải xử lý phụ thuộc 1 cách trực tiếp | Tự động tải và xử lý phụ thuộc cần thiết |
+| **Phạm vi xử lý**        | Sử dụng cho các package đơn lẻ   | Sử dụng cho toàn bộ hệ thống       |
+
+## Bảng Lệnh APT Chính
+
+| Khía Cạnh              | Lệnh Ubuntu (APT)                       |
+|------------------------|-----------------------------------------|
+| Cập nhật cache repo   | `sudo apt update`                      |
+| Cài đặt gói           | `sudo apt install pkg`                 |
+| Xóa gói               | `sudo apt remove pkg`                  |
+| Nâng cấp tất cả       | `sudo apt upgrade`                     |
+| Liệt kê đã cài        | `apt list --installed`                 |
+| Tìm kiếm gói          | `apt search keyword`                   |
+| Liệt kê tệp trong gói | `dpkg -L pkg`                          |
+| Tệp thuộc gói         | `dpkg -S /path`                        |
+
+## Lưu Ý
+- Luôn sử dụng `sudo` cho các lệnh yêu cầu quyền root.
+- Cập nhật hệ thống định kỳ để tránh lỗ hổng bảo mật.
+- Nếu gặp lỗi, kiểm tra kết nối mạng hoặc cấu hình repo.
