@@ -42,20 +42,12 @@
 | **Xử lý dependency**| Phải xử lý phụ thuộc 1 cách trực tiếp | Tự động tải và xử lý phụ thuộc cần thiết |
 | **Phạm vi xử lý**        | Sử dụng cho các package đơn lẻ   | Sử dụng cho toàn bộ hệ thống       |
 
-## Bảng Lệnh APT Chính
-
-| Khía Cạnh              | Lệnh Ubuntu (APT)                       |
-|------------------------|-----------------------------------------|
-| Cập nhật cache repo   | `sudo apt update`                      |
-| Cài đặt gói           | `sudo apt install pkg`                 |
-| Xóa gói               | `sudo apt remove pkg`                  |
-| Nâng cấp tất cả       | `sudo apt upgrade`                     |
-| Liệt kê đã cài        | `apt list --installed`                 |
-| Tìm kiếm gói          | `apt search keyword`                   |
-| Liệt kê tệp trong gói | `dpkg -L pkg`                          |
-| Tệp thuộc gói         | `dpkg -S /path`                        |
-
-## Lưu Ý
-- Luôn sử dụng `sudo` cho các lệnh yêu cầu quyền root.
-- Cập nhật hệ thống định kỳ để tránh lỗ hổng bảo mật.
-- Nếu gặp lỗi, kiểm tra kết nối mạng hoặc cấu hình repo.
+## Một số câu lệnh chính
+* Show dependencies: `apt depends` `apt rdepends`
+* Kiểm tra thuộc package nào : dùng `dpkg -S` hoặc `apt-file search`
+* List file trong 1 packge : dùng `dpkg -L` hoặc `apt-file list`
+* Search : `apt search` hoặc `apt-file search`
+* Download : `sudo apt install`
+* Remove : `sudo apt remove`(keep conf files) `sudo apt purge`(no keep) `sudo apt autoremove`(remove unused dependencies)
+* Upgrade : `sudo apt update`(update repo cache) `sudo apt upgrade`(upgrade installed packages)/`sudo apt full-upgrade`
+* List toàn bộ hoặc đã tải : `apt list` hoặc `dpkg -l`
