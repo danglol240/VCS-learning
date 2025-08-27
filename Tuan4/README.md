@@ -41,8 +41,41 @@
 
 ## SystemV và Systemd
 ### Difference
+* Các bản phân phối Linux hiện đại đã thay thế `System V init` bằng **`systemd`**. Thay vì dùng "runlevel", `systemd` sử dụng một khái niệm linh hoạt hơn gọi là **"target units"** (các đơn vị mục tiêu). Một `.target` unit không phải là một "chế độ" mà là một **điểm đồng bộ hóa**, nó nhóm các dịch vụ và các target khác lại với nhau. Dưới đây là bảng so sánh trực tiếp:
+
+| Tính năng | **Runlevel (System V `init`)** | **Target Unit (`systemd`)** |
+| :--- | :--- | :--- |
+| **Bản chất** | Một trạng thái hoạt động độc lập, được xác định bằng một con số. | Một nhóm các unit (dịch vụ, socket, target khác...). |
+| **Khởi động** | **Tuần tự**. Các dịch vụ khởi động lần lượt theo thứ tự, làm cho quá trình boot chậm hơn. | **Song song**. `systemd` phân tích sự phụ thuộc và khởi động các dịch vụ song song, giúp boot nhanh hơn nhiều. |
+| **Quản lý** | Dùng lệnh `telinit` hoặc `init` để thay đổi runlevel. | Dùng lệnh `systemctl isolate <tên-target>.target` để chuyển đổi. |
+| **Linh hoạt** | Cứng nhắc, chỉ có 7 runlevel được định sẵn. | Rất linh hoạt, bạn có thể dễ dàng tạo, chỉnh sửa, và kết hợp các target. |
+
+* Để tương thích ngược, `systemd` vẫn hiểu các khái niệm runlevel cũ và ánh xạ chúng tới các `.target` tương ứng.
+
+| Runlevel | Tương đương với Target trong `systemd` | Mô tả |
+| :--- | :--- | :--- |
+| **Runlevel 0** | `poweroff.target` | Tắt máy |
+| **Runlevel 1** | `rescue.target` | Chế độ cứu hộ (tương tự single-user) |
+| **Runlevel 3** | `multi-user.target` | Đa người dùng, dòng lệnh, có mạng |
+| **Runlevel 5** | `graphical.target` | Giao diện đồ họa (bao gồm cả `multi-user.target`) |
+| **Runlevel 6** | `reboot.target` | Khởi động lại |
+
+> **Runlevel** là cách tiếp cận **cũ**, tuần tự và cứng nhắc để xác định trạng thái của hệ thống. **Systemd Target** là cách tiếp cận **hiện đại**, linh hoạt, dựa trên sự phụ thuộc và khởi động song song, giúp hệ thống khởi động nhanh và quản lý dịch vụ hiệu quả hơn.
 
 ### SystemV and runlevel
+
+* **Runlevel** là một khái niệm từ hệ thống khởi động cũ của Linux (gọi là **System V `init`**), dùng để định nghĩa một **chế độ hoạt động** của hệ thống. Trong `System V init`, có 7 runlevel tiêu chuẩn, được đánh số từ 0 đến 6:
+
+* **Runlevel 0**: `Halt` (Tắt máy).
+* **Runlevel 1**: `Single-User Mode` (Chế độ một người dùng). Dùng để bảo trì, sửa lỗi hệ thống, không có mạng.
+* **Runlevel 2**: `Multi-User Mode` (Chế độ đa người dùng). Không có dịch vụ mạng.
+* **Runlevel 3**: `Multi-User Mode with Networking` (Chế độ đa người dùng với mạng). Đây là chế độ dòng lệnh (command-line) tiêu chuẩn cho server.
+* **Runlevel 4**: Không được sử dụng, người dùng có thể tùy chỉnh.
+* **Runlevel 5**: `Graphical User Interface (GUI)` (Chế độ đa người dùng với mạng và giao diện đồ họa). Đây là chế độ mặc định cho các máy tính để bàn.
+* **Runlevel 6**: `Reboot` (Khởi động lại máy).
+
+Khi hệ thống khởi động, nó sẽ vào một runlevel mặc định (thường là 3 hoặc 5) và khởi chạy tuần tự các script tương ứng với runlevel đó.
+
 ### Systemd and Unit file
 * /sbin/init và nó sẽ là chương trình đầu tiên được khởi động trong hệ thống (PID = 1)
 <img width="719" height="181" alt="init-systemd" src="https://github.com/user-attachments/assets/9ae4a5ea-e8f0-4006-88f7-fa3dc67fe783" />
@@ -151,26 +184,6 @@ Dịch vụ trong systemd được định nghĩa bởi các tệp **unit file**
 ### Init Script
 - **Trong systemd**: Không còn script init kiểu cũ. Thay vào đó là unit file (.service, .target, v.v.) viết bằng cú pháp đơn giản (INI-style).
 - **Legacy init script**: Ubuntu vẫn hỗ trợ các script cũ ở `/etc/init.d/` (ví dụ: `/etc/init.d/apache2 start`). Systemd tạo wrapper tự động qua `systemd-sysv-generator`.
-- **Ví dụ init script cũ** (SysV style):
-  ```
-  #!/bin/sh
-  ### BEGIN INIT INFO
-  # Provides:          my-service
-  # Required-Start:    $remote_fs $syslog
-  # Required-Stop:     $remote_fs $syslog
-  # Default-Start:     2 3 4 5
-  # Default-Stop:      0 1 6
-  ### END INIT INFO
-
-  case "$1" in
-    start)
-      # Lệnh khởi động
-      ;;
-    stop)
-      # Lệnh dừng
-      ;;
-  esac
-  ```
 - Để sử dụng: `sudo /etc/init.d/my-service start`, nhưng khuyến nghị chuyển sang unit file systemd.
 
 ## Quy Trình Tắt Máy (Shutdown Process)
