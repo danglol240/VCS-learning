@@ -206,8 +206,3 @@ Quy trình tắt máy trên Ubuntu được quản lý bởi systemd để đả
 7. **Tắt nguồn**: Kernel gọi ACPI để tắt phần cứng (power off) hoặc reboot.
 8. **Log**: Toàn bộ quy trình được ghi log trong `/var/log/syslog` hoặc dùng `journalctl` để xem.
 <img width="1109" height="585" alt="shutdown" src="https://github.com/user-attachments/assets/fb2449cf-ab01-45fb-aa9c-4389740286af" />
-
-## Lưu Ý
-- Luôn dùng `sudo` cho các lệnh hệ thống.
-- Kiểm tra log với `journalctl -u service-name` để debug dịch vụ.
-- Nếu dùng hệ thống cũ (pre-Ubuntu 15.04), có thể dùng SysV init, nhưng systemd là chuẩn hiện đại.
