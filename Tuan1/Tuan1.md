@@ -67,3 +67,55 @@ Logical Volume (LV) là thành phần của Logical Volume Manager (LVM), dùng 
 <img width="910" height="478" alt="lvextend" src="https://github.com/user-attachments/assets/d2000514-d5f0-4cda-8066-2bc93d9e95f4" />
 
 ## Hard link and sym link
+### Inode
+`inode` (Index Node) là một cấu trúc dữ liệu của hệ thống file (filesystem) trên Linux/UNIX dùng để lưu trữ thông tin **siêu dữ liệu (metadata)** về tệp hoặc thư mục, **không chứa dữ liệu thực tế của tệp** và **không chứa tên tệp**.
+
+### **Thông tin lưu trữ trong inode**
+
+Một inode chứa các thông tin quan trọng sau:
+
+* **Kiểu tệp (file type)**: Tệp thường, thư mục, thiết bị, symbolic link, socket, pipe...
+* **Kích thước tệp (file size)**
+* **Quyền truy cập (permissions)**: đọc, ghi, thực thi (rwx)
+* **Chủ sở hữu (owner UID)**
+* **Nhóm sở hữu (GID)**
+* **Thời gian quan trọng**:
+
+  * `atime` (Access time) – lần cuối tệp được đọc
+  * `mtime` (Modify time) – lần cuối dữ liệu tệp thay đổi
+  * `ctime` (Change time) – lần cuối metadata (như permission) thay đổi
+* **Số lượng hard link trỏ đến inode**
+* **Con trỏ đến các block dữ liệu thực tế** (data blocks)
+
+### **Cách hoạt động của inode**
+
+1. Khi tạo một tệp mới, hệ thống file sẽ:
+
+   * Cấp một inode để lưu metadata.
+   * Cấp các block dữ liệu (nếu có nội dung).
+   * Lưu tên tệp trong thư mục cùng **chỉ số inode (inode number)** tương ứng.
+
+2. Khi truy cập một tệp:
+
+   * Hệ thống file đọc thư mục → lấy số inode từ tên tệp → tìm inode → từ inode lấy vị trí dữ liệu thực tế.
+
+3. Khi xóa tệp:
+
+   * Hệ thống chỉ giảm **số lượng hard link** trong inode.
+   * Nếu số hard link = 0 → giải phóng inode và các block dữ liệu.
+### Hard link
+- Là **liên kết trực tiếp đến inode của file gốc**.
+- Cả file gốc và hard link đều chia sẻ cùng inode.
+- Xóa file gốc **không làm mất dữ liệu** nếu hard link còn tồn tại.
+- Chỉ hoạt động trong cùng một filesystem.
+<img width="595" height="155" alt="hardlink" src="https://github.com/user-attachments/assets/78e59164-74d5-4271-a578-ffb011fc9d6d" />
+
+* E.g <img width="873" height="535" alt="hardlinkvd" src="https://github.com/user-attachments/assets/2816fd8b-e5e3-49a3-844f-73129963e762" />
+## Symbolic link
+* Là một file đặc biệt chứa đường dẫn đến file gốc (giống shortcut).
+* Không chia sẻ inode với file gốc.
+* Nếu file gốc bị xóa, symlink trở thành broken link.
+* Có thể trỏ đến file hoặc thư mục, và có thể vượt qua filesystem khác.
+<img width="628" height="300" alt="symlink" src="https://github.com/user-attachments/assets/d6555a77-0cd1-4441-8a6a-0f0251dbc395" />
+
+* E.g  <img width="935" height="365" alt="symlinkvd" src="https://github.com/user-attachments/assets/5d5fa68b-6f52-4ddf-8b8a-29016176a8f6" />
