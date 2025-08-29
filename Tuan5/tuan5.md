@@ -1,151 +1,141 @@
 # Process monitoring and Scheduling
 ## Process monitoring
-### 1. Chạy tiến trình nền (background) và tiến trình tiền cảnh (foreground)
-* **Background process**: Cho phép tiến trình chạy song song mà không chiếm quyền điều khiển terminal.
+### Cách Chuyển Tiến Trình Đang Chạy Sang Nền Hoặc Tiền Cảnh (&, fg, bg, jobs, Ctrl+Z)
 
-  ```bash
-  command &
-  ```
+Trong các shell Linux như bash, bạn có thể quản lý tiến trình giữa tiền cảnh (tương tác) và nền (không tương tác) bằng các lệnh tích hợp. Những lệnh này rất cần thiết để đa nhiệm trong terminal.
 
-  Ví dụ:
+- **& (Dấu Và)**: Chạy lệnh ngay lập tức ở nền.  
+  Ví dụ: `sleep 60 &` – Khởi chạy tiến trình sleep 60 giây ở nền, giải phóng terminal cho các lệnh khác. Shell sẽ in ID job (ví dụ: `[1] 1234`).
 
-  ```bash
-  sleep 100 &
-  ```
-* **Foreground process**: Tiến trình chạy chiếm quyền điều khiển terminal.
-  ```bash
-  fg %job_number
-  ```
+- **Ctrl+Z**: Tạm dừng tiến trình tiền cảnh hiện tại bằng cách gửi tín hiệu SIGTSTP. Không giết tiến trình mà chỉ dừng tạm thời.  
+  Ví dụ: Khi chạy `sleep 60`, nhấn Ctrl+Z – Kết quả: `[1]+  Stopped                 sleep 60`. Tiến trình giờ bị tạm dừng và có thể quản lý.
 
-  Ví dụ:
+- **jobs**: Liệt kê tất cả các job (tiến trình nền hoặc tạm dừng) trong phiên shell hiện tại, kèm ID job (ví dụ: %1, %2).  
+  Ví dụ: `jobs` – Có thể hiển thị: `[1]+  Stopped                 sleep 60`. Sử dụng `-l` để xem PID: `jobs -l`.
 
-  ```bash
-  fg %1
-  ```
-* **Chuyển tiến trình đang chạy sang background**:
-  * Nhấn `Ctrl+Z` để tạm dừng tiến trình (chuyển sang trạng thái stopped).
-  * Dùng `bg` để tiếp tục tiến trình ở background:
+- **bg (Background)**: Tiếp tục job bị tạm dừng ở nền.  
+  Ví dụ: Sau Ctrl+Z, chạy `bg %1` (với %1 là ID job từ `jobs`). Tiến trình tiếp tục chạy mà không chiếm terminal.
 
-    ```bash
-    bg %job_number
-    ```
-* **Xem danh sách jobs**:
-  ```bash
-  jobs
-  ```
----
+- **fg (Foreground)**: Đưa job nền hoặc tạm dừng về tiền cảnh, làm cho nó tương tác lại.  
+  Ví dụ: `fg %1` – Tiếp tục job ở tiền cảnh, nơi bạn có thể tương tác (ví dụ: xem output hoặc gửi Ctrl+C).
 
-### 2. `nohup` Command
+**Quy Trình Ví Dụ**:
+1. Chạy tiền cảnh: `sleep 60`
+2. Tạm dừng: Ctrl+Z
+3. Liệt kê: `jobs`
+4. Chạy nền: `bg %1`
+5. Chạy tiền cảnh: `fg %1`
 
-* **Mục đích**: Giữ tiến trình chạy kể cả khi thoát khỏi terminal (ngăn nhận SIGHUP).
+Những lệnh này là built-in của shell, nên chúng hoạt động theo từng phiên. Đối với tiến trình tách rời, xem xét công cụ như `screen` hoặc `tmux`.
 
-  ```bash
-  nohup command &
-  ```
-* Output mặc định ghi vào `nohup.out` nếu không chuyển hướng.
+### Các Trường Hợp Sử Dụng Lệnh nohup
 
----
+`nohup` (no hangup) chạy lệnh mà không bị ảnh hưởng bởi tín hiệu hangup (SIGHUP), được gửi khi terminal đóng (ví dụ: logout hoặc ngắt SSH). Nó chuyển hướng output sang `nohup.out` mặc định và thường kết hợp với `&` để chạy nền.
 
-### 3. `kill` Command & Signals
+- **Cú Pháp**: `nohup command [args] &`  
+  Ví dụ: `nohup ./long-script.sh > output.log 2>&1 &` – Chạy script, chuyển hướng stdout/stderr sang log, và chạy nền.
 
-* **Gửi tín hiệu tới tiến trình**:
+- **Trường Hợp Sử Dụng**:
+  - **Phiên Làm Việc Từ Xa (SSH)**: Chạy nhiệm vụ dài trên server mà không bị dừng khi ngắt kết nối. Ví dụ: `nohup wget large-file.url &` – Tải tiếp tục sau khi logout.
+  - **Xử Lý Hàng Loạt**: Dành cho script mất hàng giờ/ngày (ví dụ: sao lưu dữ liệu, biên dịch) mà không cần terminal mở.
+  - **Hành Vi Giống Daemon**: Mô phỏng tiến trình liên tục mà không cần daemon hóa đầy đủ (mặc dù `systemd` hoặc `screen` tốt hơn cho dịch vụ).
+  - **Xử Lý Lỗi**: Ghi lại output ngay cả khi phiên kết thúc, hữu ích để debug công việc từ xa.
 
-  ```bash
-  kill -SIGNAL PID
-  ```
+Lưu Ý: `nohup` không biến tiến trình thành daemon; kết hợp với `disown` (`disown %1`) để loại khỏi bảng job của shell.
 
-  hoặc
+### Lệnh kill và Gửi Tín Hiệu Đến Tiến Trình (SIGINT, SIGTERM, SIGKILL)
 
-  ```bash
-  kill -9 1234
-  ```
+Lệnh `kill` gửi tín hiệu đến tiến trình theo PID (Process ID). Tín hiệu là gián đoạn phần mềm để giao tiếp (ví dụ: dừng, tạm dừng). Tìm PID bằng `ps aux | grep process-name` hoặc `pgrep name`.
 
-* **Các tín hiệu thường gặp**:
+- **Cú Pháp**: `kill [-signal] PID` (tín hiệu mặc định là SIGTERM). Sử dụng `kill -l` để liệt kê tất cả tín hiệu.
 
-  * `SIGINT` (2): Ngắt tiến trình từ terminal (`Ctrl+C`).
-  * `SIGTERM` (15): Yêu cầu kết thúc tiến trình **một cách an toàn** (default).
-  * `SIGKILL` (9): Buộc tiến trình dừng ngay lập tức (không thể bị chặn).
+- **Các Tín Hiệu Phổ Biến**:
+  - **SIGINT (Tín Hiệu 2)**: Gián đoạn từ bàn phím (ví dụ: Ctrl+C). Yêu cầu dừng lịch sự, cho phép dọn dẹp. Thường bị bỏ qua bởi daemon.
+    - Ví dụ: `kill -2 1234` hoặc `kill -SIGINT 1234`.
+  - **SIGTERM (Tín Hiệu 15)**: Yêu cầu dừng (mặc định cho `kill PID`). Dừng graceful; tiến trình có thể xử lý (lưu dữ liệu, đóng file).
+    - Ví dụ: `kill 1234` (gửi SIGTERM).
+  - **SIGKILL (Tín Hiệu 9)**: Dừng ép buộc. Dừng ngay lập tức mà không dọn dẹp; kernel thực thi. Sử dụng cuối cùng (có thể gây mất dữ liệu).
+    - Ví dụ: `kill -9 1234` hoặc `kill -SIGKILL 1234`. Không thể bỏ qua.
 
----
+- **Trường Hợp Sử Dụng**:
+  - Dừng graceful: Sử dụng SIGTERM cho dịch vụ như Apache (`kill -15 $(pgrep apache)`).
+  - Gián đoạn tương tác: SIGINT cho tiến trình người dùng.
+  - Tiến trình không phản hồi: SIGKILL khi các tín hiệu khác thất bại.
+  - Tín hiệu khác: SIGUSR1 (tùy chỉnh, ví dụ: tải lại config), SIGHUP (hangup, ví dụ: tải lại daemon).
+
+Công cụ như `pkill` (kill theo tên) hoặc `killall` đơn giản hóa: `pkill -SIGTERM process-name`.
 
 ## Cron
 
-### 1. System Crontab vs User Crontab
+### Crontab Hệ Thống và Crontab Người Dùng Là Gì
 
-* **System crontab**:
+Cron là công cụ lập lịch dựa trên thời gian cho các nhiệm vụ định kỳ.
 
-  * File: `/etc/crontab`
-  * Chạy các tác vụ hệ thống, có thêm trường `user` để chỉ định ai sẽ chạy.
-  * Ví dụ:
+- **Crontab Hệ Thống**: Nằm ở `/etc/crontab`, quản lý bởi root. Bao gồm trường "user" thêm để chỉ định ai chạy job (ví dụ: `root`). Dùng cho nhiệm vụ toàn hệ thống như xoay log. Chỉnh sửa bằng `sudo nano /etc/crontab`. Ngoài ra, thư mục như `/etc/cron.d/` cho job cụ thể của package.
 
-    ```
-    * * * * * root /path/to/script.sh
-    ```
+- **Crontab Người Dùng**: File theo từng người dùng, chỉnh sửa bằng `crontab -e` (không cần sudo cho file của bạn). Không có trường "user"; chạy dưới quyền người dùng chỉnh sửa. Lưu ở `/var/spool/cron/crontabs/username`. Lý tưởng cho script cá nhân.
 
-* **User crontab**:
+Cả hai dùng định dạng giống nhau nhưng khác về phạm vi và quyền hạn.
 
-  * Quản lý bằng `crontab -e` cho từng user.
-  * Không có trường `user` trong file.
+### Tại Sao Crontab Chỉ Chạy Mỗi Phút Một Lần Và Không Phải Mỗi Giây
 
----
+Độ chi tiết của Cron bị giới hạn ở phút theo thiết kế, theo chuẩn POSIX để tương thích và hiệu quả. Daemon cron (cron hoặc crond) thức dậy mỗi phút để kiểm tra và thực thi job, tránh polling liên tục có thể làm quá tải hệ thống. Lý do lịch sử bắt nguồn từ Vixie cron (triển khai phổ biến), ngủ 60 giây giữa các lần kiểm tra.
 
-### 2. Tại sao crontab chỉ chạy tối thiểu 1 phút?
+Đối với nhiệm vụ dưới phút, các lựa chọn thay thế bao gồm:
+- Script với vòng lặp và `sleep` (ví dụ: job cron mỗi phút chạy script lặp với `sleep 10` cho khoảng cách 10 giây).
+- Công cụ như `systemd timers` (hỗ trợ giây) hoặc `fcron` (độ chi tiết mịn hơn).
+- Không dùng cron cho nhu cầu thời gian thực; dùng daemon hoặc hệ thống dựa trên sự kiện.
 
-* Cron daemon mặc định **quét mỗi phút một lần**, nên không thể lập lịch nhỏ hơn 1 phút.
-* Nếu cần chạy với độ chính xác giây, dùng:
+Điều này ngăn lãng phí tài nguyên cho kiểm tra thường xuyên.
 
-  * `systemd timers`
-  * `watch`
-  * vòng lặp `sleep 1`
+### Các Tùy Chọn Lệnh Crontab
 
----
+`crontab` quản lý crontab người dùng. Chạy không root cho cấp độ người dùng.
 
-### 3. Crontab Command Options
+- `-e`: Chỉnh sửa crontab (mở trong editor mặc định như nano/vi).
+- `-l`: Liệt kê các entry crontab hiện tại.
+- `-r`: Xóa (delete) crontab.
+- `-u user`: Chỉ định người dùng (chỉ root, ví dụ: `sudo crontab -u username -e`).
 
-* `crontab -e`: Sửa crontab của user hiện tại.
-* `crontab -l`: Liệt kê crontab của user.
-* `crontab -r`: Xóa crontab của user.
-* `crontab -u <user>`: Quản lý crontab của user khác (yêu cầu quyền root).
+Ví dụ: `crontab -l` hiển thị job lập lịch của bạn.
 
----
+### Cách Chạy Tiến Trình Với Cron
 
-### 4. Chạy process với Cron
+Thêm entry vào crontab để thực thi lệnh/script theo khoảng thời gian.
 
-Ví dụ: Chạy script `/home/user/backup.sh` mỗi ngày lúc 2 giờ sáng:
+1. Chỉnh sửa: `crontab -e`
+2. Thêm dòng: `phút giờ ngày-tháng tháng ngày-tuần /đường/dẫn/command-or-script args`
+3. Lưu và thoát; cron cài đặt tự động.
 
-```
-0 2 * * * /home/user/backup.sh
-```
+Ví dụ: Chạy `backup.sh` mỗi ngày lúc 2 AM:  
+`0 2 * * * /home/user/backup.sh >> /var/log/backup.log 2>&1`
 
----
+- Sử dụng đường dẫn đầy đủ (ví dụ: `/usr/bin/echo` thay vì `echo`) vì cron có môi trường tối thiểu.
+- Chuyển hướng output (`> log` hoặc `>> log 2>&1`) để tránh email.
+- Đối với tiến trình cần môi trường: Source `.bashrc` trong script (`source ~/.bashrc`).
 
-### 5. Lịch biểu Cron (Cron Schedule)
+Kiểm tra với khoảng thời gian ngắn trước.
 
-Cú pháp:
+### Cách Lập Lịch (Định Dạng Crontab và Ví Dụ)
 
-```
-* * * * * command_to_run
-- - - - -
-| | | | |
-| | | | +---- Thứ trong tuần (0–7, 0/7 = Chủ nhật)
-| | | +------ Tháng (1–12)
-| | +-------- Ngày trong tháng (1–31)
-| +---------- Giờ (0–23)
-+------------ Phút (0–59)
-```
+Entry crontab theo: `m h dom mon dow command`
+- `m`: Phút (0-59)
+- `h`: Giờ (0-23)
+- `dom`: Ngày tháng (1-31)
+- `mon`: Tháng (1-12 hoặc tên như JAN)
+- `dow`: Ngày tuần (0-7, 0/7=Chủ Nhật, hoặc tên như MON)
+- Đặc biệt: `*` (bất kỳ), `*/5` (mỗi 5), `1-5` (phạm vi), `0,15,30,45` (danh sách)
 
 Ví dụ:
+- Mỗi phút: `* * * * * command`
+- Mỗi 5 phút: `*/5 * * * * command`
+- Ngày thường 9 AM: `0 9 * * 1-5 command`
+- Ngày 1 hàng tháng lúc nửa đêm: `0 0 1 * * command`
+- Khởi động lại: `@reboot command` (chạy khi khởi động)
 
-* `* * * * *`: Mỗi phút
-* `*/5 * * * *`: Mỗi 5 phút
-* `0 6 * * 1-5`: 6h sáng từ Thứ 2 đến Thứ 6
+Công cụ như crontab.guru giúp hình dung. Đối với crontab hệ thống, thêm user: `0 2 * * * root /script.sh`
 
----
-
-Bạn có muốn tôi viết thêm:
-
-1. **Cách debug cron không chạy (log ở đâu, mail output)**,
-2. **Minh họa ví dụ kết hợp nohup + cron**,
-3. Hay **so sánh cron với systemd timer**?
-
-Bạn muốn tôi làm thành **cheat sheet tóm tắt nhanh** hay **bản đầy đủ kiểu hướng dẫn thực hành?**
+## Lưu Ý
+- Tất cả ví dụ giả định Ubuntu/Debian; lệnh tương tự trên các Linux khác.
+- Giám sát log cron: `/var/log/syslog` hoặc `grep CRON /var/log/syslog`.
+- Đối với lập lịch phức tạp, xem xét `anacron` (xử lý job bị bỏ lỡ) hoặc `systemd timers`.
