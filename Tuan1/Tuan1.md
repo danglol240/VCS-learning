@@ -1,39 +1,52 @@
 # Bổ sung
 ## FS
-### Luồng hoạt động File system
-1. Ứng Dụng Gửi Yêu Cầu
-- Gọi system call: `open()`, `read()`, `write()`, `close()`
-- Chuyển từ **user space** sang **kernel space**
+### **Các Thành Phần Cốt Lõi**
 
-2. Logical File System (LFS)
-- Quản lý **metadata**: quyền truy cập, vị trí file, dung lượng
-- Kiểm tra quyền truy cập
-- Phân tích đường dẫn (path resolution)
-- Giao tiếp với **File Organization Module**
+Mọi filesystem đều hoạt động dựa trên các thành phần cấu trúc sau:
 
-3. File Organization Module
-- Xác định cách dữ liệu được lưu: block, inode, FAT, ext4 inode...
-- Tìm vị trí block vật lý
-- Chuyển yêu cầu xuống **Basic File System**
+* **Superblock**: Chứa siêu dữ liệu (metadata) về toàn bộ filesystem, chẳng hạn như loại filesystem, kích thước tổng thể, số lượng khối dữ liệu, và vị trí của các cấu trúc quan trọng khác. Đây là bản ghi chính của filesystem.
 
-4. Basic File System
-- Cung cấp API cơ bản để đọc/ghi block
-- Tạo **I/O request** (bio struct, buffer head)
+* **Inode**: Viết tắt của "index node". Mỗi tệp và thư mục được đại diện bởi một inode. Inode chứa siêu dữ liệu về đối tượng đó, bao gồm:
+    * Quyền sở hữu (user, group).
+    * Quyền truy cập (đọc, ghi, thực thi).
+    * Kích thước.
+    * Các mốc thời gian (ngày tạo, ngày sửa đổi, ngày truy cập).
+    * **Con trỏ** trỏ đến các khối dữ liệu (Data Blocks) chứa nội dung thực tế.
+    * **Lưu ý**: Inode **không** chứa tên của tệp.
 
-5. I/O Control Layer
-- Gồm:
-  - **Device Drivers**: giao tiếp trực tiếp với thiết bị (HDD, SSD, NVMe)
-  - **Interrupt Handlers**: nhận tín hiệu I/O hoàn thành
-- Sử dụng **I/O Scheduler**: CFQ, deadline, noop...
+* **Data Blocks**: Là các đơn vị lưu trữ cơ bản trên đĩa cứng. Nội dung thực tế của các tệp được ghi vào các khối này.
 
-6. Device Hardware
-- Thực hiện lệnh đọc/ghi block
-- Trả dữ liệu về kernel qua **DMA** hoặc **interrupt**
+* **Directory Entry (dentry)**: Là thành phần liên kết giữa **tên tệp** (mà con người đọc được) và **số inode** của nó. Một thư mục về bản chất là một tệp đặc biệt chứa một danh sách các `dentry` của các tệp và thư mục con bên trong nó.
 
-7. Trả Kết Quả Về Ứng Dụng
-- Kernel nhận interrupt → đánh thức process đang chờ
-- Copy dữ liệu từ kernel buffer về user buffer
-- System call trả về → ứng dụng tiếp tục thực thi
+### **Quy Trình Hoạt Động**
+
+Đây là cách các thành phần trên phối hợp với nhau trong các hoạt động cơ bản.
+
+#### **1. Tạo một tệp mới (`touch file.txt`)**
+1.  Filesystem tìm một **inode** còn trống trong bảng inode.
+2.  Nó ghi các siêu dữ liệu ban đầu (chủ sở hữu, quyền mặc định, thời gian tạo) vào inode này.
+3.  Trong thư mục hiện tại, nó tạo ra một **dentry** mới. `dentry` này chứa tên tệp là `file.txt` và số hiệu của inode vừa được cấp phát.
+
+#### **2. Ghi dữ liệu vào tệp**
+1.  Filesystem sử dụng `dentry` để tìm ra **inode** tương ứng với tên tệp.
+2.  Nó kiểm tra bản đồ không gian trống (free space bitmap) để tìm một **data block** còn trống.
+3.  Dữ liệu của người dùng được ghi vào data block đó.
+4.  Địa chỉ của data block này được ghi vào danh sách con trỏ bên trong **inode**.
+5.  Các siêu dữ liệu trong inode (như kích thước tệp và thời gian sửa đổi) được cập nhật.
+
+#### **3. Đọc một tệp**
+1.  Filesystem duyệt qua cấu trúc thư mục để tìm **dentry** có tên tệp tương ứng.
+2.  Từ `dentry`, nó lấy được số hiệu **inode**.
+3.  Nó đọc inode để lấy danh sách các con trỏ trỏ đến các **data blocks**.
+4.  Hệ thống đi đến địa chỉ của các data block trên đĩa, đọc nội dung và trả về cho ứng dụng của người dùng.
+
+#### **4. Xóa một tệp (`rm file.txt`)**
+1.  Filesystem tìm và **xóa `dentry`** có tên `file.txt` khỏi thư mục chứa nó. Việc này làm cho tên tệp biến mất khỏi danh sách.
+2.  Nó truy cập vào **inode** của tệp và giảm "số lượng liên kết" (link count) đi 1.
+3.  Nếu số lượng liên kết bằng 0 (nghĩa là không còn `dentry` nào trỏ đến inode này), filesystem sẽ:
+    * Đánh dấu **inode** này là trống, sẵn sàng để tái sử dụng.
+    * Đánh dấu tất cả các **data blocks** mà inode này trỏ tới là trống trong bản đồ không gian trống.
+    * **Lưu ý**: Dữ liệu trong các data block không bị xóa ngay lập tức mà chỉ được đánh dấu là có thể ghi đè. Đây là lý do tại sao có thể khôi phục các tệp vừa bị xóa.
 ### Vấn đề umount lúc 1 tiến trình đang xử lý
 * Tình huống: xuất hiện 1 tiến trình đọc ghi / có file descriptor cwd(current working directory) nằm ở bên trong khu vực cần unmount => target is busy
 * Quy trình kill+umount: 
