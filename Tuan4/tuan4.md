@@ -19,10 +19,12 @@
     * Đọc tệp cấu hình của nó (ví dụ: `/etc/grub2.cfg`) để biết vị trí của nhân Linux.
     * **Thực thi nhân (Execute kernel)**: Tải nhân Linux và `initramfs` (hệ thống tệp tạm thời trong RAM) vào bộ nhớ.
     * **Tải các thư viện được hỗ trợ (Load supported libraries)**.
+<img width="1727" height="166" alt="kernel" src="https://github.com/user-attachments/assets/b86de2ef-531a-40c6-ab85-d72fdabeb854" />
 
 **5. Thực thi `systemd`**
 * Sau khi nhân (kernel) được tải và khởi tạo, nó sẽ khởi chạy tiến trình đầu tiên trong **không gian người dùng (user space)**. Tiến trình này luôn có PID (Process ID) là 1.
 * Trong các hệ thống Linux hiện đại, tiến trình này là **`systemd`**. `systemd` chịu trách nhiệm khởi tạo phần còn lại của hệ thống.
+<img width="1737" height="634" alt="systemd" src="https://github.com/user-attachments/assets/ceaf600b-ef5d-428d-ba5e-b7f6ed2a28e2" />
 
 **6. Chạy các tệp `.target` (Run .target Files)**
 * `systemd` sử dụng các đơn vị (units) gọi là `.target` để quản lý và khởi động các dịch vụ theo nhóm. Một `.target` tương tự như `runlevel` trong các hệ thống cũ.
@@ -37,7 +39,7 @@
     * `/etc/profile`: Script cấu hình môi trường chung cho tất cả người dùng.
     * `~/.bashrc`: Script cấu hình riêng cho shell của từng người dùng, được thực thi khi người dùng đó mở một terminal.
 
-**8. Người dùng có thể đăng nhập (Users can login now)**
+**8. Người dùng có thể đăng nhập**
 * Khi tất cả các dịch vụ cần thiết đã được khởi động và màn hình đăng nhập đã sẵn sàng (dù là giao diện dòng lệnh hay đồ họa), hệ thống đã hoàn tất quá trình khởi động và sẵn sàng để người dùng đăng nhập.
 
 ## SystemV và Systemd
