@@ -19,7 +19,9 @@
     * Đọc tệp cấu hình của nó (ví dụ: `/etc/grub2.cfg`) để biết vị trí của nhân Linux.
     * **Thực thi nhân (Execute kernel)**: Tải nhân Linux và `initramfs` (hệ thống tệp tạm thời trong RAM) vào bộ nhớ.
     * **Tải các thư viện được hỗ trợ (Load supported libraries)**.
-<img width="1727" height="166" alt="kernel" src="https://github.com/user-attachments/assets/b86de2ef-531a-40c6-ab85-d72fdabeb854" />
+![Kernel boot log sequence showing memory map and initialization](https://github.com/user-attachments/assets/b86de2ef-531a-40c6-ab85-d72fdabeb854)
+*Hình 1: Kernel boot log hiển thị bản đồ bộ nhớ và giai đoạn khởi tạo*
+
 
 **5. Thực thi `systemd`**
 * Sau khi nhân (kernel) được tải và khởi tạo, nó sẽ khởi chạy tiến trình đầu tiên trong **không gian người dùng (user space)**. Tiến trình này luôn có PID (Process ID) là 1.
