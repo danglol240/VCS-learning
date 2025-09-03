@@ -30,8 +30,8 @@
 
 **6. Chạy các tệp `.target` (Run .target Files)**
 * `systemd` sử dụng các đơn vị (units) gọi là `.target` để quản lý và khởi động các dịch vụ theo nhóm. Một `.target` tương tự như `runlevel` trong các hệ thống cũ.
-* Sơ đồ cho thấy `default.target` (mục tiêu mặc định) thường trỏ đến `multi-user.target` (hệ thống đa người dùng, không có giao diện đồ họa).
-* `multi-user.target` lại phụ thuộc vào các target và service khác như `basic.target` (các dịch vụ cơ bản), `getty.target` (chuẩn bị màn hình đăng nhập terminal), và `ssh.service` (dịch vụ SSH). `systemd` sẽ khởi động chúng song song để tăng tốc độ.
+* Sơ đồ cho thấy `default.target` (mục tiêu mặc định) thường trỏ đến `multi-user.target` (hệ thống đa người dùng, không có giao diện đồ họa). Tuy nhiên ở Ubuntu 24 thì đã đổi mặc định thành graphical-user.target
+* `multi-user.target` lại phụ thuộc vào các target và service khác như `basic.target` (các dịch vụ cơ bản), `getty.target` (chuẩn bị màn hình đăng nhập terminal), và `ssh.service` (dịch vụ SSH). `systemd` sẽ khởi động chúng song song để tăng tốc độ. Các phụ thuộc có thể được tìm thấy ở trong file `.want`
 <img width="1919" height="1151" alt="target" src="https://github.com/user-attachments/assets/07ed3476-2112-4407-8a82-76bdde99f5a6" />
 *Hình 3: Các unit file của hệ thống
 
