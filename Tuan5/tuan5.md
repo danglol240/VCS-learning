@@ -17,7 +17,7 @@ Trong các shell Linux như bash, bạn có thể quản lý tiến trình giữ
   Ví dụ: Sau Ctrl+Z, chạy `bg %1` (với %1 là ID job từ `jobs`). Tiến trình tiếp tục chạy mà không chiếm terminal.
 
 - **fg (Foreground)**: Đưa job nền hoặc tạm dừng về tiền cảnh, làm cho nó tương tác lại.  
-  Ví dụ: `fg %1` – Tiếp tục job ở tiền cảnh, nơi bạn có thể tương tác (ví dụ: xem output hoặc gửi Ctrl+C).
+  Ví dụ: `fg %1` – Tiếp tục job ở foreground, nơi có thể tương tác (ví dụ: xem output hoặc gửi Ctrl+C).
 
 **Quy Trình Ví Dụ**:
 1. Chạy tiền cảnh: `sleep 60`
