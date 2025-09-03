@@ -1,0 +1,359 @@
+Aug 29 11:50:23 danglol240 sshd[7929]: pam_unix(sshd:session): session closed for user tester
+Aug 29 11:50:23 danglol240 sudo[15670]: pam_unix(sudo:session): session closed for user root
+Aug 29 11:50:23 danglol240 systemd-logind[1057]: Session 97 logged out. Waiting for processes to exit.
+Aug 29 11:50:23 danglol240 systemd[1]: session-97.scope: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: session-97.scope: Consumed 1.067s CPU time, 28.0M memory peak, 0B memory swap peak.
+Aug 29 11:50:23 danglol240 systemd-logind[1057]: Removed session 97.
+Aug 29 11:50:23 danglol240 systemd-logind[1057]: System is rebooting.
+Aug 29 11:50:23 danglol240 systemd[1]: unattended-upgrades.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping session-1.scope - Session 1 of User danglol240...
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping session-116.scope - Session 116 of User danglol240...
+Aug 29 11:50:23 danglol240 sshd[15360]: pam_unix(sshd:session): session closed for user danglol240
+Aug 29 11:50:23 danglol240 systemd[1]: Removed slice system-cockpit\x2dwsinstance\x2dhttps.slice - Slice /system/cockpit-wsinstance-https.
+Aug 29 11:50:23 danglol240 systemd[1]: Removed slice system-cockpit\x2dwsinstance\x2dhttps\x2dfactory.slice - Slice /system/cockpit-wsinstance-https-factory.
+Aug 29 11:50:23 danglol240 systemd[1]: Removed slice system-cockpithttps.slice - Resource limits for all cockpit-ws-https@.service instances.
+Aug 29 11:50:23 danglol240 systemd[1]: Removed slice system-modprobe.slice - Slice /system/modprobe.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped target graphical.target - Graphical Interface.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped target multi-user.target - Multi-User System.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped target getty.target - Login Prompts.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped target sound.target - Sound Card.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped target timers.target - Timer Units.
+Aug 29 11:50:23 danglol240 systemd[1]: apt-daily-upgrade.timer: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped apt-daily-upgrade.timer - Daily apt upgrade and clean activities.
+Aug 29 11:50:23 danglol240 systemd[1]: apt-daily.timer: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped apt-daily.timer - Daily apt download activities.
+Aug 29 11:50:23 danglol240 systemd[1]: dpkg-db-backup.timer: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped dpkg-db-backup.timer - Daily dpkg database backup timer.
+Aug 29 11:50:23 danglol240 systemd[1]: e2scrub_all.timer: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped e2scrub_all.timer - Periodic ext4 Online Metadata Check for All Filesystems.
+Aug 29 11:50:23 danglol240 systemd[1]: fstrim.timer: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped fstrim.timer - Discard unused filesystem blocks once a week.
+Aug 29 11:50:23 danglol240 systemd[1]: fwupd-refresh.timer: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped fwupd-refresh.timer - Refresh fwupd metadata regularly.
+Aug 29 11:50:23 danglol240 systemd[1]: logrotate.timer: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped logrotate.timer - Daily rotation of log files.
+Aug 29 11:50:23 danglol240 systemd[1]: man-db.timer: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped man-db.timer - Daily man-db regeneration.
+Aug 29 11:50:23 danglol240 systemd[1]: motd-news.timer: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped motd-news.timer - Message of the Day.
+Aug 29 11:50:23 danglol240 systemd[1]: sysstat-collect.timer: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped sysstat-collect.timer - Run system activity accounting tool every 10 minutes.
+Aug 29 11:50:23 danglol240 systemd[1]: sysstat-summary.timer: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped sysstat-summary.timer - Generate summary of yesterday's process accounting.
+Aug 29 11:50:23 danglol240 systemd[1]: systemd-tmpfiles-clean.timer: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped systemd-tmpfiles-clean.timer - Daily Cleanup of Temporary Directories.
+Aug 29 11:50:23 danglol240 systemd[1]: update-notifier-download.timer: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped update-notifier-download.timer - Download data for packages that failed at package install time.
+Aug 29 11:50:23 danglol240 systemd[1]: update-notifier-motd.timer: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped update-notifier-motd.timer - Check to see whether there is a new version of Ubuntu available.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped target time-set.target - System Time Set.
+Aug 29 11:50:23 danglol240 systemd[1]: lvm2-lvmpolld.socket: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Closed lvm2-lvmpolld.socket - LVM2 poll daemon socket.
+Aug 29 11:50:23 danglol240 systemd[1]: systemd-rfkill.socket: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Closed systemd-rfkill.socket - Load/Save RF Kill Switch Status /dev/rfkill Watch.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping apache2.service - The Apache HTTP Server...
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping apport.service - automatic crash report generation...
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping blk-availability.service - Availability of block devices...
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping cron.service - Regular background program processing daemon...
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping finalrd.service - Create final runtime dir for shutdown pivot root...
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping fwupd.service - Firmware update daemon...
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping getty@tty1.service - Getty on tty1...
+Aug 29 11:50:23 danglol240 fwupd[6054]: 04:50:23.258 FuMain               Received SIGTERM
+Aug 29 11:50:23 danglol240 apachectl[15679]: AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 127.0.1.1. Set the 'ServerName' directive globally to suppress this message
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping openvpn-iptables.service...
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping openvpn-server@server.service - OpenVPN service for server...
+Aug 29 11:50:23 danglol240 systemd[1]: openvpn.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped openvpn.service - OpenVPN service.
+Aug 29 11:50:23 danglol240 systemd[1]: plymouth-quit.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped plymouth-quit.service - Terminate Plymouth Boot Screen.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping polkit.service - Authorization Manager...
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping rsyslog.service - System Logging Service...
+Aug 29 11:50:23 danglol240 systemd[1]: snapd.seeded.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped snapd.seeded.service - Wait until snapd is fully seeded.
+Aug 29 11:50:23 danglol240 systemd[1]: snapd.system-shutdown.service - Ubuntu core (all-snaps) system shutdown helper setup service was skipped because of an unmet condition check (ConditionPathExists=!/usr/bin/finalrd).
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping ssh.service - OpenBSD Secure Shell server...
+Aug 29 11:50:23 danglol240 systemd[1]: sysstat.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped sysstat.service - Resets System Activity Logs.
+Aug 29 11:50:23 danglol240 sshd[1354]: Received signal 15; terminating.
+Aug 29 11:50:23 danglol240 openvpn[1334]: event_wait : Interrupted system call (fd=-1,code=4)
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping systemd-random-seed.service - Load/Save OS Random Seed...
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping udisks2.service - Disk Manager...
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping upower.service - Daemon for power management...
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping user@1001.service - User Manager for UID 1001...
+Aug 29 11:50:23 danglol240 systemd[7933]: Activating special unit exit.target...
+Aug 29 11:50:23 danglol240 systemd[7933]: Stopped target default.target - Main User Target.
+Aug 29 11:50:23 danglol240 rsyslogd[1097]: [origin software="rsyslogd" swVersion="8.2312.0" x-pid="1097" x-info="https://www.rsyslog.com"] exiting on signal 15.
+Aug 29 11:50:23 danglol240 systemd[7933]: Stopped target basic.target - Basic System.
+Aug 29 11:50:23 danglol240 systemd[7933]: Stopped target paths.target - Paths.
+Aug 29 11:50:23 danglol240 systemd[7933]: Stopped target sockets.target - Sockets.
+Aug 29 11:50:23 danglol240 systemd[7933]: Stopped target timers.target - Timers.
+Aug 29 11:50:23 danglol240 systemd[7933]: Stopped launchpadlib-cache-clean.timer - Clean up old files in the Launchpadlib cache.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping vsftpd.service - vsftpd FTP server...
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping zap.service - OWASP ZAP Daemon...
+Aug 29 11:50:23 danglol240 systemd[7933]: Closed dbus.socket - D-Bus User Message Bus Socket.
+Aug 29 11:50:23 danglol240 systemd[7933]: Closed dirmngr.socket - GnuPG network certificate management daemon.
+Aug 29 11:50:23 danglol240 systemd[7933]: Closed gpg-agent-browser.socket - GnuPG cryptographic agent and passphrase cache (access for web browsers).
+Aug 29 11:50:23 danglol240 systemd[7933]: Closed gpg-agent-extra.socket - GnuPG cryptographic agent and passphrase cache (restricted).
+Aug 29 11:50:23 danglol240 systemd[1]: cron.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped cron.service - Regular background program processing daemon.
+Aug 29 11:50:23 danglol240 systemd[1]: cron.service: Consumed 2.387s CPU time, 2.5M memory peak, 0B memory swap peak.
+Aug 29 11:50:23 danglol240 systemd[7933]: Stopping gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation)...
+Aug 29 11:50:23 danglol240 systemd[7933]: Closed gpg-agent.socket - GnuPG cryptographic agent and passphrase cache.
+Aug 29 11:50:23 danglol240 systemd[7933]: Closed keyboxd.socket - GnuPG public key management service.
+Aug 29 11:50:23 danglol240 systemd[7933]: Closed pk-debconf-helper.socket - debconf communication socket.
+Aug 29 11:50:23 danglol240 systemd[7933]: Closed snapd.session-agent.socket - REST API socket for snapd user session agent.
+Aug 29 11:50:23 danglol240 systemd[1]: vsftpd.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped vsftpd.service - vsftpd FTP server.
+Aug 29 11:50:23 danglol240 systemd[1]: getty@tty1.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped getty@tty1.service - Getty on tty1.
+Aug 29 11:50:23 danglol240 systemd[1]: session-1.scope: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped session-1.scope - Session 1 of User danglol240.
+Aug 29 11:50:23 danglol240 systemd[1]: polkit.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped polkit.service - Authorization Manager.
+Aug 29 11:50:23 danglol240 systemd[1]: polkit.service: Consumed 2.072s CPU time, 4.8M memory peak, 0B memory swap peak.
+Aug 29 11:50:23 danglol240 udisksd[13793]: udisks daemon version 2.10.1 exiting
+Aug 29 11:50:23 danglol240 systemd[1]: rsyslog.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd-logind[1057]: Session 1 logged out. Waiting for processes to exit.
+Aug 29 11:50:23 danglol240 systemd[7933]: Closed gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation).
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped rsyslog.service - System Logging Service.
+Aug 29 11:50:23 danglol240 systemd[1]: ssh.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped ssh.service - OpenBSD Secure Shell server.
+Aug 29 11:50:23 danglol240 systemd[1]: apache2.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped apache2.service - The Apache HTTP Server.
+Aug 29 11:50:23 danglol240 systemd[1]: apache2.service: Consumed 4.253s CPU time, 9.9M memory peak, 0B memory swap peak.
+Aug 29 11:50:23 danglol240 systemd[7933]: Removed slice app.slice - User Application Slice.
+Aug 29 11:50:23 danglol240 systemd[7933]: Reached target shutdown.target - Shutdown.
+Aug 29 11:50:23 danglol240 systemd[7933]: Finished systemd-exit.service - Exit the Session.
+Aug 29 11:50:23 danglol240 systemd[7933]: Reached target exit.target - Exit the Session.
+Aug 29 11:50:23 danglol240 systemd[1]: upower.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped upower.service - Daemon for power management.
+Aug 29 11:50:23 danglol240 systemd[1]: fwupd.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped fwupd.service - Firmware update daemon.
+Aug 29 11:50:23 danglol240 systemd[1]: fwupd.service: Consumed 1.033s CPU time, 7.6M memory peak, 0B memory swap peak.
+Aug 29 11:50:23 danglol240 systemd[1]: udisks2.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 (sd-pam)[7934]: pam_unix(systemd-user:session): session closed for user tester
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped udisks2.service - Disk Manager.
+Aug 29 11:50:23 danglol240 systemd[1]: user@1001.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped user@1001.service - User Manager for UID 1001.
+Aug 29 11:50:23 danglol240 systemd[1]: systemd-random-seed.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped systemd-random-seed.service - Load/Save OS Random Seed.
+Aug 29 11:50:23 danglol240 blkdeactivate[15680]: Deactivating block devices:
+Aug 29 11:50:23 danglol240 systemd[1]: Removed slice system-getty.slice - Slice /system/getty.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped target getty-pre.target - Preparation for Logins.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped target nss-lookup.target - Host and Network Name Lookups.
+Aug 29 11:50:23 danglol240 systemd[1]: plymouth-quit-wait.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped plymouth-quit-wait.service - Hold until boot process finishes up.
+Aug 29 11:50:23 danglol240 systemd[1]: plymouth-reboot.service - Show Plymouth Reboot Screen was skipped because of an unmet condition check (ConditionKernelCommandLine=splash).
+Aug 29 11:50:23 danglol240 systemd[1]: plymouth-switch-root-initramfs.service - Tell Plymouth To Jump To initramfs was skipped because no trigger condition checks were met.
+Aug 29 11:50:23 danglol240 systemd-logind[1057]: Removed session 1.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping user-runtime-dir@1001.service - User Runtime Directory /run/user/1001...
+Aug 29 11:50:23 danglol240 systemd[1]: run-user-1001.mount: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Unmounted run-user-1001.mount - /run/user/1001.
+Aug 29 11:50:23 danglol240 systemd[1]: user-runtime-dir@1001.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped user-runtime-dir@1001.service - User Runtime Directory /run/user/1001.
+Aug 29 11:50:23 danglol240 systemd[1]: Removed slice user-1001.slice - User Slice of UID 1001.
+Aug 29 11:50:23 danglol240 systemd[1]: user-1001.slice: Consumed 1.355s CPU time, 33.2M memory peak, 0B memory swap peak.
+Aug 29 11:50:23 danglol240 systemd[1]: session-116.scope: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped session-116.scope - Session 116 of User danglol240.
+Aug 29 11:50:23 danglol240 systemd[1]: session-116.scope: Consumed 7.580s CPU time.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping systemd-logind.service - User Login Management...
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping user@1000.service - User Manager for UID 1000...
+Aug 29 11:50:23 danglol240 systemd[1698]: Activating special unit exit.target...
+Aug 29 11:50:23 danglol240 systemd[1698]: Stopped target default.target - Main User Target.
+Aug 29 11:50:23 danglol240 systemd[1698]: Stopping log.service - Test lingering user service...
+Aug 29 11:50:23 danglol240 systemd[1698]: Stopped log.service - Test lingering user service.
+Aug 29 11:50:23 danglol240 systemd[1698]: Stopped target basic.target - Basic System.
+Aug 29 11:50:23 danglol240 systemd[1698]: Stopped target paths.target - Paths.
+Aug 29 11:50:23 danglol240 systemd[1698]: Stopped target sockets.target - Sockets.
+Aug 29 11:50:23 danglol240 systemd[1698]: Stopped target timers.target - Timers.
+Aug 29 11:50:23 danglol240 systemd[1698]: Stopped launchpadlib-cache-clean.timer - Clean up old files in the Launchpadlib cache.
+Aug 29 11:50:23 danglol240 systemd[1698]: Closed dbus.socket - D-Bus User Message Bus Socket.
+Aug 29 11:50:23 danglol240 systemd[1698]: Closed dirmngr.socket - GnuPG network certificate management daemon.
+Aug 29 11:50:23 danglol240 systemd[1698]: Closed gpg-agent-browser.socket - GnuPG cryptographic agent and passphrase cache (access for web browsers).
+Aug 29 11:50:23 danglol240 systemd[1698]: Closed gpg-agent-extra.socket - GnuPG cryptographic agent and passphrase cache (restricted).
+Aug 29 11:50:23 danglol240 kernel: EXT4-fs (dm-1): unmounting filesystem 87c950c3-b3ad-416d-aa31-391f34bb9b5b.
+Aug 29 11:50:23 danglol240 systemd[1]: mount.mount: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Unmounted mount.mount - /mount.
+Aug 29 11:50:23 danglol240 systemd-logind[1057]: Session 116 logged out. Waiting for processes to exit.
+Aug 29 11:50:23 danglol240 systemd[1698]: Stopping gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation)...
+Aug 29 11:50:23 danglol240 blkdeactivate[15680]:   [UMOUNT]: unmounting vg1-lv1 (dm-1) mounted on /mount... done
+Aug 29 11:50:23 danglol240 blkdeactivate[15680]:   [SKIP]: unmount of ubuntu--vg-ubuntu--lv (dm-0) mounted on /
+Aug 29 11:50:23 danglol240 systemd[1698]: Closed gpg-agent.socket - GnuPG cryptographic agent and passphrase cache.
+Aug 29 11:50:23 danglol240 systemd[1698]: Closed keyboxd.socket - GnuPG public key management service.
+Aug 29 11:50:23 danglol240 systemd[1698]: Closed pk-debconf-helper.socket - debconf communication socket.
+Aug 29 11:50:23 danglol240 systemd[1698]: Closed snapd.session-agent.socket - REST API socket for snapd user session agent.
+Aug 29 11:50:23 danglol240 systemd[1]: systemd-logind.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped systemd-logind.service - User Login Management.
+Aug 29 11:50:23 danglol240 systemd[1698]: Closed gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation).
+Aug 29 11:50:23 danglol240 systemd[1698]: Removed slice app.slice - User Application Slice.
+Aug 29 11:50:23 danglol240 systemd[1698]: Reached target shutdown.target - Shutdown.
+Aug 29 11:50:23 danglol240 systemd[1698]: Finished systemd-exit.service - Exit the Session.
+Aug 29 11:50:23 danglol240 systemd[1698]: Reached target exit.target - Exit the Session.
+Aug 29 11:50:23 danglol240 systemd[1]: user@1000.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped user@1000.service - User Manager for UID 1000.
+Aug 29 11:50:23 danglol240 systemd[1]: user@1000.service: Consumed 1.948s CPU time, 7.1M memory peak, 0B memory swap peak.
+Aug 29 11:50:23 danglol240 systemd[1]: openvpn-iptables.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped openvpn-iptables.service.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping systemd-user-sessions.service - Permit User Sessions...
+Aug 29 11:50:23 danglol240 systemd[1]: Stopping user-runtime-dir@1000.service - User Runtime Directory /run/user/1000...
+Aug 29 11:50:23 danglol240 systemd[1]: run-user-1000.mount: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Unmounted run-user-1000.mount - /run/user/1000.
+Aug 29 11:50:23 danglol240 systemd[1]: user-runtime-dir@1000.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped user-runtime-dir@1000.service - User Runtime Directory /run/user/1000.
+Aug 29 11:50:23 danglol240 systemd[1]: Removed slice user-1000.slice - User Slice of UID 1000.
+Aug 29 11:50:23 danglol240 systemd[1]: user-1000.slice: Consumed 2min 33.595s CPU time, 351.3M memory peak, 0B memory swap peak.
+Aug 29 11:50:23 danglol240 systemd[1]: systemd-user-sessions.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped systemd-user-sessions.service - Permit User Sessions.
+Aug 29 11:50:23 danglol240 blkdeactivate[15680]:   [LVM]: deactivating Volume Group vg1... done
+Aug 29 11:50:23 danglol240 systemd[1]: blk-availability.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped blk-availability.service - Availability of block devices.
+Aug 29 11:50:23 danglol240 systemd[1]: apport.service: Deactivated successfully.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped apport.service - automatic crash report generation.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped target remote-fs.target - Remote File Systems.
+Aug 29 11:50:23 danglol240 systemd[1]: Stopped target remote-fs-pre.target - Preparation for Remote File Systems.
+Aug 29 11:50:23 danglol240 systemd-tmpfiles[15859]: /run/finalrd-libs.conf:47: Duplicate line for path "/run/initramfs/lib64", ignoring.
+Aug 29 11:50:23 danglol240 finalrd[15860]: run-parts: executing /usr/share/finalrd/mdadm.finalrd setup
+Aug 29 11:50:24 danglol240 systemd[1]: zap.service: Main process exited, code=exited, status=143/n/a
+Aug 29 11:50:24 danglol240 systemd[1]: zap.service: Failed with result 'exit-code'.
+Aug 29 11:50:24 danglol240 systemd[1]: Stopped zap.service - OWASP ZAP Daemon.
+Aug 29 11:50:24 danglol240 systemd[1]: zap.service: Consumed 5min 55.316s CPU time, 488.9M memory peak, 0B memory swap peak.
+Aug 29 11:50:24 danglol240 finalrd[15860]: run-parts: executing /usr/share/finalrd/open-iscsi.finalrd setup
+Aug 29 11:50:24 danglol240 systemd[1]: finalrd.service: Deactivated successfully.
+Aug 29 11:50:24 danglol240 systemd[1]: Stopped finalrd.service - Create final runtime dir for shutdown pivot root.
+Aug 29 11:50:25 danglol240 openvpn[1334]: Closing TUN/TAP interface
+Aug 29 11:50:25 danglol240 openvpn[1334]: net_addr_v4_del: 10.8.0.1 dev tun0
+Aug 29 11:50:25 danglol240 systemd-timesyncd[771]: Network configuration changed, trying to establish connection.
+Aug 29 11:50:25 danglol240 systemd-networkd[738]: tun0: Link DOWN
+Aug 29 11:50:25 danglol240 systemd-networkd[738]: tun0: Lost carrier
+Aug 29 11:50:25 danglol240 openvpn[1334]: SIGTERM[hard,] received, process exiting
+Aug 29 11:50:25 danglol240 systemd[1]: openvpn-server@server.service: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped openvpn-server@server.service - OpenVPN service for server.
+Aug 29 11:50:25 danglol240 systemd[1]: Removed slice system-openvpn\x2dserver.slice - Slice /system/openvpn-server.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped target network-online.target - Network is Online.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped target network.target - Network.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopping frr.service - FRRouting...
+Aug 29 11:50:25 danglol240 systemd[1]: NetworkManager-wait-online.service: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped NetworkManager-wait-online.service - Network Manager Wait Online.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopping NetworkManager.service - Network Manager...
+Aug 29 11:50:25 danglol240 systemd[1]: systemd-networkd-wait-online.service: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped systemd-networkd-wait-online.service - Wait for Network to be Configured.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopping systemd-networkd.service - Network Configuration...
+Aug 29 11:50:25 danglol240 systemd[1]: Stopping wpa_supplicant.service - WPA supplicant...
+Aug 29 11:50:25 danglol240 systemd-networkd[738]: ens33: DHCP lease lost
+Aug 29 11:50:25 danglol240 NetworkManager[998]: <info>  [1756443025.3346] caught SIGTERM, shutting down normally.
+Aug 29 11:50:25 danglol240 systemd-networkd[738]: ens33: DHCPv6 lease lost
+Aug 29 11:50:25 danglol240 systemd[1]: wpa_supplicant.service: Deactivated successfully.
+Aug 29 11:50:25 danglol240 NetworkManager[998]: <info>  [1756443025.3459] exiting (success)
+Aug 29 11:50:25 danglol240 systemd-timesyncd[771]: Network configuration changed, trying to establish connection.
+Aug 29 11:50:25 danglol240 systemd-timesyncd[771]: Network configuration changed, trying to establish connection.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped wpa_supplicant.service - WPA supplicant.
+Aug 29 11:50:25 danglol240 systemd[1]: systemd-networkd.service: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped systemd-networkd.service - Network Configuration.
+Aug 29 11:50:25 danglol240 systemd[1]: NetworkManager.service: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped NetworkManager.service - Network Manager.
+Aug 29 11:50:25 danglol240 watchfrr[963]: [NG1AJ-FP2TQ] Terminating on signal
+Aug 29 11:50:25 danglol240 frrinit.sh[16262]:  * Stopped watchfrr
+Aug 29 11:50:25 danglol240 staticd[1052]: [MRN6F-AYZC4] Terminating on signal
+Aug 29 11:50:25 danglol240 zebra[1010]: [VXKFG-8SJRV][EC 4043309121] Client 'static' encountered an error and is shutting down.
+Aug 29 11:50:25 danglol240 zebra[1010]: [JPSA8-5KYEA] client 28 disconnected 0 static routes removed from the rib
+Aug 29 11:50:25 danglol240 zebra[1010]: [S929C-NZR3N] client 28 disconnected 0 static nhgs removed from the rib
+Aug 29 11:50:25 danglol240 frrinit.sh[16296]:  * Stopped staticd
+Aug 29 11:50:25 danglol240 zebra[1010]: [XVBTQ-5QTVQ] Terminating on signal
+Aug 29 11:50:25 danglol240 zebra[1010]: [QS0NJ-H5QKJ] Zebra final shutdown
+Aug 29 11:50:25 danglol240 frrinit.sh[16262]:  * Stopped zebra
+Aug 29 11:50:25 danglol240 systemd[1]: frr.service: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped frr.service - FRRouting.
+Aug 29 11:50:25 danglol240 systemd[1]: frr.service: Consumed 10.747s CPU time, 28.4M memory peak, 0B memory swap peak.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped target basic.target - Basic System.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped target network-pre.target - Preparation for Network.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped target paths.target - Path Units.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped target slices.target - Slice Units.
+Aug 29 11:50:25 danglol240 systemd[1]: Removed slice user.slice - User and Session Slice.
+Aug 29 11:50:25 danglol240 systemd[1]: user.slice: Consumed 2min 39.105s CPU time, 371.9M memory peak, 0B memory swap peak.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped target sockets.target - Socket Units.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopping cockpit.socket - Cockpit Web Service Socket...
+Aug 29 11:50:25 danglol240 systemd[1]: iscsid.socket: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Closed iscsid.socket - Open-iSCSI iscsid Socket.
+Aug 29 11:50:25 danglol240 systemd[1]: lxd-installer.socket: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Closed lxd-installer.socket - Helper to install lxd snap on demand.
+Aug 29 11:50:25 danglol240 systemd[1]: pcscd.socket: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Closed pcscd.socket - PC/SC Smart Card Daemon Activation Socket.
+Aug 29 11:50:25 danglol240 systemd[1]: snapd.socket: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Closed snapd.socket - Socket activation for snappy daemon.
+Aug 29 11:50:25 danglol240 systemd[1]: ssh.socket: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Closed ssh.socket - OpenBSD Secure Shell server socket.
+Aug 29 11:50:25 danglol240 systemd[1]: syslog.socket: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Closed syslog.socket - Syslog Socket.
+Aug 29 11:50:25 danglol240 systemd[1]: systemd-networkd.socket: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Closed systemd-networkd.socket - Network Service Netlink Socket.
+Aug 29 11:50:25 danglol240 systemd[1]: uuidd.socket: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Closed uuidd.socket - UUID daemon activation socket.
+Aug 29 11:50:25 danglol240 systemd[1]: cockpit.socket: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Closed cockpit.socket - Cockpit Web Service Socket.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped target sysinit.target - System Initialization.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped target cryptsetup.target - Local Encrypted Volumes.
+Aug 29 11:50:25 danglol240 systemd[1]: systemd-ask-password-console.path: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped systemd-ask-password-console.path - Dispatch Password Requests to Console Directory Watch.
+Aug 29 11:50:25 danglol240 systemd[1]: systemd-ask-password-wall.path: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped systemd-ask-password-wall.path - Forward Password Requests to Wall Directory Watch.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped target integritysetup.target - Local Integrity Protected Volumes.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped target swap.target - Swaps.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped target veritysetup.target - Local Verity Protected Volumes.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopping systemd-binfmt.service - Set Up Additional Binary Formats...
+Aug 29 11:50:25 danglol240 systemd[1]: Stopping systemd-resolved.service - Network Name Resolution...
+Aug 29 11:50:25 danglol240 systemd[1]: Stopping systemd-timesyncd.service - Network Time Synchronization...
+Aug 29 11:50:25 danglol240 systemd[1]: Stopping systemd-update-utmp.service - Record System Boot/Shutdown in UTMP...
+Aug 29 11:50:25 danglol240 systemd[1]: systemd-timesyncd.service: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped systemd-timesyncd.service - Network Time Synchronization.
+Aug 29 11:50:25 danglol240 systemd[1]: systemd-resolved.service: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped systemd-resolved.service - Network Name Resolution.
+Aug 29 11:50:25 danglol240 systemd[1]: systemd-binfmt.service: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped systemd-binfmt.service - Set Up Additional Binary Formats.
+Aug 29 11:50:25 danglol240 systemd[1]: proc-sys-fs-binfmt_misc.automount: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Unset automount proc-sys-fs-binfmt_misc.automount - Arbitrary Executable File Formats File System Automount Point.
+Aug 29 11:50:25 danglol240 systemd[1]: systemd-sysctl.service: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped systemd-sysctl.service - Apply Kernel Variables.
+Aug 29 11:50:25 danglol240 systemd[1]: systemd-modules-load.service: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped systemd-modules-load.service - Load Kernel Modules.
+Aug 29 11:50:25 danglol240 systemd[1]: proc-sys-fs-binfmt_misc.mount: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: systemd-update-utmp.service: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped systemd-update-utmp.service - Record System Boot/Shutdown in UTMP.
+Aug 29 11:50:25 danglol240 systemd[1]: systemd-tmpfiles-setup.service: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped systemd-tmpfiles-setup.service - Create Volatile Files and Directories.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped target local-fs.target - Local File Systems.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped target snapd.mounts.target - Mounted snaps.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped target snapd.mounts-pre.target - Mounting snaps.
+Aug 29 11:50:25 danglol240 systemd[1]: Unmounting boot.mount - /boot...
+Aug 29 11:50:25 danglol240 kernel: EXT4-fs (sda2): unmounting filesystem 3a311a95-3c83-4fe3-8baa-6aafa7ca215b.
+Aug 29 11:50:25 danglol240 systemd[1]: boot.mount: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Unmounted boot.mount - /boot.
+Aug 29 11:50:25 danglol240 systemd[1]: Reached target umount.target - Unmount All Filesystems.
+Aug 29 11:50:25 danglol240 systemd[1]: systemd-fsck@dev-disk-by\x2duuid-3a311a95\x2d3c83\x2d4fe3\x2d8baa\x2d6aafa7ca215b.service: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped systemd-fsck@dev-disk-by\x2duuid-3a311a95\x2d3c83\x2d4fe3\x2d8baa\x2d6aafa7ca215b.service - File System Check on /dev/disk/by-uuid/3a311a95-3c83-4fe3-8baa-6aafa7ca215b.
+Aug 29 11:50:25 danglol240 systemd[1]: Removed slice system-systemd\x2dfsck.slice - Slice /system/systemd-fsck.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped target local-fs-pre.target - Preparation for Local File Systems.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopping lvm2-monitor.service - Monitoring of LVM2 mirrors, snapshots etc. using dmeventd or progress polling...
+Aug 29 11:50:25 danglol240 multipathd[548]: multipathd: shut down
+Aug 29 11:50:25 danglol240 systemd[1]: Stopping multipathd.service - Device-Mapper Multipath Device Controller...
+Aug 29 11:50:25 danglol240 systemd[1]: systemd-tmpfiles-setup-dev.service: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped systemd-tmpfiles-setup-dev.service - Create Static Device Nodes in /dev.
+Aug 29 11:50:25 danglol240 systemd[1]: systemd-tmpfiles-setup-dev-early.service: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped systemd-tmpfiles-setup-dev-early.service - Create Static Device Nodes in /dev gracefully.
+Aug 29 11:50:25 danglol240 lvm[16318]:   1 logical volume(s) in volume group "ubuntu-vg" unmonitored
+Aug 29 11:50:25 danglol240 systemd[1]: lvm2-monitor.service: Deactivated successfully.
+Aug 29 11:50:25 danglol240 systemd[1]: Stopped lvm2-monitor.service - Monitoring of LVM2 mirrors, snapshots etc. using dmeventd or progress polling.
+Aug 29 11:50:26 danglol240 systemd[1]: multipathd.service: Deactivated successfully.
+Aug 29 11:50:26 danglol240 systemd[1]: Stopped multipathd.service - Device-Mapper Multipath Device Controller.
+Aug 29 11:50:26 danglol240 systemd[1]: multipathd.service: Consumed 10.531s CPU time, 22.4M memory peak, 0B memory swap peak.
+Aug 29 11:50:26 danglol240 systemd[1]: systemd-remount-fs.service: Deactivated successfully.
+Aug 29 11:50:26 danglol240 systemd[1]: Stopped systemd-remount-fs.service - Remount Root and Kernel File Systems.
+Aug 29 11:50:26 danglol240 systemd[1]: Reached target shutdown.target - System Shutdown.
+Aug 29 11:50:26 danglol240 systemd[1]: Reached target final.target - Late Shutdown Services.
+Aug 29 11:50:26 danglol240 systemd[1]: systemd-reboot.service: Deactivated successfully.
+Aug 29 11:50:26 danglol240 systemd[1]: Finished systemd-reboot.service - System Reboot.
+Aug 29 11:50:26 danglol240 systemd[1]: Reached target reboot.target - System Reboot.
+Aug 29 11:50:26 danglol240 systemd[1]: Shutting down.
+Aug 29 11:50:26 danglol240 systemd-shutdown[1]: Syncing filesystems and block devices.
+Aug 29 11:50:26 danglol240 systemd-shutdown[1]: Sending SIGTERM to remaining processes...
+Aug 29 11:50:26 danglol240 systemd-journald[497]: Received SIGTERM from PID 1 (systemd-shutdow).
+Aug 29 11:50:26 danglol240 systemd-journald[497]: Journal stopped

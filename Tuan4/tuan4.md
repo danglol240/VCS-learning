@@ -19,20 +19,21 @@
     * Đọc tệp cấu hình của nó (ví dụ: `/etc/grub2.cfg`) để biết vị trí của nhân Linux.
     * **Thực thi nhân (Execute kernel)**: Tải nhân Linux và `initramfs` (hệ thống tệp tạm thời trong RAM) vào bộ nhớ.
     * **Tải các thư viện được hỗ trợ (Load supported libraries)**.
-![Kernel boot log sequence showing memory map and initialization](https://github.com/user-attachments/assets/b86de2ef-531a-40c6-ab85-d72fdabeb854)
-*Hình 1: Kernel boot log hiển thị bản đồ bộ nhớ và giai đoạn khởi tạo*
-
+<img width="1727" height="166" alt="kernel" src="https://github.com/user-attachments/assets/b86de2ef-531a-40c6-ab85-d72fdabeb854" />
+*Hình 1: Các tham số hệ thống được nạp vào kernel 
 
 **5. Thực thi `systemd`**
 * Sau khi nhân (kernel) được tải và khởi tạo, nó sẽ khởi chạy tiến trình đầu tiên trong **không gian người dùng (user space)**. Tiến trình này luôn có PID (Process ID) là 1.
 * Trong các hệ thống Linux hiện đại, tiến trình này là **`systemd`**. `systemd` chịu trách nhiệm khởi tạo phần còn lại của hệ thống.
 <img width="1737" height="634" alt="systemd" src="https://github.com/user-attachments/assets/ceaf600b-ef5d-428d-ba5e-b7f6ed2a28e2" />
+*Hình 2: Mount filesystem rồi systemd được chạy rồi đến các tệp .target
 
 **6. Chạy các tệp `.target` (Run .target Files)**
 * `systemd` sử dụng các đơn vị (units) gọi là `.target` để quản lý và khởi động các dịch vụ theo nhóm. Một `.target` tương tự như `runlevel` trong các hệ thống cũ.
 * Sơ đồ cho thấy `default.target` (mục tiêu mặc định) thường trỏ đến `multi-user.target` (hệ thống đa người dùng, không có giao diện đồ họa).
 * `multi-user.target` lại phụ thuộc vào các target và service khác như `basic.target` (các dịch vụ cơ bản), `getty.target` (chuẩn bị màn hình đăng nhập terminal), và `ssh.service` (dịch vụ SSH). `systemd` sẽ khởi động chúng song song để tăng tốc độ.
 <img width="1919" height="1151" alt="target" src="https://github.com/user-attachments/assets/07ed3476-2112-4407-8a82-76bdde99f5a6" />
+*Hình 3: Các unit file của hệ thống
 
 **7. Chạy các Script khởi động (Run Startup Scripts)**
 * Sau khi các dịch vụ hệ thống chính đã chạy, `systemd` và các dịch vụ khác sẽ chạy các script để thiết lập môi trường cho người dùng.
@@ -107,6 +108,7 @@ Khi hệ thống khởi động, nó sẽ vào một runlevel mặc định (th�
     - slice (dùng cho quản lý tiến trình)
     - scope (quy định không gian hoạt động)
 <img width="715" height="1147" alt="unit_files" src="https://github.com/user-attachments/assets/689cb4d5-5faa-44bf-8789-3d403aeb5c59" />
+*Hình 4: sudo systemctl list-unit-files
 
 # Quản Lý Dịch Vụ Trên Ubuntu (Sử Dụng Systemd)
 
@@ -210,4 +212,9 @@ Quy trình tắt máy trên Ubuntu được quản lý bởi systemd để đả
 6. **Remount read-only**: Đặt filesystem root thành chỉ đọc.
 7. **Tắt nguồn**: Kernel gọi ACPI để tắt phần cứng (power off) hoặc reboot.
 8. **Log**: Toàn bộ quy trình được ghi log trong `/var/log/syslog` hoặc dùng `journalctl` để xem.
-<img width="1109" height="585" alt="shutdown" src="https://github.com/user-attachments/assets/fb2449cf-ab01-45fb-aa9c-4389740286af" />
+<img width="1553" height="776" alt="shutdown" src="https://github.com/user-attachments/assets/304a6dc8-bc24-4b7e-a747-8426d02b9c45" />
+*Hình 5: Quá trình shutdown trong đó có dừng service, unmount filesystem
+<img width="1204" height="274" alt="remount" src="https://github.com/user-attachments/assets/be5f0527-f914-4d0e-b625-09687c21300e" />
+*Hình 6: Quá trình remount, tắt nguồn và journal ngừng đọc ghi
+
+* Lưu ý ở trong thư mục shell and log có 2 file log 1 cái là boot 1 cái là shutdown đã được cắt ngắn chỉ lấy đoạn quá trình boot và shutdown
