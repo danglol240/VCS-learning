@@ -136,7 +136,6 @@ sudo apt install <tên_gói>
 
 * Chỉ tải `main restricted` nếu không cần `universe multiverse`.
 * Giới hạn kiến trúc:
-
   ```
   set defaultarch  amd64
   ```
@@ -147,24 +146,5 @@ Dung lượng tham khảo:
 
 * **Chỉ main+restricted+amd64**: \~15–25 GB.
 * **Full components + source**: >500 GB.
-
----
-
-## 10. **Xử lý sự cố thường gặp**
-
-* **Kho cũ bị xoá (ví dụ Kinetic 22.10)**:
-  → Dùng `old-releases.ubuntu.com`.
-* **Lỗi 404 khi tải**:
-  → Kiểm tra `Suites` (noble, jammy…), URL có đúng không.
-* **Quá nhiều dung lượng (vài trăm GB)**:
-  → Chỉ định `defaultarch` và loại bỏ `deb-src`.
-
----
-
-## 11. **So sánh APT-mirror với các giải pháp khác**
-
-* **apt-offline**: phù hợp máy đơn, không cần server.
-* **aptly**: mirror chuyên nghiệp hơn, hỗ trợ snapshot, publish, GPG.
-* **apt-cacher-ng**: caching proxy, không tải toàn bộ kho, chỉ cache gói được yêu cầu.
 
 ## Lưu ý : Vẫn có thể sử dụng apt-offline nhưng nếu muốn setup thì chỉ phù hợp cho việc update package đơn lẻ và khó cập nhật package hơn khi so với mirror
