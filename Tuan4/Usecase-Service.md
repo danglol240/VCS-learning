@@ -8,6 +8,9 @@
 ## Các bước thực hiện
 1. Kiểm tra tiến trình đang chạy bằng lệnh lsof hoặc fuser
 2. Sau khi phát hiện được tiến trình thử kiểm tra xem có phải service đang chạy hay không dùng `systemctl status`
+<img width="735" height="194" alt="logservice" src="https://github.com/user-attachments/assets/b0226593-3968-48a3-acf9-7d2480fc39e4" />
+*Hình 2: service và các process của service đấy
+
 3. Nếu thấy tiến trình nằm trong 1 service thì hãy disable và stop service ấy lại còn nếu là tiến trình thì hãy dùng kill
 
 ## Lưu ý
