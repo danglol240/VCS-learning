@@ -44,9 +44,87 @@
 ## Một số câu lệnh chính
 * Show dependencies: `apt depends` `apt rdepends`
 * Kiểm tra thuộc package nào : dùng `dpkg -S` hoặc `apt-file search`
+* Hiển thị thông tin package : `apt show`
 * List file trong 1 packge : dùng `dpkg -L` hoặc `apt-file list`
 * Search : `apt search` hoặc `apt-file search`
 * Download : `sudo apt install`
 * Remove : `sudo apt remove`(keep conf files) `sudo apt purge`(no keep) `sudo apt autoremove`(remove unused dependencies)
 * Upgrade : `sudo apt update`(update repo cache) `sudo apt upgrade`(upgrade installed packages)/`sudo apt full-upgrade`
 * List toàn bộ hoặc đã tải : `apt list` hoặc `dpkg -l`
+
+
+## **1. Trường trong kho APT (sources.list hoặc .sources)**
+
+### Định dạng cũ (`/etc/apt/sources.list`)
+Ví dụ:
+
+```
+deb http://archive.ubuntu.com/ubuntu noble main restricted universe multiverse
+```
+
+* `deb`: Loại repository (binary package). Có thể là `deb-src` (source code).
+* `http://archive.ubuntu.com/ubuntu`: Địa chỉ kho.
+* `noble`: Phiên bản (codename: 24.04 LTS).
+* `main restricted universe multiverse`: Components.
+
+### Định dạng mới (Ubuntu ≥ 24.04, `.sources`)
+
+Ví dụ:
+
+```
+Types: deb
+URIs: http://archive.ubuntu.com/ubuntu
+Suites: noble noble-updates noble-security
+Components: main restricted universe multiverse
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+```
+
+* `Types`: Loại kho (`deb`, `deb-src`).
+* `URIs`: URL của kho.
+* `Suites`: Danh sách bản phát hành (release, updates, security...).
+* `Components`: Thành phần.
+* `Signed-By`: Khóa GPG dùng để xác thực.
+
+---
+
+## **2. Trường trong metadata gói (`Packages`, `Sources`)**
+
+Ví dụ (`Packages`):
+
+```
+Package: bash
+Version: 5.2.21-1ubuntu1
+Architecture: amd64
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Installed-Size: 3780
+Depends: libc6 (>= 2.34), libtinfo6 (>= 6)
+Description: GNU Bourne Again SHell
+```
+
+Các trường quan trọng:
+
+* `Package`: Tên gói.
+* `Version`: Phiên bản.
+* `Architecture`: Kiến trúc (`amd64`, `i386`, `arm64`…).
+* `Maintainer`: Người/bộ phận duy trì gói.
+* `Installed-Size`: Dung lượng sau khi cài (KB).
+* `Depends`: Gói bắt buộc.
+* `Recommends`: Gói khuyến nghị.
+* `Suggests`: Gói tùy chọn.
+* `Conflicts`: Gói xung đột.
+* `Description`: Mô tả.
+
+## **4. Các thành phần (Components)**
+
+* `main`: Phần mềm chính, được Canonical hỗ trợ.
+* `restricted`: Phần mềm chính có giới hạn bản quyền (driver…).
+* `universe`: Phần mềm cộng đồng duy trì (ít bảo đảm hỗ trợ).
+* `multiverse`: Phần mềm có vấn đề về bản quyền, không đảm bảo hỗ trợ.
+
+## **5. Các suites/phân phối (Suites)**
+
+* `noble`: Kho chính (Ubuntu 24.04 LTS).
+* `noble-updates`: Cập nhật thường xuyên.
+* `noble-security`: Cập nhật bảo mật.
+* `noble-backports`: Gói mới được backport.
+* `noble-proposed`: Gói thử nghiệm.
