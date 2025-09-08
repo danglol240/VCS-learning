@@ -19,14 +19,7 @@ Trong các shell Linux như bash, bạn có thể quản lý tiến trình giữ
 - **fg (Foreground)**: Đưa job nền hoặc tạm dừng về tiền cảnh, làm cho nó tương tác lại.  
   Ví dụ: `fg %1` – Tiếp tục job ở foreground, nơi có thể tương tác (ví dụ: xem output hoặc gửi Ctrl+C).
 
-**Quy Trình Ví Dụ**:
-1. Chạy tiền cảnh: `sleep 60`
-2. Tạm dừng: Ctrl+Z
-3. Liệt kê: `jobs`
-4. Chạy nền: `bg %1`
-5. Chạy tiền cảnh: `fg %1`
-
-Những lệnh này là built-in của shell, nên chúng hoạt động theo từng phiên. Đối với tiến trình tách rời, xem xét công cụ như `screen` hoặc `tmux`.
+<img width="406" height="277" alt="sleep" src="https://github.com/user-attachments/assets/3cbf4d8b-7ccd-419a-87ea-8b76171eadc6" />
 
 ### Các Trường Hợp Sử Dụng Lệnh nohup
 
@@ -71,7 +64,7 @@ Công cụ như `pkill` (kill theo tên) hoặc `killall` đơn giản hóa: `pk
 
 Cron là công cụ lập lịch dựa trên thời gian cho các nhiệm vụ định kỳ.
 
-- **Crontab Hệ Thống**: Nằm ở `/etc/crontab`, quản lý bởi root. Bao gồm trường "user" thêm để chỉ định ai chạy job (ví dụ: `root`). Dùng cho nhiệm vụ toàn hệ thống như xoay log. Chỉnh sửa bằng `sudo nano /etc/crontab`. Ngoài ra, thư mục như `/etc/cron.d/` cho job cụ thể của package.
+- **Crontab Hệ Thống**: Nằm ở `/etc/crontab`, quản lý bởi root. Bao gồm trường "user" thêm để chỉ định ai chạy job (ví dụ: `root`) Dùng cho nhiệm vụ toàn hệ thống . Chỉnh sửa bằng `sudo nano /etc/crontab`. Ngoài ra, thư mục như `/etc/cron.d/` cho job cụ thể của package.
 
 - **Crontab Người Dùng**: File theo từng người dùng, chỉnh sửa bằng `crontab -e` (không cần sudo cho file của bạn). Không có trường "user"; chạy dưới quyền người dùng chỉnh sửa. Lưu ở `/var/spool/cron/crontabs/username`. Lý tưởng cho script cá nhân.
 
