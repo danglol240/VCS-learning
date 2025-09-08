@@ -283,12 +283,15 @@ Khác với Ubuntu (main, universe, multiverse…), CentOS/RHEL chia thành:
 * Tải package apache2 chỉ sử dụng dpkg
 1. Sử dụng lệnh apt-cache search để tìm kiếm xem có package apache2 chưa sau đó dùng lệnh apt show để check phiên bản
 <img width="1394" height="565" alt="show" src="https://github.com/user-attachments/assets/b51156bb-930f-4646-8ba8-dff603b5e6bd" />
+Hình 1: Sau khi sử dụng lệnh show để check phiên bản
 
 2. Khi dùng `dpkg -i` sẽ nhận thấy lỗi dependency
 <img width="682" height="356" alt="dpkg" src="https://github.com/user-attachments/assets/7bdcfcfd-01d0-487e-9809-e5a3ad1400a9" />
+Hình 2: Lỗi dependency
 
 2. Để lấy được package/package dependency thì sẽ dùng lệnh wget để lấy package `.deb` từ mirror
 <img width="1141" height="1093" alt="pool" src="https://github.com/user-attachments/assets/f3f87fa7-5388-4273-91bb-3be1645500f2" />
+Hình 3: tải xuống các file phụ thuộc
 
 3. Sau đấy sẽ dùng `dpkg -i` để tải về từ file .deb . Lưu ý phải tỉa các file phụ thuộc trước
 <img width="921" height="1071" alt="pkg" src="https://github.com/user-attachments/assets/154ccf67-a273-4560-a9c3-33af6b2fef62" />
