@@ -102,14 +102,7 @@ Thêm entry vào crontab để thực thi lệnh/script theo khoảng thời gia
 2. Thêm dòng: `phút giờ ngày-tháng tháng ngày-tuần /đường/dẫn/command-or-script args`
 3. Lưu và thoát; cron cài đặt tự động.
 
-Ví dụ: Chạy `backup.sh` mỗi ngày lúc 2 AM:  
-`0 2 * * * /home/user/backup.sh >> /var/log/backup.log 2>&1`
 
-- Sử dụng đường dẫn đầy đủ (ví dụ: `/usr/bin/echo` thay vì `echo`) vì cron có môi trường tối thiểu.
-- Chuyển hướng output (`> log` hoặc `>> log 2>&1`) để tránh email.
-- Đối với tiến trình cần môi trường: Source `.bashrc` trong script (`source ~/.bashrc`).
-
-Kiểm tra với khoảng thời gian ngắn trước.
 
 ### Cách Lập Lịch (Định Dạng Crontab và Ví Dụ)
 
@@ -127,8 +120,6 @@ Ví dụ:
 - Ngày thường 9 AM: `0 9 * * 1-5 command`
 - Ngày 1 hàng tháng lúc nửa đêm: `0 0 1 * * command`
 - Khởi động lại: `@reboot command` (chạy khi khởi động)
-
-Công cụ như crontab.guru giúp hình dung. Đối với crontab hệ thống, thêm user: `0 2 * * * root /script.sh`
 
 ## Lưu Ý
 - Tất cả ví dụ giả định Ubuntu/Debian; lệnh tương tự trên các Linux khác.
