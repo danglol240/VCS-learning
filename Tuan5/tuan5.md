@@ -120,8 +120,3 @@ Ví dụ:
 - Ngày thường 9 AM: `0 9 * * 1-5 command`
 - Ngày 1 hàng tháng lúc nửa đêm: `0 0 1 * * command`
 - Khởi động lại: `@reboot command` (chạy khi khởi động)
-
-## Lưu Ý
-- Tất cả ví dụ giả định Ubuntu/Debian; lệnh tương tự trên các Linux khác.
-- Giám sát log cron: `/var/log/syslog` hoặc `grep CRON /var/log/syslog`.
-- Đối với lập lịch phức tạp, xem xét `anacron` (xử lý job bị bỏ lỡ) hoặc `systemd timers`.
