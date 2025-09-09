@@ -126,8 +126,3 @@ Dưới đây là giải thích chi tiết về các chức năng mà bạn li�
 * **Ưu điểm**: Có thể duyệt thư mục, quản lý file, resume transfer.
 
 * **Ứng dụng**: Truyền file qua mạng an toàn, thay thế FTP truyền thống.
-
----
-
-Bạn có muốn mình **so sánh `rsync`, `scp`, `sftp` để chọn phương án tối ưu cho sao lưu dữ liệu (ví dụ: hàng ngày, dung lượng lớn)** không?
-Hay mình **vẽ sơ đồ mô tả cách hoạt động của ba phương thức này**?
