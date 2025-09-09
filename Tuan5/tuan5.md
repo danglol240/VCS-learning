@@ -102,7 +102,7 @@ Thêm entry vào crontab để thực thi lệnh/script theo khoảng thời gia
 2. Thêm dòng: `phút giờ ngày-tháng tháng ngày-tuần /đường/dẫn/command-or-script args`
 3. Lưu và thoát; cron cài đặt tự động.
 
-
+<img width="1095" height="623" alt="crontab" src="https://github.com/user-attachments/assets/a0887665-c9c0-4deb-a696-d6281de88d2a" />
 
 ### Cách Lập Lịch (Định Dạng Crontab và Ví Dụ)
 
