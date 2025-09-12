@@ -26,7 +26,7 @@ Trong các shell Linux như bash, bạn có thể quản lý tiến trình giữ
 `nohup` (no hangup) chạy lệnh mà không bị ảnh hưởng bởi tín hiệu hangup (SIGHUP), được gửi khi terminal đóng (ví dụ: logout hoặc ngắt SSH). Nó chuyển hướng output sang `nohup.out` mặc định và thường kết hợp với `&` để chạy nền.
 
 - **Cú Pháp**: `nohup command [args] &`  
-  Ví dụ: `nohup ./script.sh > output.log 2>&1 &` – Chạy script, chuyển hướng stdout/stderr sang log, và chạy nền.
+  Ví dụ: `nohup ping 8.8.8.8`
   <img width="1102" height="581" alt="nohup" src="https://github.com/user-attachments/assets/38ba52ca-a0d3-4665-8106-959ca779bfae" />
 
 
