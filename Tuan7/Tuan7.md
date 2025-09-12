@@ -208,31 +208,70 @@ sudo timedatectl set-timezone Asia/Ho_Chi_Minh
 * **Mục đích:** Giữ thời gian chuẩn xác cho server.
 * **Kiến trúc:** Client → NTP server → Stratum server → Atomic clock/GPS.
 
-### Cấu hình NTP server đồng bộ
+### Cấu hình NTP server đồng bộ sử dụng chrony
+<img width="835" height="451" alt="chrony" src="https://github.com/user-attachments/assets/fe02eb70-9811-44de-9130-deaeaf55adca" />
 
-* Cài đặt:
+## 1. Cài đặt Chrony
+```bash
+sudo apt update
+sudo apt install chrony -y
+```
+
+Kiểm tra dịch vụ:
 
 ```bash
-sudo yum install ntp    # CentOS
-sudo apt install ntp    # Ubuntu
+systemctl status chrony
 ```
+## 2. Cấu hình Chrony
 
-* Cấu hình `/etc/ntpsec/ntp.conf` (ví dụ đồng bộ với pool.ntp.org):
-
-```
-server 0.pool.ntp.org iburst
-server 1.pool.ntp.org iburst
-```
-
-* Khởi động dịch vụ:
+Mở file cấu hình:
 
 ```bash
-sudo systemctl enable ntpd
-sudo systemctl start ntpd
+sudo nano /etc/chrony/chrony.conf
 ```
 
-* Kiểm tra đồng bộ:
+Thêm/sửa các dòng sau:
+
+```conf
+# Cho phép client trong mạng LAN 192.168.1.0/24 truy cập
+allow 192.168.1.0/24
+
+# Đặt máy này làm "local clock" khi mất Internet
+local stratum 10
+
+# Cấu hình makestep: cho phép chỉnh giờ ngay nếu lệch >1s trong 3 lần đầu
+makestep 1.0 3
+```
+
+> ⚠️ Lưu ý: Bạn có thể giữ lại các `pool` mặc định hoặc bỏ đi nếu chỉ muốn dùng LAN.
+
+## 3. Khởi động lại dịch vụ
+```bash
+sudo systemctl restart chrony
+sudo systemctl enable chrony
+```
+## 4. Mở port NTP (UDP 123)
+Nếu có firewall:
 
 ```bash
-ntpq -p
+sudo ufw allow 123/udp
 ```
+## 5. Kiểm tra NTP Server
+Xem đồng bộ trên server:
+```bash
+chronyc tracking
+chronyc sources -v
+```
+Xem service lắng nghe port:
+
+```bash
+ss -tulpn | grep chronyd
+```
+## 6. Kiểm tra từ client
+
+Trên client (máy khác trong LAN):
+
+```bash
+chronyc sources -v
+```
+Sẽ thấy NTP server LAN (ví dụ `192.168.1.1`) hiện stratum và offset.
