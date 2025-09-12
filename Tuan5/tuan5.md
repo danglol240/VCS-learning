@@ -32,9 +32,8 @@ Trong các shell Linux như bash, bạn có thể quản lý tiến trình giữ
 
 - **Trường Hợp Sử Dụng**:
   - **Phiên Làm Việc Từ Xa (SSH)**: Chạy nhiệm vụ dài trên server mà không bị dừng khi ngắt kết nối. Ví dụ: `nohup wget file.url &` – Tải tiếp tục sau khi logout ở background.
-  - **Xử Lý Hàng Loạt**: Dành cho script mất hàng giờ/ngày (ví dụ: sao lưu dữ liệu, biên dịch) mà không cần terminal mở.
+  - **Xử Lý Script**: Dành cho script mất hàng giờ/ngày (ví dụ: sao lưu dữ liệu, biên dịch) mà không cần terminal mở.
   - **Hành Vi Giống Daemon**: Mô phỏng tiến trình liên tục mà không cần daemon hóa đầy đủ (mặc dù `systemd` hoặc `screen` tốt hơn cho dịch vụ).
-  - **Xử Lý Lỗi**: Ghi lại output ngay cả khi phiên kết thúc, hữu ích để debug công việc từ xa.
 
 Lưu Ý: `nohup` không biến tiến trình thành daemon; kết hợp với `disown` (`disown %1`) để loại khỏi bảng job của shell.
 
