@@ -225,11 +225,7 @@ grep CRON /var/log/syslog
 2. Chắc chắn script có **quyền thực thi** (`chmod +x script.sh`).
 3. Sử dụng **đường dẫn tuyệt đối** cho mọi lệnh, tệp, biến môi trường.
 
-Ok 👍 mình bổ sung phần **`cron.allow` / `cron.deny`** để bạn nắm đầy đủ về quản lý quyền chạy crontab.
-
----
-
-# 📌 Quản lý quyền với `cron.allow` và `cron.deny`
+# Quản lý quyền với `cron.allow` và `cron.deny`
 
 ## 1. Vị trí file
 
