@@ -1,40 +1,26 @@
-Dưới đây là giải thích chi tiết về các chức năng mà bạn liệt kê:
-
----
-
 ## 1. **Archiving with `tar`**
 
 * **Chức năng**:
   `tar` (tape archive) được dùng để gom nhiều tệp/thư mục lại thành **một file duy nhất (archive)**, giúp dễ quản lý, sao lưu, hoặc truyền tải. `tar` có thể chỉ tạo archive hoặc kết hợp nén bằng các công cụ như `gzip` (`.tar.gz`), `bzip2` (`.tar.bz2`), hoặc `xz` (`.tar.xz`).
 
 * **Ví dụ**:
-
-  * Tạo archive:
-
-    ```bash
-    tar -cvf backup.tar /path/to/files
-    ```
-
-    * `c`: create
-    * `v`: verbose (hiển thị tiến trình)
-    * `f`: filename (tên file archive)
-
-  * Giải nén archive:
-
-    ```bash
-    tar -xvf backup.tar
-    ```
-
-  * Tạo và nén luôn:
-
-    ```bash
-    tar -czvf backup.tar.gz /path/to/files
-    ```
-
-    * `z`: nén bằng gzip
+| Option | Ý nghĩa                               |
+| ------ | ------------------------------------- |
+| `c`    | Create archive (tạo archive)          |
+| `x`    | Extract archive (giải nén)            |
+| `t`    | List nội dung archive                 |
+| `v`    | Verbose – hiển thị chi tiết           |
+| `f`    | File – chỉ định tên archive           |
+| `z`    | Nén bằng gzip (`.tar.gz`)             |
+| `j`    | Nén bằng bzip2 (`.tar.bz2`)           |
+| `J`    | Nén bằng xz (`.tar.xz`)               |
+| `C`    | Chuyển thư mục trước khi nén/giải nén |
 
 * **Ứng dụng**: Sao lưu dữ liệu, đóng gói phần mềm, chuyển dữ liệu qua mạng.
 
+* Lưu ý
+Về đường dẫn tar sẽ tự động bỏ dấu / đầu tiên và giữ nguyên cấu trúc thư mục dựa trên đường dẫn
+<img width="938" height="392" alt="tar" src="https://github.com/user-attachments/assets/bfa78b20-ae35-46e0-82d5-c21e40bf2d2c" />
 ---
 
 ## 2. **Using the `dd` Command**
@@ -66,8 +52,10 @@ Dưới đây là giải thích chi tiết về các chức năng mà bạn li�
     dd if=/dev/sda of=/dev/sdb bs=4M status=progress
     ```
 
-* **Ứng dụng**: Clone ổ đĩa, kiểm tra tốc độ đọc/ghi, tạo file test dung lượng lớn.
+* **Ứng dụng**: Clone ổ đĩa, kiểm tra tốc độ đọc/ghi, tạo swap file.
 
+* Lưu ý : khi dd 1 ổ đĩa cần chú ý đến dung lượng nếu dd 1 ổ đĩa có dung lượng lớn hơn vào ổ đĩa nhỏ thì sẽ chỉ sao chép block đến khi ổ đĩa nhỏ đầy rồi dừng 
+<img width="845" height="255" alt="dd" src="https://github.com/user-attachments/assets/f41a5507-20f9-4a60-8dfe-cc9544d58fbd" />
 ---
 
 ## 3. **Mirroring Data Between Systems: `rsync`, `scp`, `sftp`**
@@ -90,8 +78,15 @@ Dưới đây là giải thích chi tiết về các chức năng mà bạn li�
   * `z`: nén khi truyền
 
 * **Ứng dụng**: Sao lưu dữ liệu định kỳ, mirror server.
-
+<img width="910" height="630" alt="incremental" src="https://github.com/user-attachments/assets/a7538d81-cc3d-4e8b-a25f-d8bba6573541" />
 ---
+
+* Lưu ý : 
+khi để đường dẫn nếu rsync directories thì phải chú ý tới trailing slash (/) cuối cùng
+<img width="1865" height="516" alt="trailing" src="https://github.com/user-attachments/assets/0eed9e6a-625e-43af-ad42-b9a6b3238f75" />
+
+khi muốn giữ nguyên user-id group-id nếu bên đích không tồn tại userid đấy
+<img width="1715" height="328" alt="testsource" src="https://github.com/user-attachments/assets/5630b767-8424-470a-9431-1bc658bbfd90" />
 
 ### **3.2. `scp`**
 
