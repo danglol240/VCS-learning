@@ -250,28 +250,5 @@ makestep 1.0 3
 sudo systemctl restart chrony
 sudo systemctl enable chrony
 ```
-## 4. Mở port NTP (UDP 123)
-Nếu có firewall:
 
-```bash
-sudo ufw allow 123/udp
-```
-## 5. Kiểm tra NTP Server
-Xem đồng bộ trên server:
-```bash
-chronyc tracking
-chronyc sources -v
-```
-Xem service lắng nghe port:
-
-```bash
-ss -tulpn | grep chronyd
-```
-## 6. Kiểm tra từ client
-
-Trên client (máy khác trong LAN):
-
-```bash
-chronyc sources -v
-```
-Sẽ thấy NTP server LAN (ví dụ `192.168.1.1`) hiện stratum và offset.
+<img width="1510" height="682" alt="sync" src="https://github.com/user-attachments/assets/61820173-c195-45b3-997c-fe5e5bdc1a37" />
