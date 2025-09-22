@@ -12,6 +12,8 @@
 | `t`    | List nội dung archive                 |
 | `v`    | Verbose – hiển thị chi tiết           |
 | `f`    | File – chỉ định tên archive           |
+| `r`    | Append thêm file mới                  |
+| `delete`| Xóa file ở trong archive             | 
 | `z`    | Nén bằng gzip (`.tar.gz`)             |
 | `j`    | Nén bằng bzip2 (`.tar.bz2`)           |
 | `J`    | Nén bằng xz (`.tar.xz`)               |
