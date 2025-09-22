@@ -181,27 +181,9 @@ Chạy lúc 5:00 sáng mỗi ngày với quyền `root`.
 | `crontab -u username -e` | Chỉnh sửa crontab của user khác (cần root) |
 
 ---
+## 4. Use cases đặc biệt
 
-## 4. Environment & Output
-
-* **PATH**: crontab thường có **PATH rất hạn chế** (`/usr/bin:/bin`) → nên dùng đường dẫn đầy đủ.
-* **MAILTO**: nếu muốn gửi email kết quả lệnh:
-
-```
-MAILTO="danglol240@example.com"
-```
-
-* Redirect output để tránh spam mail:
-
-```
-0 3 * * * /home/user/script.sh >> /home/user/script.log 2>&1
-```
-
----
-
-## 5. Use cases đặc biệt
-
-### 5.1. Chạy script nhiều lần trong 1 giờ
+### 4.1. Chạy script nhiều lần trong 1 giờ
 
 * Mỗi 10 phút:
 
@@ -209,7 +191,7 @@ MAILTO="danglol240@example.com"
 */10 * * * * /home/user/job.sh
 ```
 
-### 5.2. Chạy script trong khoảng giờ nhất định
+### 4.2. Chạy script trong khoảng giờ nhất định
 
 * Mỗi 5 phút từ 9h đến 17h:
 
@@ -217,7 +199,7 @@ MAILTO="danglol240@example.com"
 */5 9-17 * * * /home/user/job.sh
 ```
 
-### 5.3. Chạy script vào các ngày cụ thể
+### 4.3. Chạy script vào các ngày cụ thể
 
 * Mỗi thứ 2 và thứ 5:
 
@@ -225,20 +207,11 @@ MAILTO="danglol240@example.com"
 0 12 * * 1,4 /home/user/midday.sh
 ```
 
-### 5.4. Chạy khi khởi động hệ thống
+### 4.4. Chạy khi khởi động hệ thống
 
 ```
 @reboot /home/user/startup.sh
 ```
-
-### 5.5. Chạy vào ngày cuối cùng của tháng
-
-* Crontab truyền thống không hỗ trợ trực tiếp → phải dùng shell:
-
-```
-59 23 28-31 * * [ "$(date +\%d -d tomorrow)" == "01" ] && /home/user/monthend.sh
-```
-
 ## 6. Lưu ý crontab
 
 1. Kiểm tra log cron:
