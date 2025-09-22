@@ -4,6 +4,7 @@
   `tar` (tape archive) được dùng để gom nhiều tệp/thư mục lại thành **một file duy nhất (archive)**, giúp dễ quản lý, sao lưu, hoặc truyền tải. `tar` có thể chỉ tạo archive hoặc kết hợp nén bằng các công cụ như `gzip` (`.tar.gz`), `bzip2` (`.tar.bz2`), hoặc `xz` (`.tar.xz`).
 
 * **Ví dụ**:
+
 | Option | Ý nghĩa                               |
 | ------ | ------------------------------------- |
 | `c`    | Create archive (tạo archive)          |
