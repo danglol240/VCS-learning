@@ -48,12 +48,7 @@ Về đường dẫn tar sẽ tự động bỏ dấu / đầu tiên và giữ n
     * `of`: output file
     * `bs`: block size (1M = 1 megabyte)
     * `count`: số block
-
-  * Sao chép ổ đĩa:
-
-    ```bash
-    dd if=/dev/sda of=/dev/sdb bs=4M status=progress
-    ```
+  * Ngoài ra còn 1 số option khác ví dụ nhu : `skip`,`seek`
 
 * **Ứng dụng**: Clone ổ đĩa, kiểm tra tốc độ đọc/ghi, tạo swap file.
 
