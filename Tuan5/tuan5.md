@@ -247,14 +247,6 @@ Trên hầu hết Linux distro, file quản lý quyền thường nằm ở:
 * Nếu **không có** `cron.allow` nhưng có `cron.deny`
   → **Tất cả user đều được phép**, trừ những user có tên trong `cron.deny`.
 
-* Nếu **không có cả hai file**
-  → Quy tắc mặc định tùy distro:
-
-  * Trên Ubuntu/Debian: chỉ `root` mới được dùng crontab.
-  * Trên CentOS/RHEL: tất cả user đều được phép.
-
----
-
 ## 3. Ví dụ
 
 ### Chỉ cho phép 2 user `alice` và `bob` dùng crontab:
