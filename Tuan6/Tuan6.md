@@ -63,7 +63,53 @@ Về đường dẫn tar sẽ tự động bỏ dấu / đầu tiên và giữ n
 * **Chức năng**:
   Công cụ đồng bộ dữ liệu giữa các thư mục/ máy tính với **khả năng sao chép tăng dần (incremental)** – chỉ truyền phần thay đổi.
 
-* **Ưu điểm**: Nhanh hơn `scp` khi dữ liệu lớn và ít thay đổi. Hỗ trợ resume.
+* **Options**:
+`rsync` có rất nhiều option, nhưng mình liệt kê cho bạn một số **hay dùng nhất và quan trọng nhất** nhé 👍
+
+---
+
+## 1. **Cơ bản**
+
+* `-v` : verbose, hiển thị thông tin chi tiết.
+* `-a` : archive mode (gồm `-rlptgoD`, giữ nguyên permission, owner, symlink, device, timestamp).
+* `-r` : recursive (sao chép đệ quy thư mục).
+* `-n` : dry-run (chạy thử, không thực sự copy, chỉ in ra sẽ làm gì).
+
+---
+
+## 2. **Đồng bộ và loại trừ**
+
+* `--delete` : xóa file ở destination nếu không còn ở source.
+* `--exclude=PATTERN` : bỏ qua file/thư mục theo pattern.
+  → ví dụ: `--exclude="*.log"`
+* `--exclude-from=FILE` : đọc danh sách exclude từ file.
+
+---
+
+## 3. **Nén**
+
+* `-z` : nén dữ liệu khi truyền qua mạng.
+* `--progress` : hiển thị tiến trình copy.
+
+---
+
+## 4. **Quyền và ownership**
+
+* `-p` : giữ nguyên permission.
+* `-o` : giữ nguyên owner.
+* `-g` : giữ nguyên group.
+* `-t` : giữ nguyên timestamp.
+* `-l` : copy symlink như symlink.
+* `-H` : giữ nguyên hardlink.
+
+---
+
+## 5. **Khác**
+
+* `-e ssh` : truyền qua SSH (rất phổ biến).
+* `--bwlimit=RATE` : giới hạn băng thông (KB/s).
+  → ví dụ: `--bwlimit=1000` (giới hạn \~1MB/s).
+---
 
 * **Ví dụ**:
 
