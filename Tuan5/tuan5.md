@@ -80,6 +80,15 @@ Cả hai dùng định dạng giống nhau nhưng khác về phạm vi và quy�
 - Công cụ như `systemd timers` (hỗ trợ giây) hoặc `fcron` (độ chi tiết mịn hơn).
 - Không dùng cron cho nhu cầu thời gian thực; dùng daemon hoặc hệ thống dựa trên sự kiện.
 
+```
+* * * * * /path/to/script.sh
+* * * * * sleep 10; /path/to/script.sh
+* * * * * sleep 20; /path/to/script.sh
+* * * * * sleep 30; /path/to/script.sh
+* * * * * sleep 40; /path/to/script.sh
+* * * * * sleep 50; /path/to/script.sh
+```
+
 Điều này ngăn lãng phí tài nguyên cho kiểm tra thường xuyên.
 ## 2. Cú pháp cơ bản
 
