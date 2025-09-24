@@ -122,14 +122,6 @@ Về đường dẫn tar sẽ tự động bỏ dấu / đầu tiên và giữ n
   * `z`: nén khi truyền
 
 * **Ứng dụng**: 
-Hay 👌 mình giải thích chi tiết cho bạn:
-
----
-
-## 🌀 **Rsync dùng để làm gì?**
-
-`rsync` (**remote synchronization**) là công cụ trong Linux/Unix dùng để:
-
 1. **Đồng bộ hóa file/thư mục**
 
    * Giữa **cùng máy** (local → local).
