@@ -121,7 +121,29 @@ Về đường dẫn tar sẽ tự động bỏ dấu / đầu tiên và giữ n
   * `v`: verbose
   * `z`: nén khi truyền
 
-* **Ứng dụng**: Sao lưu dữ liệu định kỳ, mirror server.
+* **Ứng dụng**: 
+Hay 👌 mình giải thích chi tiết cho bạn:
+
+---
+
+## 🌀 **Rsync dùng để làm gì?**
+
+`rsync` (**remote synchronization**) là công cụ trong Linux/Unix dùng để:
+
+1. **Đồng bộ hóa file/thư mục**
+
+   * Giữa **cùng máy** (local → local).
+   * Giữa **2 máy khác nhau** (local ↔ remote) qua SSH hoặc daemon `rsync`.
+
+2. **Sao lưu (backup)**
+
+   * Giữ bản sao y hệt thư mục nguồn sang nơi khác.
+   * Hỗ trợ **incremental backup** (chỉ copy phần thay đổi, tiết kiệm thời gian và băng thông).
+
+3. **Truyền file hiệu quả**
+
+   * Chỉ gửi **phần khác biệt** (delta transfer), không gửi toàn bộ file mỗi lần.
+
 <img width="910" height="630" alt="incremental" src="https://github.com/user-attachments/assets/a7538d81-cc3d-4e8b-a25f-d8bba6573541" />
 ---
 
