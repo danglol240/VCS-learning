@@ -116,6 +116,6 @@ khi muốn giữ nguyên user-id group-id nếu bên đích không tồn tại u
   sftp> get remotefile
   ```
 
-* **Ưu điểm**: Có thể duyệt thư mục, quản lý file, resume transfer.
+* **Ưu điểm**: Có thể duyệt thư mục, quản lý file.
 
 * **Ứng dụng**: Truyền file qua mạng an toàn, thay thế FTP truyền thống.
