@@ -161,6 +161,7 @@ khi muốn giữ nguyên user-id group-id nếu bên đích không tồn tại u
 
 * **Nhược điểm**: Không hỗ trợ incremental copy.
 
+<img width="1059" height="174" alt="scp" src="https://github.com/user-attachments/assets/00b0c83f-3bb5-41f3-83f0-5c18a2cba530" />
 ---
 
 ### **3.3. `sftp`**
