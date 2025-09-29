@@ -188,5 +188,4 @@ verb 3
 ```bash
 sudo openvpn --config client.ovpn
 ```
-
 ---

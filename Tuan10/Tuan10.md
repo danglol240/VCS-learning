@@ -156,14 +156,3 @@ Rồi 👍 mình sẽ làm một bản tổng hợp chi tiết về **Basic Rout
 👉 ACL được áp dụng trên interface (inbound hoặc outbound).
 
 ---
-
-✅ **Tóm tắt:**
-
-* IP packet encapsulation: hiểu header IP.
-* Router function: kết nối mạng, định tuyến.
-* Static routing & dynamic (DV, LS).
-* IP addressing, subnetting.
-* Public vs Private IP, NAT.
-* ACL để lọc gói tin.
-
----
