@@ -80,8 +80,39 @@ sudo ip route add default via 192.168.1.1
 
 #### Cấu hình DHCP
 
+<img width="560" height="163" alt="dhcpconf" src="https://github.com/user-attachments/assets/e65b9ade-29b8-4457-889c-0841ba2a308a" />
 
+1. **`subnet 192.168.1.0 netmask 255.255.255.0 { ... }`**
 
+   * Xác định phạm vi mạng mà DHCP server cấp IP.
+   * Ở đây là mạng **192.168.1.0/24** (tức từ 192.168.1.1 → 192.168.1.254).
+
+2. **`range 192.168.1.10 192.168.1.20;`**
+
+   * Dải địa chỉ IP mà DHCP sẽ **cấp phát động** cho client.
+   * Client sẽ nhận IP từ **192.168.1.10 → 192.168.1.20**.
+
+3. **`default-lease-time 86400;`**
+
+   * Thời gian mặc định một client được thuê IP (lease).
+   * Đơn vị = giây → `86400 giây = 24 giờ`.
+
+4. **`max-lease-time 86400;`**
+
+   * Thời gian tối đa một client được thuê IP.
+   * Ở đây cũng là 24 giờ.
+
+5. **`option routers 192.168.1.1;`**
+
+   * Cung cấp địa chỉ **gateway (router)** cho client.
+   * Client sẽ dùng IP **192.168.1.1** làm default gateway để đi ra ngoài LAN.
+
+6. **`option domain-name-servers 4.4.4.4,8.8.8.8;`**
+
+   * Chỉ định danh sách DNS server mà client sẽ dùng.
+   * Ở đây: `4.4.4.4` và `8.8.8.8` (Google DNS).
+
+---
 **Luồng DHCP:**
 
 1. **DHCPDISCOVER** – Client gửi broadcast tìm DHCP server.
