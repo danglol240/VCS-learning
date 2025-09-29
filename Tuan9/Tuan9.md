@@ -173,12 +173,3 @@ Một số giao thức lớp ứng dụng:
   2. **Layer 3 Switch**: switch có khả năng routing.
 
 ---
-
-✅ Tóm lại:
-
-* Networking: hiểu OSI, TCP/IP, encapsulation, client-server, TCP vs UDP.
-* Switching: hiểu Ethernet, frame, domain, switch hoạt động, STP, VLAN, VTP, inter-VLAN.
-
----
-
-Bạn có muốn mình vẽ **sơ đồ minh họa** (VD: encapsulation từ Application xuống Physical, hoặc sơ đồ VLAN + router-on-a-stick) để dễ hình dung hơn không?
