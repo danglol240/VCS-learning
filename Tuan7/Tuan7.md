@@ -80,18 +80,7 @@ sudo ip route add default via 192.168.1.1
 
 #### Cấu hình DHCP
 
-* Cho phép nhận IP tự động:
 
-```bash
-sudo dhclient eth0
-```
-
-* Trên Ubuntu Netplan:
-
-```yaml
-eth0:
-  dhcp4: yes
-```
 
 **Luồng DHCP:**
 
@@ -99,6 +88,8 @@ eth0:
 2. **DHCPOFFER** – Server phản hồi địa chỉ khả dụng.
 3. **DHCPREQUEST** – Client yêu cầu IP từ server.
 4. **DHCPACK** – Server xác nhận và gán IP.
+
+<img width="1205" height="240" alt="dhcp" src="https://github.com/user-attachments/assets/25d3c64e-2fb9-45d3-bd89-fdffd542ec44" />
 
 ---
 
@@ -154,7 +145,115 @@ sudo hostnamectl set-hostname server01
     nameserver 1.1.1.1
     ```
 
+## 1. **A record (Address Record)**
+
+* **Ý nghĩa:** ánh xạ **tên miền → địa chỉ IPv4**.
+* **Ví dụ:**
+
+  ```
+  example.com.    IN    A    93.184.216.34
+  ```
+
+  → Khi người dùng gõ `example.com`, DNS sẽ trả về địa chỉ IP `93.184.216.34`.
+* **Thực tế:** dùng cho website, mail server, FTP server…
+
 ---
+
+## 2. **AAAA record (IPv6 Address Record)**
+
+* **Ý nghĩa:** ánh xạ **tên miền → địa chỉ IPv6**.
+* **Ví dụ:**
+
+  ```
+  example.com.    IN    AAAA    2606:2800:220:1:248:1893:25c8:1946
+  ```
+* **Thực tế:** dùng khi triển khai IPv6 song song với IPv4.
+
+---
+
+## 3. **CNAME record (Canonical Name Record)**
+
+* **Ý nghĩa:** tạo **bí danh (alias)** cho một tên miền.
+* **Ví dụ:**
+
+  ```
+  www.example.com.   IN   CNAME   example.com.
+  ```
+
+  → `www.example.com` sẽ trỏ đến `example.com`.
+* **Thực tế:** giúp quản lý dễ hơn, chỉ cần đổi IP của `example.com` thì alias tự cập nhật.
+
+---
+
+## 4. **MX record (Mail Exchanger)**
+
+* **Ý nghĩa:** xác định **mail server** chịu trách nhiệm nhận email cho tên miền.
+* **Ví dụ:**
+
+  ```
+  example.com.    IN    MX   10   mail1.example.com.
+  example.com.    IN    MX   20   mail2.example.com.
+  ```
+
+  * `10`, `20` = **priority** (số nhỏ hơn = ưu tiên cao hơn).
+* **Thực tế:** khi gửi mail đến `user@example.com`, mail server sẽ tìm MX record để biết gửi đến đâu.
+
+---
+
+## 5. **NS record (Name Server)**
+
+* **Ý nghĩa:** khai báo **DNS server có thẩm quyền** cho domain.
+* **Ví dụ:**
+
+  ```
+  example.com.    IN    NS    ns1.example.com.
+  example.com.    IN    NS    ns2.example.com.
+  ```
+* **Thực tế:** khi người dùng tra DNS cho `example.com`, hệ thống sẽ hỏi các NS này để lấy dữ liệu.
+
+---
+
+## 6. **PTR record (Pointer Record)**
+
+* **Ý nghĩa:** ánh xạ **IP → tên miền** (reverse DNS).
+* **Ví dụ:**
+
+  ```
+  34.216.184.93.in-addr.arpa.    IN    PTR    example.com.
+  ```
+* **Thực tế:** dùng trong xác thực email (nhiều mail server từ chối kết nối nếu không có PTR).
+
+---
+
+## 7. **TXT record (Text Record)**
+
+* **Ý nghĩa:** lưu **dữ liệu tùy ý dạng text** trong DNS.
+* **Thực tế:** thường dùng cho bảo mật, ví dụ:
+
+  * **SPF (Sender Policy Framework):** khai báo mail server nào được phép gửi email.
+
+    ```
+    example.com. IN TXT "v=spf1 include:_spf.google.com ~all"
+    ```
+  * **DKIM (DomainKeys Identified Mail):** dùng để xác thực chữ ký email.
+  * **Google site verification, Microsoft 365, AWS…** đều yêu cầu TXT record để verify domain.
+
+---
+
+## 8. **SOA record (Start of Authority)**
+
+* **Ý nghĩa:** chứa thông tin quản trị cho zone DNS.
+* **Bao gồm:** primary DNS server, email admin, serial number, refresh, retry, expire, TTL.
+* **Ví dụ:**
+
+  ```
+  example.com. IN SOA ns1.example.com. admin.example.com. (
+      2025092601 ; Serial
+      3600       ; Refresh
+      600        ; Retry
+      1209600    ; Expire
+      3600 )     ; Minimum TTL
+  ```
 
 ## 4. Routing trên Linux
 
