@@ -328,16 +328,6 @@ sudo ip route add 192.168.2.0/24 via 192.168.1.1
 ```bash
 sudo ip route del 192.168.2.0/24
 ```
-
-**Giải thích bảng route:**
-
-* Destination: mạng đích
-* Gateway: cổng ra
-* Genmask: subnet mask
-* Iface: giao diện mạng
-
----
-
 ## 5. Cấu hình thời gian và timezone
 
 ### Kiểm tra và đặt timezone
