@@ -7,7 +7,7 @@
 * **Kiểm tra danh sách interface:**
 
 ```bash
-ip link show
+ip link show / ip -a
 ```
 
 * **Tắt interface:**
@@ -21,14 +21,6 @@ sudo ip link set eth0 down
 ```bash
 sudo ip link set eth0 up
 ```
-
-* Với hệ thống dùng `ifconfig` (cũ):
-
-```bash
-sudo ifconfig eth0 down
-sudo ifconfig eth0 up
-```
-
 ---
 
 ### 1.2. Cấu hình địa chỉ IP
@@ -159,6 +151,8 @@ sudo hostnamectl set-hostname server01
 * **DNS là gì?**: Hệ thống phân giải tên miền → địa chỉ IP.
 
 * **Vì sao cần?**: Giúp người dùng dễ nhớ tên thay vì IP.
+
+<img width="407" height="295" alt="dns" src="https://github.com/user-attachments/assets/45d60904-301f-4c58-a954-1c8b50c92568" />
 
 * **Kiến trúc sơ lược:**
 
@@ -299,6 +293,29 @@ sudo hostnamectl set-hostname server01
 ```bash
 ip route show
 ```
+Ví dụ output:
+
+```bash
+default via 192.168.1.1 dev eth0 proto dhcp metric 100
+192.168.1.0/24 dev eth0 proto kernel scope link src 192.168.1.10 metric 100
+```
+
+### Các trường quan trọng:
+
+* **default** → route mặc định (nếu gói tin không match route nào khác thì đi theo route này).
+* **via 192.168.1.1** → địa chỉ gateway (router) mà gói tin sẽ đi qua.
+* **dev eth0** → interface sử dụng để gửi gói.
+* **proto** → nguồn gốc route:
+
+  * `kernel` → do kernel tự tạo khi interface up.
+  * `dhcp` → lấy từ DHCP.
+  * `static` → do admin thêm thủ công.
+* **scope** → phạm vi sử dụng route:
+  * `link` → Địa chỉ IP đích nằm trên cùng mạng LAN (cùng subnet) với bạn, nên có thể gửi trực tiếp mà không cần đi qua router/gateway.
+* **src 192.168.1.10** → địa chỉ IP mà kernel sẽ dùng làm source khi ứng dụng gửi gói mà không bind một địa chỉ nguồn cụ thể.
+* **metric 100** → độ ưu tiên (route nào metric nhỏ hơn sẽ được chọn trước).
+
+---
 
 * Thêm route:
 
