@@ -292,6 +292,7 @@ logger -t myapp "This is a test log from myapp"
     endscript
 }
 ```
+<img width="831" height="1097" alt="logrotate" src="https://github.com/user-attachments/assets/6dbdac1c-9fd9-48f9-9e86-336fc0d360db" />
 
 👉 **Tại sao cần `postrotate script`?**
 
