@@ -305,9 +305,6 @@ logger -t myapp "This is a test log from myapp"
 sudo logrotate -d /etc/logrotate.conf     # chạy test, debug
 sudo logrotate -f /etc/logrotate.conf     # force rotate
 ```
-
----
-
 # 5. The systemd journal: `journalctl`
 
 ### Ý nghĩa:

@@ -1,7 +1,3 @@
-Ok 👌 mình sẽ tổng hợp đầy đủ kiến thức **Basic Networking** và **Basic Switching** theo outline bạn đưa, có giải thích chi tiết, dễ hiểu cho học tập.
-
----
-
 # 🌐 BASIC NETWORKING
 
 ## 1. TCP/IP và OSI
@@ -16,12 +12,13 @@ Ok 👌 mình sẽ tổng hợp đầy đủ kiến thức **Basic Networking** 
   6. Presentation
   7. Application
 
-* **TCP/IP model**: 4 tầng
+* **TCP/IP model**: 5 tầng
 
-  1. Network Interface (Physical + Data link trong OSI)
-  2. Internet (Network trong OSI)
-  3. Transport (Transport trong OSI)
-  4. Application (Session + Presentation + Application trong OSI)
+  1. Physical
+  2. Link
+  3. Internet (Network trong OSI)
+  4. Transport (Transport trong OSI)
+  5. Application (Session + Presentation + Application trong OSI)
 
 👉 **Giống nhau:** đều phân tầng để truyền dữ liệu, có Transport & Application.
 👉 **Khác nhau:** OSI 7 tầng lý thuyết, TCP/IP 4 tầng thực tế (ứng dụng trong Internet).

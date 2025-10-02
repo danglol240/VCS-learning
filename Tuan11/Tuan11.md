@@ -1,7 +1,3 @@
-Ok 👍 mình sẽ tổng hợp kiến thức **Firewall basic** và **VPN basic** cho bạn, theo outline bạn đưa.
-
----
-
 # 🔥 FIREWALL BASIC
 
 ## 1. Khái Niệm Firewall
