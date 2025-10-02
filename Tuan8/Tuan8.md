@@ -11,6 +11,57 @@
 * Syslog sẽ phân loại theo **facility** (auth, mail, daemon, kern, user, local0..local7) và **severity** (emerg, alert, crit, err, warning, notice, info, debug).
 * Luồng: **App → Syslog API → Rsyslog daemon (`/dev/log`) → Log file / Remote server**
 
+Ok 👍 mình sẽ đi **từng bước, cực chi tiết** để bạn nắm vững về **facility** và **severity** trong syslog/rsyslog.
+
+---
+
+# 1. Facility là gì?
+
+👉 **Facility = nguồn gốc (loại dịch vụ / ứng dụng) sinh ra log**.
+Hệ thống chia ra nhiều facility chuẩn để phân loại log cho dễ quản lý.
+
+### 📋 Một số facility chuẩn:
+
+| Facility          | Giá trị số | Ý nghĩa (nguồn log)                                    |
+| ----------------- | ---------- | ------------------------------------------------------ |
+| `kern`            | 0          | Log từ kernel                                          |
+| `user`            | 1          | Log từ chương trình user-level (ứng dụng thông thường) |
+| `mail`            | 2          | Log từ hệ thống mail                                   |
+| `daemon`          | 3          | Log từ các system daemon (dịch vụ nền)                 |
+| `auth`            | 4          | Log liên quan tới authentication (PAM, login)          |
+| `syslog`          | 5          | Log từ chính syslog/rsyslog                            |
+| `lpr`             | 6          | Log từ subsystem in ấn                                 |
+| `news`            | 7          | Log từ dịch vụ news (Usenet, ít dùng)                  |
+| `uucp`            | 8          | UUCP (cũ)                                              |
+| `cron`            | 9          | Log từ cron jobs                                       |
+| `authpriv`        | 10         | Log auth riêng tư (SSH, sudo, su)                      |
+| `ftp`             | 11         | Log FTP                                                |
+| `local0`–`local7` | 16–23      | Log dành cho custom app                                |
+
+💡 **Ứng dụng** khi gửi log sẽ gắn **facility** để syslog biết log thuộc loại nào.
+
+---
+
+# 2. Severity là gì?
+
+👉 **Severity = mức độ quan trọng (độ nghiêm trọng) của log**.
+Có 8 cấp độ chuẩn (theo RFC5424), số càng nhỏ thì càng nghiêm trọng:
+
+| Giá trị số | Tên severity | Ý nghĩa                                                  |
+| ---------- | ------------ | -------------------------------------------------------- |
+| 0          | `emerg`      | Emergency – hệ thống chết hoàn toàn (panic)              |
+| 1          | `alert`      | Alert – cần xử lý ngay (ví dụ mất nguồn điện)            |
+| 2          | `crit`       | Critical – lỗi nghiêm trọng (hỏng ổ cứng, service crash) |
+| 3          | `err`        | Error – lỗi chung                                        |
+| 4          | `warning`    | Warning – cảnh báo, có thể ảnh hưởng                     |
+| 5          | `notice`     | Notice – thông báo quan trọng nhưng không lỗi            |
+| 6          | `info`       | Info – thông tin bình thường                             |
+| 7          | `debug`      | Debug – thông tin chi tiết để gỡ lỗi                     |
+
+💡 Mỗi log đều có **severity** để cho biết mức nghiêm trọng.
+
+---
+
 ### File cấu hình cơ bản:
 
 * `/etc/rsyslog.conf` hoặc `/etc/rsyslog.d/*.conf`
@@ -28,6 +79,8 @@ auth,authpriv.*    /var/log/auth.log
 *.*     @192.168.1.100:514    # UDP
 *.*     @@192.168.1.100:514   # TCP
 ```
+<img width="656" height="203" alt="rsyslog_server" src="https://github.com/user-attachments/assets/ed6d1823-9623-4f6f-9919-5e5b9004c88f" />
+<img width="851" height="191" alt="rsyslog_client" src="https://github.com/user-attachments/assets/333733d9-4832-4fed-a419-b91a760f872b" />
 
 ## 1. Cú pháp cơ bản của rsyslog
 
@@ -94,16 +147,6 @@ authpriv.*    /var/log/auth.log
 authpriv.*    @@192.168.1.100:514
 ```
 
----
-
-## 4. Reload lại rsyslog để áp dụng
-
-```bash
-sudo systemctl restart rsyslog
-```
-
----
-
 # 2. Mô hình log tập trung
 
 ### Ý tưởng:
@@ -163,13 +206,74 @@ logger -t myapp "This is a test log from myapp"
 * Dịch vụ riêng: `/etc/logrotate.d/<service>`
 
 ### Các tham số chính:
+* `daily`, `weekly`, `monthly`
 
-* `daily/weekly/monthly` → tần suất rotate
-* `rotate N` → giữ lại N file cũ
-* `compress` → nén log cũ (.gz)
-* `size 100M` → rotate khi log > 100MB
-* `missingok` → không báo lỗi nếu file log không tồn tại
-* `notifempty` → không rotate file rỗng
+  * Chỉ định tần suất rotate. (Tần suất thực tế phụ thuộc cron job gọi logrotate.)
+
+* `rotate <count>`
+
+  * Giữ lại bao nhiêu bản cũ. `rotate 7` giữ 7 bản (1..7).
+
+* `size <bytes>` / `minsize` / `maxsize`
+
+  * `size 100M` → chỉ rotate khi file ≥ 100MB (bất kể time). `minsize` tương tự, `maxsize` kết hợp với tần suất.
+
+* `compress` / `delaycompress` / `compresscmd` / `compressext`
+
+  * `compress`: nén file xoay (mặc định gzip).
+  * `delaycompress`: hoãn nén file vừa mới rotate 1 lần (thường dùng khi dịch vụ vẫn giữ file handle).
+  * `compresscmd` cho phép dùng chương trình nén khác, `compressext` chỉ định hậu tố.
+
+* `copytruncate`
+
+  * Copy nội dung file ra file xoay rồi **truncate** file gốc (giữ inode). Dùng khi process **không thể** re-open file (không thể gửi HUP). **Nhược điểm**: có thể mất 1 ít log trong khoảng thời gian copy → nói chung ít an toàn.
+  * **Không khuyến khích** cho DB hoặc hight-traffic logs; tốt hơn là reload process để re-open file.
+
+* `create <mode> <owner> <group>`
+
+  * Sau khi rotate, tạo file log mới với quyền/owner chỉ định. Ví dụ `create 0640 root adm`.
+
+* `missingok`
+
+  * Không báo lỗi nếu file không tồn tại.
+
+* `notifempty`
+
+  * Không rotate nếu file rỗng.
+
+* `sharedscripts`
+
+  * Nếu group nhiều file cùng 1 khối config, `postrotate`/`prerotate` mặc định chạy **cho mỗi file**; `sharedscripts` khiến các script chạy **1 lần duy nhất** cho toàn bộ block. Rất quan trọng khi postrotate reload service (không muốn reload nhiều lần).
+
+* `prerotate` / `postrotate` ... `endscript`
+
+  * Script shell chạy trước/sau rotation. Thường dùng để reload/reopen service. Ví dụ:
+
+    ```conf
+    postrotate
+      systemctl reload rsyslog || true
+    endscript
+    ```
+
+* `firstaction` / `lastaction`
+
+  * Chạy 1 script **trước/after** toàn bộ processing, chỉ 1 lần.
+
+* `olddir <dir>`
+
+  * Chuyển file log đã xoay vào thư mục `<dir>`.
+
+* `dateext` / `dateformat`
+
+  * Sử dụng ngày trong tên file xoay (vd `-20251002`) thay cho `.1`. Dễ quản lý theo thời gian.
+
+* `maxage <days>`
+
+  * Xóa bản cũ hơn N ngày.
+
+* `su <user> <group>`
+
+  * Quy định user/group để thực hiện thao tác tạo file (dùng trên hệ không chạy logrotate bằng root hoặc cần quyền file đặc biệt).
 
 ### Ví dụ cấu hình cho Apache2 (`/etc/logrotate.d/apache2`):
 
@@ -238,14 +342,3 @@ sudo logrotate -f /etc/logrotate.conf     # force rotate
   ```bash
   journalctl -p err
   ```
-
----
-
-✅ Tóm lại:
-
-* **Syslog/rsyslog**: nền tảng thu thập log, có thể tập trung.
-* **logger**: test cấu hình syslog.
-* **logrotate**: quản lý kích thước log, kèm postrotate để reload service.
-* **journalctl**: đọc log trong hệ thống systemd.
-
----
