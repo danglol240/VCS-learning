@@ -1,7 +1,3 @@
-Rồi 👍 mình sẽ làm một bản tổng hợp chi tiết về **Basic Router** cho bạn, theo outline mà bạn đưa ra.
-
----
-
 # 🌐 BASIC ROUTER
 
 ## 1. Encapsulation IP Packet
