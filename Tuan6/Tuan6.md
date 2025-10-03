@@ -224,13 +224,7 @@ Cả `scp` và `sftp` đều dùng **kênh SSH** (tham chiếu qua SSH tunnel). 
 * `scp` chỉ cho phép copy; không có `ls`/`rm`/`rename` (ngoại trừ dùng SSH chạy lệnh từ xa).
 * `sftp` có bộ lệnh file-level giúp duyệt và quản lý trực tiếp trên server.
 
-## 5) Scripting & automation
-
-* Cả hai dùng tốt trong script.
-* `sftp` có lợi thế khi bạn cần chạy một chuỗi thao tác (cd, put, chmod, mv) vì `-b batchfile`.
-* `scp` rất thuận tiện cho copy nhanh trong script (nhưng không quản lý remote filesystem).
-
-## 6) Hiệu năng
+## 5) Hiệu năng
 
 * Về hiệu năng thô, `scp` thường nhanh hơn cho copy đơn giản (ít protocol overhead).
 * Tuy nhiên với các file lớn/ nhiều file, hiệu năng thực tế còn phụ thuộc vào implementation; nếu cần hiệu quả băng thông khi cập nhật nhiều file, **rsync over SSH** là lựa chọn tốt hơn (sinh delta, resume tốt).
