@@ -312,6 +312,28 @@ sudo timedatectl set-timezone Asia/Ho_Chi_Minh
 * **Mục đích:** Giữ thời gian chuẩn xác cho server.
 * **Kiến trúc:** Client → NTP server → Stratum server → Atomic clock/GPS.
 
+Ok 👌 mình giải thích chi tiết về **cơ chế đồng bộ thời gian trong Chrony** nhé.
+
+---
+
+# 📌 Chrony – Cơ chế đồng bộ thời gian
+
+Chrony là một NTP client/server hiện đại thay thế `ntpd`. Nó hoạt động nhanh, chính xác, và ổn định trong nhiều môi trường (server, desktop, máy ảo, laptop).
+
+---
+
+## 🔹 1. Quá trình đồng bộ cơ bản
+
+1. **Chronyd** (daemon) chạy trên máy client hoặc server.
+2. Nó gửi **NTP request** tới upstream servers (ví dụ `pool.ntp.org`, `time.google.com`, hoặc máy NTP nội bộ).
+3. Server trả về **thời gian chính xác**.
+4. Chronyd sẽ tính toán:
+
+   * **Offset**: chênh lệch giữa đồng hồ local và server.
+   * **Drift**: sai số tốc độ của đồng hồ local (clock frequency).
+5. Dựa vào offset + drift, chronyd **điều chỉnh dần dần** đồng hồ local về đúng chuẩn, tránh “nhảy” đột ngột.
+
+---
 ### Cấu hình NTP server đồng bộ sử dụng chrony
 <img width="835" height="451" alt="chrony" src="https://github.com/user-attachments/assets/fe02eb70-9811-44de-9130-deaeaf55adca" />
 
