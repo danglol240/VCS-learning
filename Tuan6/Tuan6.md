@@ -229,7 +229,7 @@ Cả `scp` và `sftp` đều dùng **kênh SSH** (tham chiếu qua SSH tunnel). 
 * Về hiệu năng thô, `scp` thường nhanh hơn cho copy đơn giản (ít protocol overhead).
 * Tuy nhiên với các file lớn/ nhiều file, hiệu năng thực tế còn phụ thuộc vào implementation; nếu cần hiệu quả băng thông khi cập nhật nhiều file, **rsync over SSH** là lựa chọn tốt hơn (sinh delta, resume tốt).
 ---
-# Khi nào dùng cái nào (gợi ý)
+# Khi nào dùng
 
 * Dùng **`scp`** khi: copy đơn giản, nhanh, bạn chỉ cần 1 lệnh trong script để chuyển file.
 * Dùng **`sftp`** khi: cần quản lý file từ xa (ls/cd/remove/rename), cần resume, hoặc muốn batch nhiều thao tác file.
