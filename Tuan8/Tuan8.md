@@ -296,7 +296,7 @@ logger -t myapp "This is a test log from myapp"
 
 👉 **Tại sao cần `postrotate script`?**
 
-* Vì khi rotate log, file log cũ được đổi tên → service vẫn ghi vào file cũ.
+* Vì khi rotate log, file log cũ được đổi tên → service đang hoạt động vẫn ghi vào file cũ.
 * `postrotate` dùng để gửi lệnh reload → service mở lại file log mới.
 
 ### Test logrotate:
