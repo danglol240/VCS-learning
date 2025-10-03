@@ -181,25 +181,7 @@ khi muốn giữ nguyên user-id group-id nếu bên đích không tồn tại u
 
 * **Ứng dụng**: Truyền file qua mạng an toàn, thay thế FTP truyền thống.
 
-# Bảng so sánh nhanh
-
-| Tiêu chí                                     |                                                              `scp` | `sftp`                                                             |
-| -------------------------------------------- | -----------------------------------------------------------------: | :----------------------------------------------------------------- |
-| Protocol / nền tảng                          |                         Copy qua SSH (dựa trên legacy `rcp` style) | SSH File Transfer Protocol (SFTP subsystem over SSH)               |
-| Port                                         |                                                  SSH (mặc định 22) | SSH (mặc định 22)                                                  |
-| Kiểu hoạt động                               |                     One-shot copy (non-interactive single command) | Có thể interactive (shell-like) hoặc batch (non-interactive)       |
-| Duyệt thư mục / quản lý file                 |                                                       ❌ (chỉ copy) | ✅ (ls, cd, rm, rename, mkdir, …)                                   |
-| Resume transfer                              |                                                   ❌ (không native) | ✅ (`reget`, `reput` hoặc client hỗ trợ resume)                     |
-| Copy đệ quy (thư mục)                        |                                                           ✅ (`-r`) | ✅ (interactive: `put -r` / `get -r`)                               |
-| Scripting / batch                            |                                           ✅ (dễ dùng trong script) | ✅ (tốt hơn: `sftp -b batchfile`)                                   |
-| Khả năng nhận biết delta / tối ưu băng thông |                                                                  ❌ | ❌ (cả 2 không delta) — dùng `rsync` nếu cần delta                  |
-| Hiệu năng                                    |                                             Thường nhanh, đơn giản | Có overhead giao thức, đôi khi chậm hơn scp                        |
-| Tính năng an toàn hiện đại                   | Legacy (một vài vấn đề lịch sử) — cộng đồng khuyên dùng SFTP/rsync | Thiết kế rõ ràng hơn cho file operations; được khuyến nghị         |
-| Phù hợp khi                                  |                              Copy nhanh file đơn / script đơn giản | Quản lý file từ xa, transfer nhiều file, resume, interactive needs |
-
----
-
-# Giải thích chi tiết
+# Khác biệt chi tiết
 
 ## 1) Giao thức & port
 
