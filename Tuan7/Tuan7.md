@@ -7,7 +7,7 @@
 * **Kiểm tra danh sách interface:**
 
 ```bash
-ip link show / ip -a
+ip link show / ip a
 ```
 
 * **Tắt interface:**
@@ -42,14 +42,16 @@ sudo ip route add default via 192.168.1.1
     ```yaml
     network:
       version: 2
+      renderer: networkd
       ethernets:
-        eth0:
+        enp3s0:
           dhcp4: no
-          addresses:
-            - 192.168.1.100/24
-          gateway4: 192.168.1.1
+          addresses: [192.168.1.10/24]
           nameservers:
-            addresses: [8.8.8.8, 1.1.1.1]
+            addresses: [8.8.8.8, 8.8.4.4]
+          routes:
+            - to: default
+              via: 192.168.1.1
     ```
 
     Áp dụng:
