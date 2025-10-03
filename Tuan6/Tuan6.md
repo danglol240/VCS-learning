@@ -176,6 +176,8 @@ khi muốn giữ nguyên user-id group-id nếu bên đích không tồn tại u
   sftp> put localfile
   sftp> get remotefile
   ```
+  
+<img width="1389" height="326" alt="sftp" src="https://github.com/user-attachments/assets/df37298c-8817-4151-88dd-a182bd4b733a" />
 
 * **Ưu điểm**: Có thể duyệt thư mục, quản lý file.
 
