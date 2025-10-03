@@ -180,3 +180,148 @@ khi muốn giữ nguyên user-id group-id nếu bên đích không tồn tại u
 * **Ưu điểm**: Có thể duyệt thư mục, quản lý file.
 
 * **Ứng dụng**: Truyền file qua mạng an toàn, thay thế FTP truyền thống.
+
+# Bảng so sánh nhanh
+
+| Tiêu chí                                     |                                                              `scp` | `sftp`                                                             |
+| -------------------------------------------- | -----------------------------------------------------------------: | :----------------------------------------------------------------- |
+| Protocol / nền tảng                          |                         Copy qua SSH (dựa trên legacy `rcp` style) | SSH File Transfer Protocol (SFTP subsystem over SSH)               |
+| Port                                         |                                                  SSH (mặc định 22) | SSH (mặc định 22)                                                  |
+| Kiểu hoạt động                               |                     One-shot copy (non-interactive single command) | Có thể interactive (shell-like) hoặc batch (non-interactive)       |
+| Duyệt thư mục / quản lý file                 |                                                       ❌ (chỉ copy) | ✅ (ls, cd, rm, rename, mkdir, …)                                   |
+| Resume transfer                              |                                                   ❌ (không native) | ✅ (`reget`, `reput` hoặc client hỗ trợ resume)                     |
+| Copy đệ quy (thư mục)                        |                                                           ✅ (`-r`) | ✅ (interactive: `put -r` / `get -r`)                               |
+| Scripting / batch                            |                                           ✅ (dễ dùng trong script) | ✅ (tốt hơn: `sftp -b batchfile`)                                   |
+| Khả năng nhận biết delta / tối ưu băng thông |                                                                  ❌ | ❌ (cả 2 không delta) — dùng `rsync` nếu cần delta                  |
+| Hiệu năng                                    |                                             Thường nhanh, đơn giản | Có overhead giao thức, đôi khi chậm hơn scp                        |
+| Tính năng an toàn hiện đại                   | Legacy (một vài vấn đề lịch sử) — cộng đồng khuyên dùng SFTP/rsync | Thiết kế rõ ràng hơn cho file operations; được khuyến nghị         |
+| Phù hợp khi                                  |                              Copy nhanh file đơn / script đơn giản | Quản lý file từ xa, transfer nhiều file, resume, interactive needs |
+
+---
+
+# Giải thích chi tiết
+
+## 1) Giao thức & port
+
+Cả `scp` và `sftp` đều dùng **kênh SSH** (tham chiếu qua SSH tunnel). Mặc định là port **22**. Về mặt mạng, giống nhau (một TCP connection tới SSH), nhưng `scp` thực thi thao tác copy bằng lệnh đơn giản, còn `sftp` khởi tạo một phiên SFTP (một “subsystem” trên SSH) để thực hiện nhiều lệnh file-level.
+
+## 2) Cách dùng & tương tác
+
+* `scp` rất đơn giản: một câu lệnh là copy xong. Ví dụ:
+
+  ```bash
+  scp localfile.txt user@remote:/path/
+  scp -r dir/ user@remote:/path/
+  scp -i ~/.ssh/id_rsa -P 2222 file user@host:/path/
+  ```
+* `sftp` có thể vào interactive shell:
+
+  ```bash
+  sftp user@remote
+  sftp> ls
+  sftp> cd /var/log
+  sftp> put localfile
+  sftp> get remotefile
+  ```
+
+  hoặc chạy non-interactive bằng batch:
+
+  ```bash
+  sftp -b batch.txt user@remote
+  ```
+
+  hoặc dùng ssh option thay vì `-P`:
+
+  ```bash
+  sftp -oPort=2222 user@host
+  ```
+
+## 3) Resume & reliability
+
+* `scp` không có resume built-in. Nếu kết nối bị gián đoạn, bạn phải restart transfer.
+* `sftp` có lệnh `reget`/`reput` (client hỗ trợ) để resume; nhiều client GUI SFTP cũng hỗ trợ resume.
+
+## 4) Quản lý file & thao tác
+
+* `scp` chỉ cho phép copy; không có `ls`/`rm`/`rename` (ngoại trừ dùng SSH chạy lệnh từ xa).
+* `sftp` có bộ lệnh file-level giúp duyệt và quản lý trực tiếp trên server.
+
+## 5) Scripting & automation
+
+* Cả hai dùng tốt trong script.
+* `sftp` có lợi thế khi bạn cần chạy một chuỗi thao tác (cd, put, chmod, mv) vì `-b batchfile`.
+* `scp` rất thuận tiện cho copy nhanh trong script (nhưng không quản lý remote filesystem).
+
+## 6) Hiệu năng
+
+* Về hiệu năng thô, `scp` thường nhanh hơn cho copy đơn giản (ít protocol overhead).
+* Tuy nhiên với các file lớn/ nhiều file, hiệu năng thực tế còn phụ thuộc vào implementation; nếu cần hiệu quả băng thông khi cập nhật nhiều file, **rsync over SSH** là lựa chọn tốt hơn (sinh delta, resume tốt).
+
+## 7) An toàn
+
+* Cả hai dùng SSH (xác thực bằng password / key, mã hoá AES, v.v.).
+* Trong những năm gần đây, cộng đồng bảo mật lưu ý `scp` có các edge-case rủi ro do format/command-interpretation cũ; do đó nhiều người khuyến nghị dùng `sftp` hoặc `rsync` over SSH thay vì `scp` cho workloads mới.
+
+## 8) Khả năng tương thích & legacy
+
+* `scp` có lịch sử lâu đời, có sẵn trên hầu hết hệ thống.
+* `sftp` là một phần của OpenSSH và phổ biến trên servers/clients hiện đại. GUI clients thường cung cấp SFTP backend.
+
+---
+
+# Ví dụ thực tế (thực hành nhanh)
+
+**SCP:**
+
+```bash
+# copy local -> remote
+scp -i ~/.ssh/id_rsa file.txt user@10.0.0.5:/home/user/
+
+# copy remote -> local
+scp user@10.0.0.5:/home/user/file.txt .
+
+# recursive
+scp -r mydir user@10.0.0.5:/backup/
+```
+
+**SFTP interactive & resume:**
+
+```bash
+sftp user@10.0.0.5
+# trong prompt sftp>:
+sftp> ls
+sftp> get bigfile.bin            # tải file
+sftp> quit
+
+# resume download if interrupted
+sftp> reget bigfile.bin
+```
+
+**SFTP batch (non-interactive):**
+tạo `batch.txt`:
+
+```
+lcd /local/dir
+cd /remote/dir
+put file1
+put file2
+quit
+```
+
+chạy:
+
+```bash
+sftp -b batch.txt user@host
+```
+
+---
+
+# Khi nào dùng cái nào (gợi ý)
+
+* Dùng **`scp`** khi: copy đơn giản, nhanh, bạn chỉ cần 1 lệnh trong script để chuyển file.
+* Dùng **`sftp`** khi: cần quản lý file từ xa (ls/cd/remove/rename), cần resume, hoặc muốn batch nhiều thao tác file.
+* Nếu bạn cần **synchronization/đồng bộ delta** (chỉ gửi phần khác nhau), dùng **`rsync -e ssh`** thay vì scp/sftp.
+
+---
+
+Muốn mình cung cấp vài lệnh mẫu cụ thể cho trường hợp của bạn (ví dụ: *copy log directory lên backup server*, hoặc *resume transfer file lớn*) không?
