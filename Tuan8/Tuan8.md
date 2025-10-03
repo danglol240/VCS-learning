@@ -11,10 +11,6 @@
 * Syslog sẽ phân loại theo **facility** (auth, mail, daemon, kern, user, local0..local7) và **severity** (emerg, alert, crit, err, warning, notice, info, debug).
 * Luồng: **App → Syslog API → Rsyslog daemon (`/dev/log`) → Log file / Remote server**
 
-Ok 👍 mình sẽ đi **từng bước, cực chi tiết** để bạn nắm vững về **facility** và **severity** trong syslog/rsyslog.
-
----
-
 # 1. Facility là gì?
 
 👉 **Facility = nguồn gốc (loại dịch vụ / ứng dụng) sinh ra log**.
