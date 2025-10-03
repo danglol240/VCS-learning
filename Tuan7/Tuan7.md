@@ -57,19 +57,6 @@ sudo ip route add default via 192.168.1.1
     ```bash
     sudo netplan apply
     ```
-
-  * **CentOS 7/8:**
-    File: `/etc/sysconfig/network-scripts/ifcfg-eth0`
-
-    ```
-    BOOTPROTO=none
-    ONBOOT=yes
-    IPADDR=192.168.1.100
-    PREFIX=24
-    GATEWAY=192.168.1.1
-    DNS1=8.8.8.8
-    ```
-
 #### Cấu hình DHCP
 
 <img width="560" height="163" alt="dhcpconf" src="https://github.com/user-attachments/assets/e65b9ade-29b8-4457-889c-0841ba2a308a" />
@@ -161,7 +148,7 @@ sudo hostnamectl set-hostname server01
   * Authoritative servers
   * Recursive resolvers
 
-* Cấu hình DNS trên Linux:
+* Cấu hình DNS resolver trên Linux:
 
   * Tạm thời: `/etc/resolv.conf`
 
@@ -169,6 +156,9 @@ sudo hostnamectl set-hostname server01
     nameserver 8.8.8.8
     nameserver 1.1.1.1
     ```
+
+* Cách kiểm tra / xem 1 DNS record : sử dụng dig/nslookup
+<img width="1205" height="788" alt="dig" src="https://github.com/user-attachments/assets/cd1e913f-5b88-4489-99da-98871810ae5f" />
 
 ## 1. **A record (Address Record)**
 
@@ -180,7 +170,6 @@ sudo hostnamectl set-hostname server01
   ```
 
   → Khi người dùng gõ `example.com`, DNS sẽ trả về địa chỉ IP `93.184.216.34`.
-* **Thực tế:** dùng cho website, mail server, FTP server…
 
 ---
 
@@ -192,7 +181,6 @@ sudo hostnamectl set-hostname server01
   ```
   example.com.    IN    AAAA    2606:2800:220:1:248:1893:25c8:1946
   ```
-* **Thực tế:** dùng khi triển khai IPv6 song song với IPv4.
 
 ---
 
@@ -206,7 +194,6 @@ sudo hostnamectl set-hostname server01
   ```
 
   → `www.example.com` sẽ trỏ đến `example.com`.
-* **Thực tế:** giúp quản lý dễ hơn, chỉ cần đổi IP của `example.com` thì alias tự cập nhật.
 
 ---
 
@@ -221,7 +208,6 @@ sudo hostnamectl set-hostname server01
   ```
 
   * `10`, `20` = **priority** (số nhỏ hơn = ưu tiên cao hơn).
-* **Thực tế:** khi gửi mail đến `user@example.com`, mail server sẽ tìm MX record để biết gửi đến đâu.
 
 ---
 
@@ -234,8 +220,6 @@ sudo hostnamectl set-hostname server01
   example.com.    IN    NS    ns1.example.com.
   example.com.    IN    NS    ns2.example.com.
   ```
-* **Thực tế:** khi người dùng tra DNS cho `example.com`, hệ thống sẽ hỏi các NS này để lấy dữ liệu.
-
 ---
 
 ## 6. **PTR record (Pointer Record)**
@@ -246,26 +230,9 @@ sudo hostnamectl set-hostname server01
   ```
   34.216.184.93.in-addr.arpa.    IN    PTR    example.com.
   ```
-* **Thực tế:** dùng trong xác thực email (nhiều mail server từ chối kết nối nếu không có PTR).
 
 ---
-
-## 7. **TXT record (Text Record)**
-
-* **Ý nghĩa:** lưu **dữ liệu tùy ý dạng text** trong DNS.
-* **Thực tế:** thường dùng cho bảo mật, ví dụ:
-
-  * **SPF (Sender Policy Framework):** khai báo mail server nào được phép gửi email.
-
-    ```
-    example.com. IN TXT "v=spf1 include:_spf.google.com ~all"
-    ```
-  * **DKIM (DomainKeys Identified Mail):** dùng để xác thực chữ ký email.
-  * **Google site verification, Microsoft 365, AWS…** đều yêu cầu TXT record để verify domain.
-
----
-
-## 8. **SOA record (Start of Authority)**
+## 7. **SOA record (Start of Authority)**
 
 * **Ý nghĩa:** chứa thông tin quản trị cho zone DNS.
 * **Bao gồm:** primary DNS server, email admin, serial number, refresh, retry, expire, TTL.
@@ -345,6 +312,28 @@ sudo timedatectl set-timezone Asia/Ho_Chi_Minh
 * **Mục đích:** Giữ thời gian chuẩn xác cho server.
 * **Kiến trúc:** Client → NTP server → Stratum server → Atomic clock/GPS.
 
+Ok 👌 mình giải thích chi tiết về **cơ chế đồng bộ thời gian trong Chrony** nhé.
+
+---
+
+# 📌 Chrony – Cơ chế đồng bộ thời gian
+
+Chrony là một NTP client/server hiện đại thay thế `ntpd`. Nó hoạt động nhanh, chính xác, và ổn định trong nhiều môi trường (server, desktop, máy ảo, laptop).
+
+---
+
+## 🔹 1. Quá trình đồng bộ cơ bản
+
+1. **Chronyd** (daemon) chạy trên máy client hoặc server.
+2. Nó gửi **NTP request** tới upstream servers (ví dụ `pool.ntp.org`, `time.google.com`, hoặc máy NTP nội bộ).
+3. Server trả về **thời gian chính xác**.
+4. Chronyd sẽ tính toán:
+
+   * **Offset**: chênh lệch giữa đồng hồ local và server.
+   * **Drift**: sai số tốc độ của đồng hồ local (clock frequency).
+5. Dựa vào offset + drift, chronyd **điều chỉnh dần dần** đồng hồ local về đúng chuẩn, tránh “nhảy” đột ngột.
+
+---
 ### Cấu hình NTP server đồng bộ sử dụng chrony
 <img width="835" height="451" alt="chrony" src="https://github.com/user-attachments/assets/fe02eb70-9811-44de-9130-deaeaf55adca" />
 
