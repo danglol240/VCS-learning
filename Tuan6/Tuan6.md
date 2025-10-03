@@ -176,7 +176,7 @@ khi muốn giữ nguyên user-id group-id nếu bên đích không tồn tại u
   sftp> put localfile
   sftp> get remotefile
   ```
-  
+
 <img width="1389" height="326" alt="sftp" src="https://github.com/user-attachments/assets/df37298c-8817-4151-88dd-a182bd4b733a" />
 
 * **Ưu điểm**: Có thể duyệt thư mục, quản lý file.
@@ -211,13 +211,7 @@ Cả `scp` và `sftp` đều dùng **kênh SSH** (tham chiếu qua SSH tunnel). 
   hoặc chạy non-interactive bằng batch:
 
   ```bash
-  sftp -b batch.txt user@remote
-  ```
-
-  hoặc dùng ssh option thay vì `-P`:
-
-  ```bash
-  sftp -oPort=2222 user@host
+  sftp -b batch.sh user@remote
   ```
 
 ## 3) Resume & reliability
@@ -240,72 +234,9 @@ Cả `scp` và `sftp` đều dùng **kênh SSH** (tham chiếu qua SSH tunnel). 
 
 * Về hiệu năng thô, `scp` thường nhanh hơn cho copy đơn giản (ít protocol overhead).
 * Tuy nhiên với các file lớn/ nhiều file, hiệu năng thực tế còn phụ thuộc vào implementation; nếu cần hiệu quả băng thông khi cập nhật nhiều file, **rsync over SSH** là lựa chọn tốt hơn (sinh delta, resume tốt).
-
-## 7) An toàn
-
-* Cả hai dùng SSH (xác thực bằng password / key, mã hoá AES, v.v.).
-* Trong những năm gần đây, cộng đồng bảo mật lưu ý `scp` có các edge-case rủi ro do format/command-interpretation cũ; do đó nhiều người khuyến nghị dùng `sftp` hoặc `rsync` over SSH thay vì `scp` cho workloads mới.
-
-## 8) Khả năng tương thích & legacy
-
-* `scp` có lịch sử lâu đời, có sẵn trên hầu hết hệ thống.
-* `sftp` là một phần của OpenSSH và phổ biến trên servers/clients hiện đại. GUI clients thường cung cấp SFTP backend.
-
 ---
-
-# Ví dụ thực tế (thực hành nhanh)
-
-**SCP:**
-
-```bash
-# copy local -> remote
-scp -i ~/.ssh/id_rsa file.txt user@10.0.0.5:/home/user/
-
-# copy remote -> local
-scp user@10.0.0.5:/home/user/file.txt .
-
-# recursive
-scp -r mydir user@10.0.0.5:/backup/
-```
-
-**SFTP interactive & resume:**
-
-```bash
-sftp user@10.0.0.5
-# trong prompt sftp>:
-sftp> ls
-sftp> get bigfile.bin            # tải file
-sftp> quit
-
-# resume download if interrupted
-sftp> reget bigfile.bin
-```
-
-**SFTP batch (non-interactive):**
-tạo `batch.txt`:
-
-```
-lcd /local/dir
-cd /remote/dir
-put file1
-put file2
-quit
-```
-
-chạy:
-
-```bash
-sftp -b batch.txt user@host
-```
-
----
-
 # Khi nào dùng cái nào (gợi ý)
 
 * Dùng **`scp`** khi: copy đơn giản, nhanh, bạn chỉ cần 1 lệnh trong script để chuyển file.
 * Dùng **`sftp`** khi: cần quản lý file từ xa (ls/cd/remove/rename), cần resume, hoặc muốn batch nhiều thao tác file.
-* Nếu bạn cần **synchronization/đồng bộ delta** (chỉ gửi phần khác nhau), dùng **`rsync -e ssh`** thay vì scp/sftp.
-
----
-
-Muốn mình cung cấp vài lệnh mẫu cụ thể cho trường hợp của bạn (ví dụ: *copy log directory lên backup server*, hoặc *resume transfer file lớn*) không?
+* Nếu cần **synchronization/đồng bộ delta** (chỉ gửi phần khác nhau), dùng **`rsync -e ssh`** thay vì scp/sftp.
