@@ -134,6 +134,14 @@ hostnamectl
 ```bash
 sudo hostnamectl set-hostname server01
 ```
+File /etc/hosts dùng để ánh xạ tên máy (hostname) ↔ địa chỉ IP trước khi tra cứu qua DNS.
+Khi hệ thống cần tìm IP của một tên miền, nó sẽ tra cứu file này đầu tiên, sau đó mới đến DNS.
+
+Vì vậy, file này dùng để:
+
+Xác định hostname nội bộ (ví dụ: localhost, dangdb, myserver.local...).
+
+Cấu hình tạm hoặc ghi đè kết quả DNS (ví dụ để chặn truy cập, test domain, v.v.).
 
 ### DNS
 
@@ -307,76 +315,104 @@ sudo timedatectl set-timezone Asia/Ho_Chi_Minh
 ```
 
 ---
+<img width="1510" height="682" alt="sync" src="https://github.com/user-attachments/assets/61820173-c195-45b3-997c-fe5e5bdc1a37" />
 
-## 6. NTP (Network Time Protocol)
+# NTP – Network Time Protocol
 
-* **NTP là gì?**: Giao thức đồng bộ thời gian giữa các hệ thống.
-* **Mục đích:** Giữ thời gian chuẩn xác cho server.
-* **Kiến trúc:** Client → NTP server → Stratum server → Atomic clock/GPS.
+## 1. Khái niệm
 
-Ok 👌 mình giải thích chi tiết về **cơ chế đồng bộ thời gian trong Chrony** nhé.
-
----
-
-# 📌 Chrony – Cơ chế đồng bộ thời gian
-
-Chrony là một NTP client/server hiện đại thay thế `ntpd`. Nó hoạt động nhanh, chính xác, và ổn định trong nhiều môi trường (server, desktop, máy ảo, laptop).
+**NTP (Network Time Protocol)** là giao thức chuẩn dùng để đồng bộ thời gian giữa các máy tính trong mạng dùng giao thức UDP cổng 123.
+Nếu thời gian giữa các máy không được đồng bộ chính xác, nhiều dịch vụ và hệ thống có thể hoạt động sai hoặc gặp lỗi.
 
 ---
 
-## 🔹 1. Quá trình đồng bộ cơ bản
+## 2. Tầm quan trọng của việc đồng bộ thời gian
 
-1. **Chronyd** (daemon) chạy trên máy client hoặc server.
-2. Nó gửi **NTP request** tới upstream servers (ví dụ `pool.ntp.org`, `time.google.com`, hoặc máy NTP nội bộ).
-3. Server trả về **thời gian chính xác**.
-4. Chronyd sẽ tính toán:
-
-   * **Offset**: chênh lệch giữa đồng hồ local và server.
-   * **Drift**: sai số tốc độ của đồng hồ local (clock frequency).
-5. Dựa vào offset + drift, chronyd **điều chỉnh dần dần** đồng hồ local về đúng chuẩn, tránh “nhảy” đột ngột.
+| Lĩnh vực                           | Ảnh hưởng khi thời gian không đồng bộ                                                                                                                |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Bảo mật                            | Các giao thức bảo mật như SSL/TLS, Kerberos... sử dụng timestamp để chống tấn công phát lại. Khi thời gian lệch, quá trình xác thực có thể thất bại. |
+| Ghi log và giám sát                | Thời gian không thống nhất khiến việc phân tích sự cố và theo dõi hệ thống trở nên sai lệch.                                                         |
+| Cơ sở dữ liệu và hệ thống phân tán | Lệch thời gian giữa các node có thể gây xung đột dữ liệu, ghi đè sai thứ tự.                                                                         |
+| Sao lưu và đồng bộ tệp             | Các công cụ sao lưu dựa trên timestamp để xác định tệp mới. Nếu thời gian không khớp, việc đồng bộ có thể sai hoặc bỏ sót dữ liệu.                   |
+| Ứng dụng người dùng                | Các ứng dụng có thể hiển thị dữ liệu không đúng thứ tự hoặc thực hiện hành động sai thời điểm.                                                       |
 
 ---
-### Cấu hình NTP server đồng bộ sử dụng chrony
-<img width="835" height="451" alt="chrony" src="https://github.com/user-attachments/assets/fe02eb70-9811-44de-9130-deaeaf55adca" />
 
-## 1. Cài đặt Chrony
+## 3. Kiến trúc của NTP
+
+NTP được tổ chức theo mô hình phân cấp nhiều tầng (gọi là các **Stratum**):
+
+| Tầng                 | Mô tả                                                                                                                                                 |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Stratum 0**        | Là các thiết bị phần cứng có độ chính xác cao như đồng hồ nguyên tử (atomic clock) hoặc GPS clock. Các thiết bị này không kết nối trực tiếp với mạng. |
+| **Stratum 1**        | Là các máy chủ NTP đồng bộ trực tiếp với Stratum 0, cung cấp thời gian chính xác cho các tầng dưới.                                                   |
+| **Stratum 2**        | Đồng bộ thời gian từ Stratum 1 và cung cấp lại cho client.                                                                                            |
+| **Stratum 3, 4,...** | Các tầng thấp hơn, đồng bộ từ tầng trên theo mô hình cây.                                                                                             |
+| **Client**           | Là các máy trạm thông thường, thường đồng bộ từ server Stratum 2 hoặc cao hơn.                                                                        |
+
+Hệ thống NTP trên Internet thường được cấu trúc theo mô hình cây đa nguồn, giúp dự phòng khi một máy chủ gặp sự cố.
+
+---
+
+## 4. Cơ chế hoạt động của NTP
+
+Khi một client đồng bộ với NTP server, quá trình trao đổi gồm bốn mốc thời gian:
+
+| Ký hiệu              | Thời điểm                                    | Ý nghĩa |
+| -------------------- | -------------------------------------------- | ------- |
+| **T1 (Originate)**   | Thời điểm client gửi yêu cầu đến server      |         |
+| **T2 (Receive)**     | Thời điểm server nhận yêu cầu                |         |
+| **T3 (Transmit)**    | Thời điểm server gửi phản hồi trở lại client |         |
+| **T4 (Destination)** | Thời điểm client nhận phản hồi               |         |
+
+Từ bốn giá trị thời gian này, client có thể tính được:
+
+* **Độ trễ mạng (Delay)**
+  [
+  Delay = \frac{(T4 - T1) - (T3 - T2)}{2}
+  ]
+  Đại diện cho độ trễ trung bình một chiều của gói tin trên đường truyền.
+
+* **Độ lệch thời gian (Offset)**
+  [
+  Offset = \frac{(T2 - T1) + (T3 - T4)}{2}
+  ]
+  Cho biết mức độ sai lệch giữa đồng hồ client và server, giúp client hiệu chỉnh lại thời gian hệ thống.
+
+---
+
+## 5. Cấu hình NTP trên máy chủ (ví dụ với Chrony)
+
+### Bước 1: Cài đặt
+
 ```bash
-sudo apt update
 sudo apt install chrony -y
 ```
 
-Kiểm tra dịch vụ:
+### Bước 2: Chỉnh sửa file cấu hình `/etc/chrony/chrony.conf`
 
 ```bash
-systemctl status chrony
-```
-## 2. Cấu hình Chrony
+# Khai báo các nguồn thời gian chuẩn
+server time.google.com iburst
+server 0.pool.ntp.org iburst
+server 1.pool.ntp.org iburst
 
-Mở file cấu hình:
-
-```bash
-sudo nano /etc/chrony/chrony.conf
-```
-
-Thêm/sửa các dòng sau:
-
-```conf
-# Cho phép client trong mạng LAN 192.168.1.0/24 truy cập
+# Cho phép client trong mạng LAN đồng bộ
 allow 192.168.1.0/24
-
-# Đặt máy này làm "local clock" khi mất Internet
-local stratum 10
-
-# Cấu hình makestep: cho phép chỉnh giờ ngay nếu lệch >1s trong 3 lần đầu
-makestep 1.0 3
 ```
-
-> ⚠️ Lưu ý: Bạn có thể giữ lại các `pool` mặc định hoặc bỏ đi nếu chỉ muốn dùng LAN.
-
-## 3. Khởi động lại dịch vụ
-```bash
-sudo systemctl restart chrony
-sudo systemctl enable chrony
-```
-
 <img width="1510" height="682" alt="sync" src="https://github.com/user-attachments/assets/61820173-c195-45b3-997c-fe5e5bdc1a37" />
+
+### Bước 3: Khởi động và kiểm tra trạng thái
+
+```bash
+sudo systemctl enable chronyd --now
+chronyc sources -v
+```
+
+Lệnh `chronyc sources -v` sẽ hiển thị danh sách các máy chủ NTP mà hệ thống đang đồng bộ cùng trạng thái của chúng.
+<img width="835" height="451" alt="chrony" src="https://github.com/user-attachments/assets/68df6c90-dd4a-432f-b884-d5859df89387" />
+
+Lệnh `chronyc tracking` sẽ kiểm tra độ chính xác và đồng bộ tổng thể
+<img width="436" height="242" alt="tracking" src="https://github.com/user-attachments/assets/aa3734dd-d45f-4be8-8c97-e77ea02a5bc8" />
+---
+
