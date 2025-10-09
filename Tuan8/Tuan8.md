@@ -125,7 +125,7 @@ if $programname == 'apache2' then @@192.168.1.100:514
 
 ### Ví dụ 4: Gửi log ứng dụng tự định nghĩa (dùng local facility)
 
-Ứng dụng của bạn có thể log bằng `logger -p local0.info "msg"`.
+Ứng dụng có thể log bằng `logger -p local0.info "msg"`.
 Trên client cấu hình:
 
 ```conf
@@ -136,7 +136,7 @@ local0.*    @@192.168.1.100:514
 
 ## 3. Kết hợp forward + lưu local
 
-Nếu bạn vừa muốn **lưu log local** vừa forward đi, có thể viết 2 action:
+Nếu vừa muốn **lưu log local** vừa forward đi, có thể viết 2 action:
 
 ```conf
 authpriv.*    /var/log/auth.log
@@ -150,6 +150,27 @@ authpriv.*    @@192.168.1.100:514
 * Có nhiều server → gửi log về **central log server** để dễ quản lý.
 * Client rsyslog forward log qua TCP/UDP đến server.
 * Server rsyslog nhận log → lưu vào file theo source host, hoặc gửi tiếp vào hệ thống phân tích (ELK, Loki…).
+
+### Mục đích
+
+* Việc triển khai mô hình log tập trung nhằm giải quyết các vấn đề thường gặp khi quản lý log phân tán:
+
+* Khi chỉ quan sát log từ một nguồn đơn lẻ, ta không thể có cái nhìn tổng thể về toàn hệ thống.
+
+* Trong quá trình xử lý sự cố, các sự kiện thường liên quan đến nhiều thành phần khác nhau → cần tổng hợp và đối chiếu log từ nhiều nguồn.
+
+* Nếu phải đăng nhập thủ công vào từng máy để đọc log, việc này tốn thời gian và dễ bỏ sót sự kiện quan trọng.
+
+* Khi có sự cố nghiêm trọng (server lỗi, ổ đĩa hỏng, bị tấn công...), log cục bộ có thể bị mất hoặc xóa. Lưu trữ tập trung giúp đảm bảo an toàn và toàn vẹn dữ liệu log.
+
+### Lợi ích
+| Lợi ích                             | Mô tả                                                                                                                                    |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| **Quản lý tập trung**               | Dễ dàng theo dõi trạng thái của toàn hệ thống hoặc ứng dụng từ một điểm duy nhất.                                                        |
+| **Phân tích nhanh sự cố**           | Cho phép truy vấn, tìm kiếm và lọc log theo nhiều tiêu chí → giúp rút ngắn thời gian khắc phục sự cố.                                    |
+| **Đảm bảo tính toàn vẹn log**       | Log được lưu trên máy chủ riêng biệt, tránh bị mất hoặc chỉnh sửa trên máy nguồn.                                                        |
+| **Giám sát bảo mật**                | Hỗ trợ phát hiện sớm các hành vi bất thường hoặc tấn công tiềm ẩn.                                                                       |
+| **Khả năng mở rộng và tự động hóa** | Có thể tích hợp với các hệ thống giám sát như **Grafana**, **Kibana**, hoặc để trực quan hóa, cảnh báo và phân tích chuyên sâu. |
 
 ### Cấu hình cơ bản:
 
