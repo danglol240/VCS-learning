@@ -13,10 +13,10 @@
 
 # 1. Facility là gì?
 
-👉 **Facility = nguồn gốc (loại dịch vụ / ứng dụng) sinh ra log**.
+ **Facility = nguồn gốc (loại dịch vụ / ứng dụng) sinh ra log**.
 Hệ thống chia ra nhiều facility chuẩn để phân loại log cho dễ quản lý.
 
-### 📋 Một số facility chuẩn:
+### Một số facility chuẩn:
 
 | Facility          | Giá trị số | Ý nghĩa (nguồn log)                                    |
 | ----------------- | ---------- | ------------------------------------------------------ |
@@ -34,13 +34,13 @@ Hệ thống chia ra nhiều facility chuẩn để phân loại log cho dễ qu
 | `ftp`             | 11         | Log FTP                                                |
 | `local0`–`local7` | 16–23      | Log dành cho custom app                                |
 
-💡 **Ứng dụng** khi gửi log sẽ gắn **facility** để syslog biết log thuộc loại nào.
+ **Ứng dụng** khi gửi log sẽ gắn **facility** để syslog biết log thuộc loại nào.
 
 ---
 
 # 2. Severity là gì?
 
-👉 **Severity = mức độ quan trọng (độ nghiêm trọng) của log**.
+ **Severity = mức độ quan trọng (độ nghiêm trọng) của log**.
 Có 8 cấp độ chuẩn (theo RFC5424), số càng nhỏ thì càng nghiêm trọng:
 
 | Giá trị số | Tên severity | Ý nghĩa                                                  |
@@ -54,7 +54,7 @@ Có 8 cấp độ chuẩn (theo RFC5424), số càng nhỏ thì càng nghiêm tr
 | 6          | `info`       | Info – thông tin bình thường                             |
 | 7          | `debug`      | Debug – thông tin chi tiết để gỡ lỗi                     |
 
-💡 Mỗi log đều có **severity** để cho biết mức nghiêm trọng.
+ Mỗi log đều có **severity** để cho biết mức nghiêm trọng.
 
 ---
 
@@ -311,7 +311,7 @@ logger -t myapp "This is a test log from myapp"
 ```
 <img width="831" height="1097" alt="logrotate" src="https://github.com/user-attachments/assets/6dbdac1c-9fd9-48f9-9e86-336fc0d360db" />
 
-👉 **Tại sao cần `postrotate script`?**
+ **Tại sao cần `postrotate script`?**
 
 * Vì khi rotate log, file log cũ được đổi tên → service đang hoạt động vẫn ghi vào file cũ.
 * `postrotate` dùng để gửi lệnh reload → service mở lại file log mới.
