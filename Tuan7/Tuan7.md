@@ -288,7 +288,7 @@ default via 192.168.1.1 dev eth0 proto dhcp metric 100
   * `dhcp` → lấy từ DHCP.
   * `static` → do admin thêm thủ công.
 * **scope** → phạm vi sử dụng route:
-  * `link` → Địa chỉ IP đích nằm trên cùng mạng LAN (cùng subnet) với bạn, nên có thể gửi trực tiếp mà không cần đi qua router/gateway.
+  * `link` → Địa chỉ IP đích nằm trên cùng mạng LAN (cùng subnet) , nên có thể gửi trực tiếp mà không cần đi qua router/gateway.
 * **src 192.168.1.10** → địa chỉ IP mà kernel sẽ dùng làm source khi ứng dụng gửi gói mà không bind một địa chỉ nguồn cụ thể.
 * **metric 100** → độ ưu tiên (route nào metric nhỏ hơn sẽ được chọn trước).
 
@@ -409,10 +409,40 @@ sudo systemctl enable chronyd --now
 chronyc sources -v
 ```
 
-Lệnh `chronyc sources -v` sẽ hiển thị danh sách các máy chủ NTP mà hệ thống đang đồng bộ cùng trạng thái của chúng.
+* Lệnh `chronyc sources -v` sẽ hiển thị danh sách các máy chủ NTP mà hệ thống đang đồng bộ cùng trạng thái của chúng.
 <img width="835" height="451" alt="chrony" src="https://github.com/user-attachments/assets/68df6c90-dd4a-432f-b884-d5859df89387" />
 
-Lệnh `chronyc tracking` sẽ kiểm tra độ chính xác và đồng bộ tổng thể
+MS → Trạng thái:
+* ^* = server chính đang được chọn để đồng bộ.
+* ^+ = server tốt, có thể thay thế khi cần.
+* ^- = server khả dụng nhưng chất lượng thấp hơn.
+Name/IP address → địa chỉ NTP server.
+Stratum → tầng của server đó.
+Poll → khoảng thời gian giữa 2 lần truy vấn
+Reach → trạng thái kết nối
+LastRx → số giây từ lần nhận gói tin cuối.
+Last sample → offset đo được so với server đó (+/- micro giây), kèm jitter (± sai số).
+
+* Lệnh `chronyc tracking` sẽ kiểm tra độ chính xác và đồng bộ tổng thể
 <img width="436" height="242" alt="tracking" src="https://github.com/user-attachments/assets/aa3734dd-d45f-4be8-8c97-e77ea02a5bc8" />
+
+Reference ID → ID của server NTP đang được chọn
+Stratum → Tầng đồng bộ
+Ref time (UTC) → Thời gian UTC cuối cùng nhận dữ liệu hợp lệ từ server.
+System time → Đồng hồ hệ thống lệch bao nhiêu so với NTP.
+Last offset → Độ lệch đo được trong lần đồng bộ gần nhất.
+RMS offset → Sai số trung bình (càng nhỏ càng tốt) - từ khi system bắt đầu start.
+Frequency → Sai lệch của đồng hồ phần cứng (ppm = parts per million).
+Residual freq → Sai lệch còn lại sau khi đã hiệu chỉnh.
+Skew → Độ không chắc chắn trong việc ước tính tần số, càng thấp càng ổn định.
+Root delay → Tổng độ trễ mạng đến nguồn chuẩn gốc.
+Root dispersion → Sai số tích lũy từ nguồn gốc đến client.
+Update interval → Khoảng thời gian giữa các lần cập nhật 
+Leap status → Trạng thái “leap second”:
+Normal = bình thường.
+Insert second = sẽ chèn thêm 1 giây.
+Delete second = sẽ bỏ 1 giây.
+
+
 ---
 
