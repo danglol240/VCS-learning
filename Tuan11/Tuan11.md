@@ -1,4 +1,4 @@
-# 🔥 FIREWALL BASIC
+# FIREWALL BASIC
 
 ## 1. Khái Niệm Firewall
 
@@ -72,7 +72,7 @@ sudo iptables-save > /etc/iptables/rules.v4
 
 ---
 
-# 🔒 VPN BASIC
+#  VPN BASIC
 
 ## 1. Khái niệm VPN
 

@@ -1,4 +1,4 @@
-# 🌐 BASIC ROUTER
+# BASIC ROUTER
 
 ## 1. Encapsulation IP Packet
 
@@ -14,7 +14,7 @@
   * **Source IP / Destination IP.**
   * **Header Checksum.**
 
-👉 Ý nghĩa: Router **dựa vào IP header** để chuyển tiếp gói tin.
+Ý nghĩa: Router **dựa vào IP header** để chuyển tiếp gói tin.
 
 ---
 
@@ -72,7 +72,7 @@
   * Metric = bandwidth, delay…
   * Ví dụ: OSPF, IS-IS.
 
-👉 **DV = dễ triển khai, ít tài nguyên**; **LS = tối ưu đường đi, hội tụ nhanh, phức tạp hơn.**
+**DV = dễ triển khai, ít tài nguyên**; **LS = tối ưu đường đi, hội tụ nhanh, phức tạp hơn.**
 
 ---
 
@@ -149,6 +149,6 @@
   ```
 * **Named ACL:** ACL có tên để dễ quản lý.
 
-👉 ACL được áp dụng trên interface (inbound hoặc outbound).
+ACL được áp dụng trên interface (inbound hoặc outbound).
 
 ---

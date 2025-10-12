@@ -1,6 +1,13 @@
-# 🌐 BASIC NETWORKING
+# BASIC NETWORKING
 
 ## 1. TCP/IP và OSI
+
+* Cách một nút mạng được quản lý :
+Phân chia nhiệm vụ cho các thành phần và tổ chức các chúng thành các tầng (layer)
+Trong đó, mỗi tầng:
+- Có thể thực hiện một hay nhiều chức năng khác nhau
+- Mỗi dịch vụ có thể có một hay nhiều cách triển khai khác nhau
+- Các tầng ngang hàng trên liên kết sử dụng chung giao thức
 
 * **OSI model** (Open Systems Interconnection): 7 tầng
 
@@ -20,8 +27,8 @@
   4. Transport (Transport trong OSI)
   5. Application (Session + Presentation + Application trong OSI)
 
-👉 **Giống nhau:** đều phân tầng để truyền dữ liệu, có Transport & Application.
-👉 **Khác nhau:** OSI 7 tầng lý thuyết, TCP/IP 4 tầng thực tế (ứng dụng trong Internet).
+ **Giống nhau:** đều phân tầng để truyền dữ liệu, có Transport & Application.
+ **Khác nhau:** OSI 7 tầng lý thuyết, TCP/IP 4 tầng thực tế (ứng dụng trong Internet).
 
 ---
 
@@ -69,7 +76,7 @@ Một số giao thức lớp ứng dụng:
 
 ---
 
-# 🔀 BASIC SWITCHING
+#  BASIC SWITCHING
 
 ## 1. Ethernet trong OSI
 
