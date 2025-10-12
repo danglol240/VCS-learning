@@ -230,18 +230,13 @@ Trong đó có các option:
 
 * `size <bytes>` / `minsize` / `maxsize`
 
-  * `size 100M` → chỉ rotate khi file ≥ 100MB (bất kể time). `minsize` tương tự, `maxsize` kết hợp với tần suất.
+  * `size 100M` → chỉ rotate khi file ≥ 100MB (bất kể time). `minsize` chỉ rotate khi file log lớn hơn dung lượng cho trước nếu đến tần suất (daily,weekly,...) thì sẽ không rotate nếu chưa đủ, `maxsize` kết hợp với tần suất.
 
 * `compress` / `delaycompress` / `compresscmd` / `compressext`
 
   * `compress`: nén file xoay (mặc định gzip).
   * `delaycompress`: hoãn nén file vừa mới rotate 1 lần (thường dùng khi dịch vụ vẫn giữ file handle).
   * `compresscmd` cho phép dùng chương trình nén khác, `compressext` chỉ định hậu tố.
-
-* `copytruncate`
-
-  * Copy nội dung file ra file xoay rồi **truncate** file gốc (giữ inode). Dùng khi process **không thể** re-open file (không thể gửi HUP). **Nhược điểm**: có thể mất 1 ít log trong khoảng thời gian copy → nói chung ít an toàn.
-  * **Không khuyến khích** cho DB hoặc hight-traffic logs; tốt hơn là reload process để re-open file.
 
 * `create <mode> <owner> <group>`
 
@@ -269,14 +264,6 @@ Trong đó có các option:
     endscript
     ```
 
-* `firstaction` / `lastaction`
-
-  * Chạy 1 script **trước/after** toàn bộ processing, chỉ 1 lần.
-
-* `olddir <dir>`
-
-  * Chuyển file log đã xoay vào thư mục `<dir>`.
-
 * `dateext` / `dateformat`
 
   * Sử dụng ngày trong tên file xoay (vd `-20251002`) thay cho `.1`. Dễ quản lý theo thời gian.
@@ -287,24 +274,29 @@ Trong đó có các option:
 
 * `su <user> <group>`
 
-  * Quy định user/group để thực hiện thao tác tạo file (dùng trên hệ không chạy logrotate bằng root hoặc cần quyền file đặc biệt).
+  * Quy định user/group để thực hiện thao tác rotate file (dùng trên hệ không chạy logrotate bằng root hoặc cần quyền file đặc biệt).
 
-### Ví dụ cấu hình cho Apache2 (`/etc/logrotate.d/apache2`):
+### Ví dụ cấu hình cho log nhận được từ rsyslog (`/etc/logrotate.d/rsyslog-remote`):
 
 ```conf
-/var/log/apache2/*.log {
-    daily
+/var/log/danglol240/*.log
+/var/log/danglol2400/*.log
+/var/log/danglol2402/*.log {
+    weekly
     rotate 14
-    compress
     missingok
     notifempty
+    compress
+    delaycompress
+    dateext
     sharedscripts
+    su root syslog
+    create 0640 syslog syslog
     postrotate
-        if [ -f /var/run/apache2.pid ]; then
-            /etc/init.d/apache2 reload > /dev/null
-        fi
+        systemctl reload rsyslog > /dev/null 2>&1 || true
     endscript
 }
+
 ```
 <img width="831" height="1097" alt="logrotate" src="https://github.com/user-attachments/assets/6dbdac1c-9fd9-48f9-9e86-336fc0d360db" />
 
@@ -325,6 +317,14 @@ sudo logrotate -f /etc/logrotate.conf     # force rotate
 
 * Trên hệ thống dùng **systemd**, nhiều service không log ra file `/var/log/...` nữa mà log vào **binary journal**.
 * `journalctl` là công cụ để đọc log từ systemd journal.
+
+- Nó gom log từ nhiều nguồn:
++ Kernel messages (dmesg)
++ systemd unit log (dịch vụ, timer, socket)
++ stdout/stderr của dịch vụ chạy bởi systemd
++ Thông điệp từ syslog API (/dev/log)
+
+
 
 ### Cách dùng:
 
@@ -349,8 +349,16 @@ sudo logrotate -f /etc/logrotate.conf     # force rotate
   ```bash
   journalctl --since "2025-09-01" --until "2025-09-29"
   ```
-* Lọc theo priority (chỉ error):
+* Lọc theo severity:
 
   ```bash
   journalctl -p err
   ```
+
+| **Tiêu chí**                     | **systemd-journald / journalctl**                                 | **rsyslog**                                              |
+| -------------------------------- | ----------------------------------------------------------------- | -------------------------------------------------------- |
+| **1. Định dạng log**             | Nhị phân (binary), chỉ đọc bằng `journalctl`                      | Văn bản thuần (plain text), đọc bằng `cat`, `grep`, v.v. |
+| **2. Lưu trữ & quản lý**         | Tự quản lý kích thước, tự xoay vòng (SystemMaxUse, RuntimeMaxUse) | Dùng `logrotate`, tùy chỉnh lưu trữ, nén, xóa linh hoạt  |
+| **3. Phạm vi sử dụng**           | Ghi log nội bộ của hệ thống `systemd`                             | Thu thập, xử lý, gửi log đi xa, phù hợp log tập trung    |
+| **4. Khả năng gửi log ra ngoài** | Không hỗ trợ (chỉ lưu local)                                      | Hỗ trợ gửi log qua UDP/TCP/TLS → server khác             |
+| **5. Tích hợp & phân tích**      | Dễ lọc, tìm kiếm theo dịch vụ (`journalctl -u ssh`)               | Dễ tích hợp với ELK, Loki, SIEM để phân tích tập trung   |
