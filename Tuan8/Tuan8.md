@@ -198,16 +198,13 @@ input(type="imtcp" port="514")
 
 * `logger` là công cụ CLI gửi log đến syslog để test.
 
-Ví dụ:
-
-```bash
-logger "Hello syslog test"
-logger -p auth.notice "Login event test"
-logger -t myapp "This is a test log from myapp"
-```
-
-→ Sau đó kiểm tra trong `/var/log/syslog`, `/var/log/auth.log`…
-
+Trong đó có các option:
+- p facility.level, chỉ định giá trị facility và level (ví dụ logger -p local0.info “Test”)
+- t chỉ định tag cho log (ví dụ logger -t myapp “Test”)
+- i, đặt PID kèm theo (ví dụ logger -t myapp -i "App crash")
+- n HOST -p PORT, gửi log qua địa chỉ host log server
+- --tcp, --udp chỉ định giao thức gửi
+- f FILE, đọc từ file (logger -t backup -p local1.info -f /var/log/backup_result.log)
 ---
 
 # 4. Managing logs with logrotate
