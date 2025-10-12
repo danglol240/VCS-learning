@@ -439,10 +439,6 @@ Root delay → Tổng độ trễ mạng đến nguồn chuẩn gốc.
 Root dispersion → Sai số tích lũy từ nguồn gốc đến client.
 Update interval → Khoảng thời gian giữa các lần cập nhật 
 Leap status → Trạng thái “leap second”:
-Normal = bình thường.
-Insert second = sẽ chèn thêm 1 giây.
-Delete second = sẽ bỏ 1 giây.
-
 
 ---
 
