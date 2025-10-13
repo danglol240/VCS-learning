@@ -596,102 +596,219 @@ Client → [ Dữ liệu ] → Server
 ---
 #  BASIC SWITCHING
 
-## 1. Ethernet trong OSI
+## 1. **Ethernet trong mô hình OSI**
 
-* **Ở lớp Physical:** định nghĩa chuẩn cáp (UTP, fiber), tốc độ (10Mbps, 100Mbps, 1Gbps…).
-* **Ở lớp Data Link:** định nghĩa MAC address, framing, error detection (CRC).
+### **1.1. Định nghĩa**
 
----
+**Ethernet** là công nghệ mạng cục bộ (LAN) phổ biến nhất hiện nay, được định nghĩa trong tiêu chuẩn **IEEE 802.3**.
+Ethernet quy định cách dữ liệu được **đóng gói, truyền và nhận** qua các loại cáp (đồng hoặc quang) và **cách các thiết bị giao tiếp ở tầng thấp** của mô hình OSI.
 
-## 2. Encapsulation Ethernet Frame
+### **1.2. Vị trí trong mô hình OSI**
 
-* **Ethernet Frame:** đơn vị dữ liệu ở tầng Data Link.
-* **Kích thước:** 64 – 1518 bytes (không kể preamble, IFG).
+Ethernet hoạt động ở **hai tầng thấp nhất** của mô hình OSI:
 
-**Trường trong frame:**
+| Tầng                         | Tên tầng              | Chức năng của Ethernet tại tầng đó                                                                                                                 |
+| ---------------------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Tầng 1 (Physical Layer)**  | Tầng vật lý           | Chuyển đổi bit nhị phân (0/1) thành tín hiệu điện, quang hoặc sóng để truyền đi. Quy định loại cáp, đầu nối, tốc độ (10/100/1000 Mbps, 10 Gbps...) |
+| **Tầng 2 (Data Link Layer)** | Tầng liên kết dữ liệu | Đóng gói dữ liệu thành frame, định danh thiết bị qua địa chỉ MAC, kiểm soát lỗi, kiểm soát truy cập đường truyền.                                  |
 
-* **Preamble (7B) + SFD (1B):** đồng bộ.
-* **Destination MAC (6B)**
-* **Source MAC (6B)**
-* **EtherType/Length (2B):** xác định loại payload (IPv4, ARP…).
-* **Payload (46–1500B)**
-* **FCS (4B):** checksum kiểm tra lỗi.
+### **1.3. Thành phần tầng 2**
 
----
+Tầng Data Link trong Ethernet chia thành 2 phần:
 
-## 3. CSMA/CD
-
-* **Carrier Sense Multiple Access with Collision Detection**
-* Cơ chế truy cập đường truyền: thiết bị "nghe" trước khi gửi, nếu collision thì dừng và random thời gian gửi lại.
-* Dùng trong Ethernet truyền thống (hub, half-duplex).
-* **Hiện nay switch + full duplex nên hầu như không còn collision.**
+* **LLC (Logical Link Control – IEEE 802.2):**
+  Giao tiếp với tầng 3, xác định giao thức tầng trên (IP, ARP, IPX...).
+* **MAC (Media Access Control – IEEE 802.3):**
+  Giao tiếp với tầng vật lý, gán địa chỉ MAC, kiểm soát quyền truy cập đường truyền.
 
 ---
 
-## 4. Collision Domain vs Broadcast Domain
+## 2. **Encapsulation – Ethernet Frame**
 
-* **Collision domain:** phạm vi mà gói tin có thể va chạm. Mỗi port switch là 1 collision domain.
-* **Broadcast domain:** phạm vi mà gói broadcast (FF:FF:FF:FF:FF:FF) lan tỏa. Một VLAN = một broadcast domain.
+### **2.1. Ethernet Frame là gì**
 
----
+**Ethernet Frame** là đơn vị dữ liệu cơ bản tại tầng 2, được tạo ra khi dữ liệu từ tầng mạng (IP Packet) được **đóng gói thêm header và trailer** để truyền trên mạng LAN.
 
-## 5. Simplex vs Duplex
+### **2.2. Cấu trúc Ethernet Frame**
 
-* **Simplex:** truyền 1 chiều (TV).
-* **Half-duplex:** 2 chiều nhưng không đồng thời (walkie-talkie).
-* **Full-duplex:** 2 chiều đồng thời (Ethernet hiện đại).
+| Trường                          | Kích thước    | Ý nghĩa                                                               |
+| ------------------------------- | ------------- | --------------------------------------------------------------------- |
+| **Preamble**                    | 7 bytes       | Dãy đồng bộ (10101010) giúp đồng bộ tín hiệu giữa các thiết bị.       |
+| **Start Frame Delimiter (SFD)** | 1 byte        | Xác định điểm bắt đầu frame (10101011).                               |
+| **Destination MAC Address**     | 6 bytes       | Địa chỉ MAC đích (thiết bị nhận).                                     |
+| **Source MAC Address**          | 6 bytes       | Địa chỉ MAC nguồn (thiết bị gửi).                                     |
+| **Type/Length**                 | 2 bytes       | Cho biết loại giao thức tầng 3 (ví dụ: 0x0800 = IPv4, 0x86DD = IPv6). |
+| **Data (Payload)**              | 46–1500 bytes | Dữ liệu được đóng gói (gói IP).                                       |
+| **Frame Check Sequence (FCS)**  | 4 bytes       | Kiểm tra lỗi CRC để phát hiện lỗi trong quá trình truyền.             |
 
----
-
-## 6. Vai trò của Switch trong LAN
-
-* Kết nối các thiết bị trong LAN.
-* Tách collision domain, giảm xung đột.
-* Học MAC address để chuyển frame chính xác (không flood toàn mạng).
-
----
-
-## 7. Nguyên tắc chuyển mạch của Switch
-
-* Switch duy trì **MAC address table**.
-* Khi nhận frame:
-
-  * Nếu biết địa chỉ MAC đích → gửi đúng port.
-  * Nếu chưa biết → flood ra tất cả port.
-  * Nếu địa chỉ broadcast → gửi tất cả.
+➡️ **Tổng kích thước frame:**
+Tối thiểu **64 bytes**, tối đa **1518 bytes** (bao gồm header + trailer, chưa tính preamble/SFD).
+Nếu nhỏ hơn 64 byte → bị coi là **runt frame (frame lỗi)**.
 
 ---
 
-## 8. Spanning Tree Protocol (STP)
+## 3. **CSMA/CD (Carrier Sense Multiple Access with Collision Detection)**
 
-* Giải quyết loop trong mạng có nhiều switch.
-* Nguyên tắc: chọn **root bridge**, sau đó disable bớt port để tạo topology dạng cây không vòng lặp.
-* Chuẩn: IEEE 802.1D.
+Là **cơ chế truy cập đường truyền** trong mạng Ethernet truyền thống (dạng bus hoặc hub) để tránh va chạm.
 
----
+### **Cơ chế hoạt động:**
 
-## 9. VLAN (Virtual LAN)
-
-* Chia mạng LAN vật lý thành nhiều mạng logic.
-* Mỗi VLAN = 1 broadcast domain.
-* Ưu điểm: tăng bảo mật, giảm broadcast, quản lý dễ hơn.
+1. **Carrier Sense:** Thiết bị “lắng nghe” xem đường truyền đang rảnh hay có ai gửi.
+2. **Multiple Access:** Nhiều thiết bị có thể cùng truy cập vào môi trường mạng.
+3. **Collision Detection:** Nếu hai thiết bị truyền cùng lúc → va chạm → gửi tín hiệu “jam” thông báo lỗi.
+4. **Backoff:** Mỗi thiết bị chờ ngẫu nhiên một khoảng thời gian rồi thử gửi lại.
 
 ---
 
-## 10. VTP (VLAN Trunking Protocol)
+## 4. **Collision Domain vs Broadcast Domain**
 
-* Cisco protocol dùng để phân phối VLAN giữa các switch.
-* Có 3 mode: **Server, Client, Transparent**.
-* Lưu ý: có thể gây mất VLAN nếu config sai → ít dùng trong thực tế.
+| Khái niệm            | Định nghĩa                                                        | Bị chia tách bởi  | Mô tả                                               |
+| -------------------- | ----------------------------------------------------------------- | ----------------- | --------------------------------------------------- |
+| **Collision Domain** | Phạm vi mà tại đó hai thiết bị có thể truyền cùng lúc gây va chạm | **Switch**        | Mỗi cổng switch là một collision domain riêng.      |
+| **Broadcast Domain** | Phạm vi mà gói tin broadcast được phát tới tất cả thiết bị        | **Router / VLAN** | Một mạng LAN hoặc một VLAN là một broadcast domain. |
+
+➡️ **Switch giảm collision domain nhưng không chia nhỏ broadcast domain**, trừ khi có cấu hình VLAN.
 
 ---
 
-## 11. Inter-VLAN Routing
+## 5. **Simplex vs Duplex**
 
-* Máy trong VLAN khác nhau muốn liên lạc cần **router** hoặc **Layer 3 Switch**.
-* Có 2 cách:
+| Chế độ          | Mô tả                                              | Ví dụ                |
+| --------------- | -------------------------------------------------- | -------------------- |
+| **Simplex**     | Truyền một chiều, thiết bị nhận không gửi lại được | Màn hình hiển thị    |
+| **Half-duplex** | Hai chiều nhưng **không đồng thời**                | Bộ đàm, Hub          |
+| **Full-duplex** | Hai chiều **đồng thời**, loại bỏ va chạm           | Switch, NIC hiện đại |
 
-  1. **Router-on-a-stick**: dùng 1 router với sub-interface gắn IP cho từng VLAN.
-  2. **Layer 3 Switch**: switch có khả năng routing.
+---
+
+## 6. **Vai trò của Switch trong mạng LAN**
+
+Switch là **thiết bị tầng 2** thực hiện chức năng **chuyển mạch (switching)** frame Ethernet trong mạng LAN.
+
+### **Vai trò chính:**
+
+* Kết nối nhiều thiết bị trong cùng LAN.
+* Dựa vào **địa chỉ MAC** để gửi dữ liệu chính xác.
+* Mỗi cổng là một **collision domain** riêng → tăng hiệu năng.
+* Hỗ trợ **full-duplex** → truyền song công.
+* Có thể chia **VLAN** để cách ly lưu lượng, tăng bảo mật.
+* Tích hợp nhiều tính năng như **QoS, Spanning Tree, VLAN, port security...**
+
+---
+
+## 7. **Nguyên tắc chuyển mạch của Switch**
+
+### **Các bước hoạt động:**
+
+1. **Learning (Học MAC):**
+   Khi nhận frame, switch đọc địa chỉ MAC nguồn và lưu vào **MAC Table** cùng với cổng tương ứng.
+2. **Forwarding (Chuyển tiếp):**
+
+   * Nếu MAC đích có trong bảng → gửi đúng cổng.
+   * Nếu không có → broadcast frame ra tất cả các cổng (trừ cổng nhận).
+3. **Aging (Làm mới):**
+   Mỗi bản ghi MAC có thời gian sống (mặc định 300s). Hết hạn → xóa để cập nhật lại.
+
+---
+
+## 8. **Spanning Tree Protocol (STP)**
+
+### **Mục đích:**
+
+Ngăn **vòng lặp tầng 2** trong mạng có nhiều đường dự phòng (redundant links), gây **broadcast storm** hoặc **looping**.
+
+### **Cách hoạt động:**
+
+1. **Bầu chọn Root Bridge** – switch có Bridge ID nhỏ nhất (priority + MAC).
+2. **Tính toán đường ngắn nhất đến Root Bridge (Root Path Cost).**
+3. **Chọn Root Port (cổng về root)** và **Designated Port (cổng được phép chuyển tiếp)**.
+4. **Các cổng dư thừa sẽ bị Blocked** để loại bỏ vòng lặp.
+
+### **Trạng thái port trong STP:**
+
+* **Blocking → Listening → Learning → Forwarding**
+
+### **Thông số thời gian:**
+
+* Hello Time: 2s
+* Max Age: 20s
+* Forward Delay: 15s
+
+### **Các phiên bản STP:**
+
+| Giao thức              | Đặc điểm                         |
+| ---------------------- | -------------------------------- |
+| **STP (802.1D)**       | Gốc, chậm (30-50s hội tụ).       |
+| **RSTP (802.1w)**      | Nhanh hơn, hội tụ vài giây.      |
+| **MSTP (802.1s)**      | Gộp nhiều VLAN cùng một cây STP. |
+| **PVST/PVST+ (Cisco)** | Một STP riêng cho từng VLAN.     |
+
+---
+
+## 9. **VLAN (Virtual LAN)**
+
+### **Định nghĩa:**
+
+**VLAN** là mạng LAN ảo, chia tách mạng vật lý thành nhiều miền logic độc lập.
+Các thiết bị cùng VLAN giao tiếp như trong cùng LAN, dù ở cổng khác nhau.
+
+### **Lợi ích:**
+
+* Tăng bảo mật (cách ly các nhóm người dùng).
+* Giảm broadcast domain.
+* Quản lý mạng linh hoạt.
+* Tối ưu hiệu năng.
+
+### **Các loại cổng:**
+
+| Loại cổng       | Mô tả                           | Ứng dụng                             |
+| --------------- | ------------------------------- | ------------------------------------ |
+| **Access Port** | Thuộc 1 VLAN duy nhất           | PC, server                           |
+| **Trunk Port**  | Mang nhiều VLAN, gắn thẻ 802.1Q | Switch ↔ Switch hoặc Switch ↔ Router |
+
+### **Tagging VLAN (802.1Q):**
+
+Gắn thêm 4 byte tag vào frame để xác định VLAN ID (0–4095).
+
+---
+
+## 10. **VTP (VLAN Trunking Protocol)**
+
+### **Định nghĩa:**
+
+Giao thức riêng của Cisco dùng để **đồng bộ và quản lý VLAN** giữa các switch trong cùng domain.
+
+### **Chế độ hoạt động:**
+
+| Chế độ          | Chức năng                                               |
+| --------------- | ------------------------------------------------------- |
+| **Server**      | Tạo, xóa, chỉnh VLAN; phát thông tin cho switch khác.   |
+| **Client**      | Nhận thông tin VLAN từ server, không tự tạo VLAN.       |
+| **Transparent** | Không tham gia đồng bộ, chỉ truyền tiếp thông tin VLAN. |
+
+-> VTP giúp **giảm công cấu hình VLAN lặp lại** giữa nhiều switch.
+
+---
+
+## 11. **Inter-VLAN Routing**
+
+### **Mục đích:**
+
+Các VLAN riêng biệt **không thể giao tiếp với nhau** nếu không có thiết bị tầng 3.
+→ **Inter-VLAN Routing** cho phép VLAN A ↔ VLAN B thông qua **router hoặc switch layer 3**.
+
+### **Phương pháp:**
+
+#### **1️⃣ Router-on-a-stick**
+
+* Một router dùng **một interface vật lý**, chia thành nhiều **sub-interface**, mỗi sub tương ứng với 1 VLAN.
+* Mỗi sub-interface có IP trong VLAN tương ứng.
+  → Giao tiếp giữa các VLAN thông qua router.
+
+#### **2️⃣ Layer 3 Switch (SVI)**
+
+* Tạo **Switch Virtual Interface (SVI)** – mỗi VLAN có 1 SVI (interface VLAN x).
+* Switch định tuyến nội bộ giữa các VLAN mà không cần router vật lý.
+  → Nhanh, hiệu quả, phổ biến hiện nay.
 
 ---
