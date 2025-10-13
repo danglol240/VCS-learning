@@ -120,16 +120,6 @@ kern.warning    @@192.168.1.100:514
 
 ```conf
 if $programname == 'apache2' then @@192.168.1.100:514
-& stop
-```
-
-### Ví dụ 4: Gửi log ứng dụng tự định nghĩa (dùng local facility)
-
-Ứng dụng có thể log bằng `logger -p local0.info "msg"`.
-Trên client cấu hình:
-
-```conf
-local0.*    @@192.168.1.100:514
 ```
 
 ---

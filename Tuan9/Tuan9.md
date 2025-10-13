@@ -156,6 +156,8 @@ Truyền file giữa client và server, hỗ trợ danh sách thư mục, upload
   * Active: server dùng **port 20** (data) để kết nối về client.
   * Passive: server mở một port động (>1024) và client kết nối tới đó.
 
+![ftp](https://github.com/user-attachments/assets/a1b3bc2c-e8f0-4af8-940c-a6d93f5df6e4)
+
 ## Modes
 
 * **Active (PORT)**: client lắng nghe một port ngẫu nhiên, gửi PORT command cho server; server mở kết nối TCP từ port 20 → client port.
@@ -181,102 +183,55 @@ Truyền file giữa client và server, hỗ trợ danh sách thư mục, upload
 
 # 3. MAIL (SMTP, POP3, IMAP)
 
-Hệ thống email thường chia hai phần chính: **SMTP** để gửi/relay mail; **POP3/IMAP** để nhận mail từ server về client.
+![smtp](https://github.com/user-attachments/assets/e3501179-5432-4d40-a176-b16cc744618b)
+
+## Định nghĩa
+
+**Mail (Email)** là ứng dụng cung cấp dịch vụ **gửi, chuyển tiếp, nhận và lưu trữ thư điện tử** giữa các người dùng thông qua mạng máy tính.
+Nó hoạt động ở **tầng 7 – Application Layer** trong mô hình **OSI**.
 
 ---
 
-## 3.1 SMTP (Simple Mail Transfer Protocol)
+## Các giao thức chính trong hệ thống Mail
 
-### Mục đích
-
-Gửi thư điện tử giữa Mail User Agent (MUA) → Mail Transfer Agent (MTA), và giữa MTA với nhau (relay).
-
-### Cổng & mode
-
-* **Port 25**: SMTP truyền thống (MTA ↔ MTA) — không mã hóa mặc định.
-* **Port 587**: Submission (MUA → MTA) thường yêu cầu AUTH, có STARTTLS.
-* **Port 465**: SMTPS (implicit TLS historically) — đôi khi dùng.
-
-### Luồng cơ bản
-
-1. TCP connect server:25
-2. Server gửi `220` greeting
-3. Client: `EHLO client.example.com` (hoặc `HELO`)
-4. If TLS desired: `STARTTLS` → TLS handshake
-5. `AUTH LOGIN` / `AUTH PLAIN` (nếu cần)
-6. `MAIL FROM:<sender>`
-7. `RCPT TO:<recipient>` (có thể nhiều)
-8. `DATA` → client gửi headers + body, kết thúc bằng CRLF.CRLF
-9. `QUIT`
-
-### Envelope vs Header
-
-* **Envelope (SMTP commands MAIL/RCPT)** chứa địa chỉ giao vận (return path, recipients) — có thể khác với `From:` header trong thân mail.
-
-### Bảo mật & vấn đề
-
-* **Spam**: cần kiểm soát (RBL, spam filters).
-* **Authentication/Encryption**: STARTTLS / SMTPS để bảo mật; AUTH + submission auth trên 587 cho MUA.
-* **SPF / DKIM / DMARC**: cơ chế chống giả mạo, xác thực nguồn mail.
+| Giao thức                                   | Vai trò                                    | Cổng TCP                           | Mô tả                                                                          |
+| ------------------------------------------- | ------------------------------------------ | ---------------------------------- | ------------------------------------------------------------------------------ |
+| **SMTP** (Simple Mail Transfer Protocol)    | Gửi và chuyển tiếp thư đi giữa các máy chủ | 25 (chuẩn), 465 (SMTPS), 587 (TLS) | Dùng để **gửi mail** từ client lên server hoặc giữa các mail server            |
+| **POP3** (Post Office Protocol v3)          | Tải mail từ server về client               | 110 (POP3), 995 (POP3S)            | Dùng để **nhận mail**, thường **tải về máy và có thể xóa bản gốc** trên server |
+| **IMAP** (Internet Message Access Protocol) | Quản lý mail trực tiếp trên server         | 143 (IMAP), 993 (IMAPS)            | Cho phép **đọc, đồng bộ và quản lý thư ngay trên server**, giữ nguyên bản gốc  |
 
 ---
 
-## 3.2 POP3 (Post Office Protocol v3)
+## Các thành phần trong hệ thống Mail
 
-### Mục đích
-
-Tải mail từ server về client (thường tải về và xóa trên server).
-
-### Port & kiểu
-
-* TCP **110** (clear)
-* TCP **995** (POP3S, implicit TLS)
-
-### Flow
-
-1. Connect → server `+OK` greeting
-2. `USER username` → `PASS password` (or AUTH methods)
-3. `STAT` (số thư & size) / `LIST` (liệt kê)
-4. `RETR n` → tải message n
-5. `DELE n` → đánh dấu xóa (thực thi khi QUIT)
-6. `QUIT`
-
-### Đặc điểm
-
-* **Simple model**: mailbox server giữ mail; client kéo về và thường xóa.
-* **Không hỗ trợ nhiều folders, server-side state** (trừ các tùy chọn extension).
+| Thành phần                      | Tên đầy đủ                                                 | Chức năng chính                                                |
+| ------------------------------- | ---------------------------------------------------------- | -------------------------------------------------------------- |
+| **MUA** (Mail User Agent)       | Ứng dụng người dùng như Outlook, Thunderbird, Gmail Web... | Viết, gửi, đọc, xóa thư                                        |
+| **MSA** (Mail Submission Agent) | Lớp trung gian nhận thư từ MUA                             | Xác thực người gửi, kiểm tra nội dung, chuyển cho MTA          |
+| **MTA** (Mail Transfer Agent)   | Mail server trung gian như Sendmail, Postfix, Exim...      | Gửi và chuyển tiếp thư giữa các mail server khác nhau qua SMTP |
+| **MDA** (Mail Delivery Agent)   | Trình giao thư nội bộ như Procmail, Dovecot LDA...         | Lưu thư vào đúng hộp thư người nhận                            |
+| **Mailbox**                     | Hộp thư của người dùng                                     | Nơi lưu trữ mail đến, được truy cập qua POP3 hoặc IMAP         |
 
 ---
 
-## 3.3 IMAP (Internet Message Access Protocol)
+## Mô hình hoạt động tổng quát
 
-### Mục đích
+1. **Người gửi** dùng **MUA** (ví dụ: Outlook, Gmail web) gửi thư.
+2. **MSA** trên mail server nhận thư, xác thực và chuyển đến **MTA**.
+3. **MTA** dùng giao thức **SMTP** để chuyển thư đến **MTA** của người nhận.
+4. **MTA** của người nhận chuyển thư cho **MDA**, lưu vào **Mailbox** của người nhận.
+5. **Người nhận** dùng **MUA** để truy cập vào hộp thư qua **POP3** hoặc **IMAP**.
 
-Truy cập và quản lý mailbox trực tiếp trên server — mail giữ nguyên trên máy chủ, hỗ trợ folders, flags, đồng bộ nhiều client.
+---
 
-### Port & kiểu
+## So sánh POP3 và IMAP
 
-* TCP **143** (IMAP, STARTTLS possible)
-* TCP **993** (IMAPS, implicit TLS)
-
-### Flow cơ bản
-
-1. Connect → `* OK` greeting
-2. `a001 LOGIN user pass` hoặc `a001 AUTHENTICATE`
-3. `a002 SELECT INBOX` → server trả trạng thái (message count, recent, flags)
-4. `a003 FETCH 1:* (FLAGS BODY[HEADER])` để lấy headers/bodies
-5. `a004 STORE 2 +FLAGS (\Deleted)` để đánh dấu, `EXPUNGE` để xóa thực sự.
-6. `LOGOUT`
-
-### Đặc điểm
-
-* IMAP là **stateful & feature-rich**: hỗ trợ many folders, UID, sequence numbers, partial fetch (BODY.PEEK), IDLE (push notifications).
-* Thích hợp đồng bộ nhiều thiết bị.
-
-### Bảo mật & vấn đề
-
-* TLS (STARTTLS / implicit) để mã hóa.
-* OAuth2 thường được dùng cho authentication hiện đại thay password plain.
+| Tiêu chí                   | **POP3**                                   | **IMAP**                                              |
+| -------------------------- | ------------------------------------------ | ----------------------------------------------------- |
+| **Cách hoạt động**         | Tải mail về máy cục bộ                     | Đọc và quản lý mail trực tiếp trên server             |
+| **Lưu trữ trên server**    | Có thể bị xóa sau khi tải (tùy cấu hình)   | Giữ nguyên bản gốc trên server                        |
+| **Đồng bộ nhiều thiết bị** | Không đồng bộ (mỗi thiết bị lưu bản riêng) | Đồng bộ thời gian thực giữa các thiết bị              |
+| **Phù hợp với**            | Người chỉ dùng 1 thiết bị duy nhất         | Người dùng nhiều thiết bị hoặc muốn quản lý tập trung |
 
 ---
 
@@ -284,7 +239,9 @@ Truy cập và quản lý mailbox trực tiếp trên server — mail giữ nguy
 
 ## Mục đích
 
-Giao thức cho web — truyền siêu văn bản (HTML), tài nguyên (JS/CSS/images), API (JSON), REST, v.v.
+**HTTP (HyperText Transfer Protocol)** là giao thức truyền tải siêu văn bản, dùng để **trao đổi dữ liệu giữa client và server** trên mạng Internet.
+HTTP hoạt động ở **tầng 7 (Application Layer)** trong mô hình **OSI**.
+Phiên bản bảo mật của HTTP là **HTTPS (HTTP Secure)** — sử dụng mã hóa SSL/TLS để đảm bảo an toàn truyền thông tin.
 
 ## Cổng & kiểu
 
@@ -293,7 +250,38 @@ Giao thức cho web — truyền siêu văn bản (HTML), tài nguyên (JS/CSS/i
 
 ## Phương thức (methods) HTTP phổ biến
 
-* `GET`, `HEAD`, `POST`, `PUT`, `DELETE`, `PATCH`, `OPTIONS`, `CONNECT` (for proxies).
+* `GET`, `HEAD`, `POST`, `PUT`, `DELETE`, `PATCH`, `OPTIONS`,...
+
+---
+
+## Các thành phần cơ bản trong mô hình HTTP
+
+| Thành phần                   | Mô tả                                                                                                                                                                                    |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Client (HTTP User Agent)** | Ứng dụng gửi yêu cầu HTTP, thường là trình duyệt web (Chrome, Firefox, Edge...) hoặc công cụ dòng lệnh (curl, wget). Gửi các phương thức như `GET`, `POST`, `PUT`, `DELETE`, `HEAD`, ... |
+| **Server (HTTP Server)**     | Tiếp nhận và xử lý yêu cầu từ client, phản hồi bằng một thông điệp HTTP Response chứa **mã trạng thái**, **header**, và **nội dung**. Ví dụ: Apache, Nginx, IIS.                         |
+| **Resource (Tài nguyên)**    | Đối tượng mà client yêu cầu, được định danh qua **URL**, có thể là trang HTML, ảnh, video, API JSON,...                                                                                  |
+| **HTTP Message**             | Gồm hai loại chính: **HTTP Request** (client gửi lên) và **HTTP Response** (server trả về).                                                                                              |
+
+---
+
+## Cách thức hoạt động của HTTP
+
+1. **Thiết lập kết nối TCP**
+
+   * Server mở socket lắng nghe tại **cổng 80 (HTTP)** hoặc **443 (HTTPS)**.
+   * Client khởi tạo kết nối TCP đến server.
+   * Server chấp nhận kết nối và tạo kênh truyền dữ liệu hai chiều.
+
+2. **Trao đổi thông điệp HTTP**
+
+   * Client gửi **HTTP Request** (ví dụ: `GET /index.html HTTP/1.1`)
+   * Server xử lý, sau đó phản hồi **HTTP Response** (ví dụ: `HTTP/1.1 200 OK` + dữ liệu).
+   * Trình duyệt hiển thị nội dung lên giao diện người dùng.
+
+3. **Đóng kết nối TCP**
+
+   * Sau khi hoàn tất trao đổi, kết nối có thể được đóng hoặc giữ mở (tuỳ theo phiên bản HTTP).
 
 ## Cấu trúc request / response
 
@@ -301,29 +289,82 @@ Giao thức cho web — truyền siêu văn bản (HTML), tài nguyên (JS/CSS/i
 * **Headers:** `Host`, `User-Agent`, `Accept`, `Content-Type`, `Content-Length`, `Authorization`, `Cookie`, v.v.
 * **Body:** optional (POST/PUT)
 * **Response:** `HTTP/1.1 200 OK` + headers (`Content-Type`, `Content-Length`, `Set-Cookie`, `Cache-Control`) + body.
+---
 
-## Connection & state
+## Các phiên bản HTTP
 
-* HTTP/1.0: mỗi request mở 1 TCP connection (Connection: close).
-* HTTP/1.1: persistent connections mặc định (Connection: keep-alive), pipelining (ít dùng)
-* HTTP/2: binary framing, multiplexing nhiều streams trên 1 TCP connection, header compression (HPACK).
-* HTTP/3: chạy trên QUIC (UDP) — kết nối + multiplexing trên UDP.
+| Phiên bản    | Đặc điểm nổi bật                                                                                                                                                                                                         |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **HTTP/1.0** | Mỗi yêu cầu mở một kết nối TCP riêng → tốn thời gian bắt tay → hiệu năng thấp.                                                                                                                                           |
+| **HTTP/1.1** | Hỗ trợ **Persistent Connection (Keep-Alive)** – giữ một kết nối cho nhiều request; cho phép **Pipeline** – gửi nhiều yêu cầu liên tiếp. Tuy nhiên vẫn bị **Head-of-Line Blocking** (một request bị kẹt → cả luồng dừng). |
+| **HTTP/2.0** | Hỗ trợ **Multiplexing** (nhiều request/response chia sẻ một kết nối TCP mà không chặn nhau), **nén header**, và **truyền dữ liệu dạng nhị phân** → nhanh hơn và ổn định hơn nhiều so với HTTP/1.x.                       |
 
-## Cache, cookies, session
+---
 
-* **Cache control**: `Cache-Control`, `Expires`, `ETag`, `Last-Modified` để caching.
-* **Cookie**: server set cookie, client gửi cookie để duy trì session.
-* **Session**: stateful behavior built on top of HTTP (token, session id).
+## URL – Uniform Resource Locator
 
-## TLS (HTTPS)
+**URL** là địa chỉ xác định **tài nguyên trên Internet**, bao gồm:
 
-* TLS cung cấp: confidentiality, integrity, server authentication (certificate chain).
-* TLS handshake: ClientHello -> ServerHello, Certificate, (ServerKeyExchange) -> ClientKeyExchange -> Finished; sau đó bắn dữ liệu HTTP qua channel mã hóa.
-* TLS versions: TLS1.2, TLS1.3 phổ biến hiện nay.
+```
+http(s)://<host>[:port]/<path>?<query>#<fragment>
+```
 
-## Bảo mật & vấn đề
+Ví dụ:
 
-* HTTPS bắt buộc cho bảo mật dữ liệu; HSTS để buộc HTTPS; CSRF/XSS/SQLi là ứng dụng layer threats; bảo mật headers: `Strict-Transport-Security`, `X-Frame-Options`, `Content-Security-Policy`.
+```
+https://example.com:443/products?id=123#detail
+```
+
+| Thành phần    | Ý nghĩa                          |
+| ------------- | -------------------------------- |
+| `https`       | Giao thức truy cập               |
+| `example.com` | Tên miền (hostname)              |
+| `:443`        | Cổng (port)                      |
+| `/products`   | Đường dẫn tài nguyên             |
+| `?id=123`     | Tham số truy vấn                 |
+| `#detail`     | Vị trí trong tài liệu (fragment) |
+
+---
+
+## Mã trạng thái HTTP (HTTP Status Code)
+
+| Nhóm    | Ý nghĩa                        | Ví dụ                                                                                |
+| ------- | ------------------------------ | ------------------------------------------------------------------------------------ |
+| **1xx** | Thông tin (Informational)      | 100 Continue                                                                         |
+| **2xx** | Thành công (Success)           | 200 OK, 201 Created                                                                  |
+| **3xx** | Chuyển hướng (Redirection)     | 301 Moved Permanently, 302 Found                                                     |
+| **4xx** | Lỗi phía client (Client Error) | 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found, 408 Request Timeout |
+| **5xx** | Lỗi phía server (Server Error) | 500 Internal Server Error, 502 Bad Gateway, 503 Service Unavailable                  |
+
+---
+
+## HTTP là giao thức *Stateless* (phi trạng thái)
+
+* Mỗi yêu cầu (request) là **độc lập**, server **không ghi nhớ** trạng thái của client.
+* Để duy trì trạng thái (đăng nhập, giỏ hàng, phiên làm việc, ...), cần dùng:
+
+  * **Cookie** → lưu dữ liệu nhỏ trên trình duyệt.
+  * **Session** → lưu trạng thái trên server, gắn với ID trong cookie.
+  * **Token (JWT, OAuth2)** → dùng cho xác thực và API.
+
+---
+
+## HTTPS – Phiên bản bảo mật của HTTP
+
+### Hạn chế của HTTP:
+
+* Không xác thực được **máy chủ** → dễ bị giả mạo, tấn công phishing.
+* Không mã hóa dữ liệu → dễ bị nghe lén, chèn mã độc (Man-in-the-Middle Attack).
+
+### HTTPS khắc phục bằng cách:
+
+* Sử dụng **SSL/TLS** để mã hóa dữ liệu giữa client và server.
+* Xác thực server qua **chứng chỉ số (digital certificate)** do CA (Certificate Authority) cấp.
+* Dùng **TCP port 443** thay vì 80.
+
+→ Kết quả: dữ liệu được **mã hóa**, **toàn vẹn**, và **xác thực nguồn gốc**.
+
+---
 
 ## Kiểm tra / lệnh
 
@@ -333,74 +374,122 @@ Giao thức cho web — truyền siêu văn bản (HTML), tài nguyên (JS/CSS/i
 
 ---
 
-# 5. Telnet
-
-## Mục đích
-
-Giao thức terminal remote, cho phép đăng nhập shell qua TCP.
-
-## Cổng & kiểu
-
-* TCP **23** (clear text), connection-oriented, interactive.
-
-## Đặc điểm
-
-* Truyền mọi ký tự bàn phím và hiển thị từ server; không mã hóa → username/password gửi plain text → RẤT KHÔNG AN TOÀN trên mạng công cộng.
-
-## Sử dụng
-
-* Hiện nay Telnet chủ yếu dùng cho test (mở socket TCP raw) hoặc quản lý thiết bị cũ; KHÔNG dùng để remote shell production.
-
-## Kiểm tra / lệnh
-
-* `telnet example.com 23` để connect; sau đó gõ lệnh thủ công.
-* Dùng `nc` (netcat) thay thế trong test.
+Dưới đây là phần viết lại **đầy đủ và chi tiết hơn** về **Telnet** — vẫn giữ phong cách ngắn gọn, dễ hiểu, nhưng trình bày rõ ràng và chuyên nghiệp hơn:
 
 ---
 
-# 6. SSH (Secure Shell)
+# Giao thức Telnet (Telecommunication Network Protocol)
 
-## Mục đích
+## Định nghĩa
 
-Remote shell an toàn, secure file transfer (SFTP), port forwarding, tunneling, secure command execution.
+**Telnet** (viết tắt của *Telecommunication Network*) là một **giao thức truy cập từ xa (remote login protocol)** cho phép người dùng điều khiển một máy tính hoặc thiết bị mạng từ xa thông qua **giao diện dòng lệnh (CLI)**.
 
-## Cổng & kiểu
+Telnet hoạt động ở **tầng 7 – Application Layer** trong mô hình **OSI**, nhưng sử dụng **kết nối TCP (port 23)** để truyền dữ liệu.
 
-* TCP **22** (mặc định), connection-oriented, bảo mật.
+---
 
-## Mô tả & luồng
+## Thành phần cơ bản
 
-1. **Transport layer**: thiết lập kênh mã hóa (key exchange, server authentication bằng certificate/public key), negotiate algorithms (KEX, cipher, MAC).
-2. **User authentication**: password hoặc public key (`ssh-rsa`, `ssh-ed25519`) hoặc keyboard-interactive, GSSAPI, 2FA.
-3. **Connection layer / channels**: multiplex các kênh (shell, exec, subsystems như sftp, forwarded ports) trên 1 kết nối SSH.
+| Thành phần         | Mô tả                                                                                                                                                                                            |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Telnet Client**  | Là chương trình chạy trên máy người dùng (ví dụ: `telnet` trên Linux, PuTTY trên Windows). Client tạo kết nối đến Telnet server qua TCP và cung cấp giao diện dòng lệnh để người dùng nhập lệnh. |
+| **Telnet Server**  | Dịch vụ chạy trên máy đích, lắng nghe ở **cổng TCP 23**. Khi có kết nối đến, nó xác thực người dùng và mở một **phiên làm việc shell (CLI)** cho phép điều khiển hệ thống.                       |
+| **TCP Connection** | Là kênh truyền song công (full-duplex) giữa client và server. Tất cả các lệnh, phản hồi, và dữ liệu điều khiển đều truyền qua kết nối TCP này.                                                   |
 
-## Key exchange & host key
+---
 
-* KEX (Diffie-Hellman / ECDH / Curve25519) để tạo shared secret, sau đó derive symmetric keys.
-* Server có **host key** (RSA/ECDSA/Ed25519) để client xác thực server; client lưu `known_hosts` để phát hiện MITM.
+## Cách thức hoạt động của Telnet
 
-## Public key auth
+1. **Thiết lập kết nối TCP**
 
-* Client giữ private key; public key đặt trong `~/.ssh/authorized_keys` trên server.
-* Khi auth publickey: server gửi challenge, client trả lời bằng digital signature.
+   * Telnet Client gửi yêu cầu kết nối đến **Telnet Server** qua **port 23 (TCP)**.
+   * Server chấp nhận kết nối, mở một phiên giao tiếp Telnet.
 
-## Tunneling / Port forwarding
+2. **Xác thực người dùng**
 
-* **Local port forwarding:** `ssh -L local:localport:remote:remoteport user@bastion` (client mở local port → tunnel → remote)
-* **Remote port forwarding:** `ssh -R` (server mở port → forward về client)
-* **Dynamic (SOCKS) proxy:** `ssh -D` tạo SOCKS proxy.
+   * Server yêu cầu nhập **tên đăng nhập (username)** và **mật khẩu (password)**.
+   * Quá trình xác thực diễn ra trực tiếp qua kết nối TCP (không mã hóa).
 
-## SFTP & SCP
+3. **Tạo phiên làm việc (Session)**
 
-* **SCP**: copy file via SSH (older, less flexible).
-* **SFTP**: subsystem trong SSH, file transfer with more control.
+   * Sau khi xác thực thành công, server khởi tạo một **CLI session** (thường là shell như `/bin/sh` hoặc `/bin/bash` trên Linux).
+   * Người dùng có thể nhập lệnh điều khiển hệ thống từ xa.
 
-## Security & best practices
+4. **Trao đổi dữ liệu**
 
-* Disable root login (`PermitRootLogin no`)
-* Use key-based authentication, disable password auth where possible (`PasswordAuthentication no`)
-* Use strong host key algorithms (ed25519), up-to-date ciphers, limit users, fail2ban, rate limiting.
-* Use `ssh-agent` to handle keys, and `authorized_keys` options (from="...", no-pty) to restrict.
+   * Khi người dùng nhập lệnh trên client, Telnet gửi **chuỗi ký tự ASCII** qua mạng đến server.
+   * Server **thực thi lệnh** và gửi kết quả trả về cho client để hiển thị.
+
+5. **Kết thúc phiên**
+
+   * Khi người dùng gõ `exit` hoặc đóng client, kết nối TCP được **ngắt**.
+   * Server giải phóng tài nguyên phiên làm việc.
+
+---
+
+## Ví dụ sử dụng Telnet
+
+### Trên Linux:
+
+Cài đặt Telnet client:
+
+```bash
+sudo apt install telnet
+```
+
+Kết nối đến server Telnet:
+
+```bash
+telnet 192.168.1.10
+```
+
+Khi kết nối thành công:
+
+```
+Trying 192.168.1.10...
+Connected to 192.168.1.10.
+Escape character is '^]'.
+login: admin
+Password: *****
+Welcome to Ubuntu 22.04 LTS!
+$
+```
+
+---
+
+## Nhược điểm bảo mật của Telnet
+
+| Vấn đề                             | Mô tả                                                                               |
+| ---------------------------------- | ----------------------------------------------------------------------------------- |
+| **Không mã hóa dữ liệu**           | Tất cả dữ liệu (kể cả mật khẩu) truyền dạng văn bản thuần (plain text).             |
+| **Dễ bị nghe lén (sniffing)**      | Hacker có thể thu lại gói tin Telnet qua Wireshark và đọc thông tin đăng nhập.      |
+| **Không xác thực máy chủ**         | Client không có cách nào kiểm tra xem server có phải thật sự là máy đích hay không. |
+| **Không đảm bảo toàn vẹn dữ liệu** | Gói tin có thể bị chỉnh sửa giữa đường mà client không biết.                        |
+
+→ Chính vì vậy, **Telnet không còn được sử dụng trong môi trường thực tế**, đặc biệt là mạng Internet.
+
+---
+
+## Giải pháp thay thế — SSH (Secure Shell)
+
+**SSH (Secure Shell)** là **phiên bản bảo mật thay thế Telnet**, có các ưu điểm:
+
+| Tiêu chí                  | **Telnet** | **SSH**                                     |
+| ------------------------- | ---------- | ------------------------------------------- |
+| **Port mặc định**         | 23         | 22                                          |
+| **Mã hóa dữ liệu**        | ❌ Không    | ✅ Có (AES, RSA, ECC...)                     |
+| **Xác thực máy chủ**      | ❌ Không có | ✅ Có chứng chỉ / khóa công khai             |
+| **Tính toàn vẹn dữ liệu** | ❌ Không    | ✅ Đảm bảo bằng thuật toán hash (HMAC)       |
+| **An toàn**               | Thấp       | Rất cao                                     |
+| **Ứng dụng hiện nay**     | Hầu như bỏ | Sử dụng phổ biến để quản trị hệ thống từ xa |
+
+Ví dụ dùng SSH:
+
+```bash
+ssh user@192.168.1.10
+```
+
+---
 
 ## Kiểm tra / lệnh
 
@@ -411,42 +500,100 @@ Remote shell an toàn, secure file transfer (SFTP), port forwarding, tunneling, 
 
 ---
 
-# So sánh tóm tắt (một dòng mỗi giao thức)
+## 4. Client - Server Model
 
-* **DNS:** name ↔ IP, UDP/TCP 53, phân tán & caching, cần DNSSEC/DoT/DoH để bảo mật.
-* **FTP:** truyền file, control:21, data:20/ephemeral, plain → dùng FTPS/SFTP thay thế.
-* **SMTP:** gửi/relay mail (port 25), submission 587; kết hợp SPF/DKIM/DMARC để chống giả mạo.
-* **POP3/IMAP:** nhận mail — POP3 (110/995) tải về; IMAP (143/993) giữ trên server, multi-device sync.
-* **HTTP/HTTPS:** web; HTTP stateless request/response; HTTPS = HTTP + TLS (443).
-* **Telnet:** remote shell plain text (23), KHÔNG AN TOÀN; dùng chỉ để test.
-* **SSH:** remote secure shell (22), key auth, tunneling, SFTP; tiêu chuẩn cho remote management.
+### Tổng quan
+
+Kiến trúc **Client–Server** là mô hình phổ biến nhất trong mạng Internet hiện nay, được sử dụng trong hầu hết các ứng dụng như web, email, FTP, cơ sở dữ liệu, v.v.
+Trong mô hình này, **Client** (máy trạm/người dùng) gửi yêu cầu dịch vụ, còn **Server** (máy chủ) tiếp nhận, xử lý và phản hồi kết quả.
 
 ---
 
-## 4. Client - Server Model
+### Đặc điểm
 
-* **Định nghĩa:** kiến trúc giao tiếp giữa client (gửi yêu cầu) và server (trả lời).
-* **Ví dụ:** Trình duyệt (client) truy cập web server (server).
+* Hệ thống chia thành hai thành phần chính:
+
+  * **Client:** Giao diện người dùng, gửi yêu cầu dịch vụ (request).
+  * **Server:** Xử lý yêu cầu và cung cấp tài nguyên hoặc dữ liệu (response).
+* Giao tiếp giữa client và server thường sử dụng các giao thức mạng tiêu chuẩn như **HTTP, FTP, SMTP, DNS,…**
+
+---
+
+### Ưu điểm
+
+* **Quản lý tập trung:** Tài nguyên, dữ liệu, và cấu hình được quản lý từ máy chủ, giúp dễ dàng kiểm soát.
+* **Dễ mở rộng:** Có thể thêm hoặc nâng cấp server để đáp ứng nhiều client hơn.
+* **Bảo mật và cập nhật thuận tiện:** Các chính sách bảo mật, cập nhật phần mềm chỉ cần thực hiện trên server, giảm rủi ro và tiết kiệm thời gian.
+
+---
+
+### Nhược điểm
+
+* **Điểm đơn lỗi (Single Point of Failure):** Nếu server gặp sự cố, toàn bộ hệ thống ngừng hoạt động.
+* **Giới hạn tải (Load Issue):** Khi có quá nhiều client truy cập cùng lúc, server có thể bị quá tải, làm giảm hiệu năng.
+* **Cấu hình phức tạp:** Việc thiết lập mạng, bảo mật, phân quyền, và quản lý dịch vụ yêu cầu kỹ thuật cao hơn so với mô hình ngang hàng (peer-to-peer).
 
 ---
 
 ## 5. Connection-oriented và Connectionless
 
-* **Connection-oriented:** có thiết lập kết nối trước khi truyền (TCP).
-* **Connectionless:** không cần thiết lập, gửi ngay (UDP).
+- Truyền thông hướng liên kết (Connection-oriented):
+  + Dữ liệu được truyền qua một kết nối đã được thiết lập. Gồm 3 giai đoạn: thiết lập
+  liên kết, truyền dữ liệu, hủy liên kết.
+  + Đáng tin cậy
+  + Truyền chậm hơn khi so với truyền thông hướng không liên kết.
+  + Giao thức thường sử dụng TCP
+- Truyền thông hướng không liên kết (Connectionless):
+  + Không thiết lập liên kết chỉ có giai đoạn truyền dữ liệu
+  + Không tin cậy
+  + Best Effort: truyền với khả năng tối đa
+  + Giao thức thường sử dụng UDP
 
 ---
 
 ## 6. TCP và UDP
 
-* **TCP (Transmission Control Protocol):** reliable (có ACK, kiểm tra lỗi, sắp xếp), connection-oriented, chậm hơn.
-  Ví dụ: HTTP, FTP, SMTP.
+**TCP:**
 
-* **UDP (User Datagram Protocol):** không đảm bảo, connectionless, nhanh hơn.
-  Ví dụ: DNS, VoIP, video streaming.
+```
+Client → [ SYN ] → Server  
+Client ← [ SYN + ACK ] ← Server  
+Client → [ ACK ] → Server  
+=> Kết nối được thiết lập, sau đó mới truyền dữ liệu.
+```
+
+**UDP:**
+
+```
+Client → [ Dữ liệu ] → Server  
+=> Không cần bắt tay, gửi thẳng, nhanh nhưng có thể mất gói.
+```
+
+## So sánh giao thức TCP và UDP
+
+| Tiêu chí                        | **TCP (Transmission Control Protocol)**                                                                                        | **UDP (User Datagram Protocol)**                                                   |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- |
+| **Loại giao thức**              | Giao thức **hướng kết nối** (connection-oriented)                                                                              | Giao thức **không hướng kết nối** (connectionless)                                 |
+| **Cách thức hoạt động**         | Thiết lập kết nối trước khi truyền dữ liệu (bắt tay 3 bước - *Three-way handshake*) → đảm bảo đường truyền ổn định giữa 2 đầu. | Gửi dữ liệu trực tiếp mà không cần thiết lập kết nối, mỗi gói tin độc lập.         |
+| **Độ tin cậy**                  | **Đảm bảo tin cậy**: có cơ chế kiểm tra lỗi, xác nhận gói (ACK), truyền lại nếu mất.                                           | **Không đảm bảo tin cậy**: không kiểm tra, không xác nhận, nếu mất gói thì bỏ qua. |
+| **Trình tự dữ liệu (ordering)** | Dữ liệu đến **đúng thứ tự** nhờ có đánh số gói (sequence number).                                                              | Gói tin có thể **đến sai thứ tự**, trùng lặp hoặc bị mất mà không được phát hiện.  |
+| **Kiểm soát luồng & tắc nghẽn** | Có cơ chế **flow control** và **congestion control** để điều chỉnh tốc độ truyền.                                              | Không có cơ chế điều chỉnh tốc độ – gửi càng nhanh càng tốt.                       |
+| **Tốc độ truyền**               | Chậm hơn do overhead kiểm soát lớn.                                                                                            | Nhanh hơn, do ít overhead, không cần xác nhận hay thiết lập phiên.                 |
+| **Cấu trúc gói tin (header)**   | Header phức tạp hơn (~20 bytes), gồm nhiều trường như Seq, Ack, Window,...                                                     | Header đơn giản (~8 bytes), chỉ có Port, Length, Checksum.                         |
+| **Truyền dạng**                 | Dòng byte (byte stream) liên tục.                                                                                              | Gói tin (datagram) rời rạc, độc lập.                                               |
+
+* HTTP/HTTPS (Web)
+* SMTP, IMAP, POP3 (Mail)
+* FTP, SSH
+* Database, File transfer | Các ứng dụng yêu cầu **tốc độ cao, chấp nhận mất mát**:
+* DNS query
+* Video streaming, VoIP
+* Gaming online
+* NTP, DHCP |
+  | **Giao thức tầng dưới sử dụng** | Dựa trên IP (Internet Protocol). | Dựa trên IP (Internet Protocol). |
+  | **Cổng mặc định phổ biến** | HTTP: 80, HTTPS: 443, FTP: 21, SSH: 22 | DNS: 53, DHCP: 67/68, SNMP: 161, NTP: 123 |
 
 ---
-
 #  BASIC SWITCHING
 
 ## 1. Ethernet trong OSI
